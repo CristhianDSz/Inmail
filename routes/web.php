@@ -12,4 +12,5 @@
 */
 
 Route::get('/', 'HomeController@index');
+Route::get('app/dependencies', 'DependenciesController@render')->name('dependencies.render');
 Route::apiResource('dependencies', 'DependenciesController');
