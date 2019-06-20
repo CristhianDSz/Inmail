@@ -8,6 +8,14 @@ require('./bootstrap')
 
 // window.Vue = require('vue')
 import Vue from 'vue'
+import VueSweetalert2 from 'vue-sweetalert2'
+
+const options = {
+    confirmButtonColor: '#41b882',
+    cancelButtonColor: '#ff7674'
+}
+
+Vue.use(VueSweetalert2, options)
 
 /**
  * The following block of code may be used to automatically register your
@@ -26,6 +34,9 @@ import DependencyMain from './components/dependencies/DependencyMain.vue'
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+/**EventEmitters -Buses */
+window.modalEmitter = new Vue()
 
 const app = new Vue({
     el: '#app',

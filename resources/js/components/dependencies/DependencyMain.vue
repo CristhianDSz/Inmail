@@ -1,38 +1,46 @@
 <template>
   <div class="col-10 offset-1">
     <div class="text-right">
-      <button class="btn btn-primary btn-link mb-3">Agregar dependencia</button>
+      <button class="btn btn-primary btn-link mb-3" @click="showModal">Agregar dependencia</button>
     </div>
     <div class="card">
       <div class="card-body">
-        <div class="bd bd-gray-300 rounded table-responsive">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Código</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Cartera</td>
-                <td>02</td>
-                <td>
-                  <a href="#">Editar</a>
-                  <a href="#">Eliminar</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <dependencies ref="dependencies"></dependencies>
       </div>
     </div>
+    <modal name="dependencyModal" :isLg="true" ref="modal">
+      <template slot="title">Agregar nueva dependencia</template>
+      <template slot="body">
+        <dependency-form @success="reloadDependencies"></dependency-form>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
-export default {};
+import Modal from "../utils/Modal";
+import DependencyForm from "./DependencyForm";
+import Dependencies from "./Dependencies";
+export default {
+  components: {
+    Modal,
+    DependencyForm,
+    Dependencies
+  },
+  data() {
+    return {};
+  },
+
+  methods: {
+    showModal() {
+      this.$refs.modal.showModal();
+    },
+    reloadDependencies() {
+      this.$refs.dependencies.getDependencies();
+      modalEmitter.$emit("close");
+    }
+  }
+};
 </script>
 
 <style>

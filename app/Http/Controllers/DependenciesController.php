@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Dependency;
 
 class DependenciesController extends Controller
 {
@@ -11,5 +12,39 @@ class DependenciesController extends Controller
         return view('dependencies.index');
     }
     public function index()
-    { }
+    {
+        return Dependency::all();
+    }
+
+    public function store()
+    {
+        $attributes = request()->validate([
+            'name' => 'required|string|min:3',
+            'code' => 'required|min:2'
+        ]);
+
+        Dependency::create($attributes);
+
+        return response()->json(['message' => 'Dependencia creada correctamente!'], 201);
+    }
+
+    public function update(Dependency $dependency)
+    {
+
+        $attributes = request()->validate([
+            'name' => 'required|string|min:3',
+            'code' => 'required|min:2'
+        ]);
+
+        $dependency->update($attributes);
+
+        return response()->json(['message' => 'Dependencia actualizada correctamente!'], 200);
+    }
+
+    public function destroy(Dependency $dependency)
+    {
+        $dependency->delete();
+
+        return response()->json(['message' => 'Dependencia eliminada correctamente!'], 200);
+    }
 }
