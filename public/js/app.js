@@ -39327,7 +39327,7 @@ var render = function() {
             staticClass: "btn btn-primary btn-link mb-3",
             on: { click: _vm.showModal }
           },
-          [_vm._v("Agregar dependencia")]
+          [_vm._v("Agregar funcionario")]
         )
       ]),
       _vm._v(" "),
@@ -39345,7 +39345,7 @@ var render = function() {
         { ref: "modal", attrs: { name: "dependencyModal", isLg: true } },
         [
           _c("template", { slot: "title" }, [
-            _vm._v("Agregar nueva dependencia")
+            _vm._v("Agregar nuevo funcionario")
           ]),
           _vm._v(" "),
           _c(

@@ -1,7 +1,7 @@
 <template>
   <div class="col-10 offset-1">
     <div class="text-right">
-      <button class="btn btn-primary btn-link mb-3" @click="showModal">Agregar dependencia</button>
+      <button class="btn btn-primary btn-link mb-3" @click="showModal">Agregar funcionario</button>
     </div>
     <div class="card">
       <div class="card-body">
@@ -9,7 +9,7 @@
       </div>
     </div>
     <modal name="dependencyModal" :isLg="true" ref="modal">
-      <template slot="title">Agregar nueva dependencia</template>
+      <template slot="title">Agregar nuevo funcionario</template>
       <template slot="body">
         <employee-form @success="reloadEmployees" @dependencies="passDataToEmployees"></employee-form>
       </template>

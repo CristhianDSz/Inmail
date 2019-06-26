@@ -19,39 +19,41 @@
     <div class="br-sideleft overflow-y-auto">
       <label class="sidebar-label pd-x-15 mg-t-20">Navigation</label>
       <div class="br-sideleft-menu">
-        <a href="index.html" class="br-menu-link active">
+        <a href="index.html" class="br-menu-link">
           <div class="br-menu-item">
             <i class="menu-item-icon icon ion-ios-home-outline tx-22"></i>
-            <span class="menu-item-label">Inicio</span>
+            <span class="menu-item-label">Correspondencia</span>
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
-       
-       
-        <a href="#" class="br-menu-link">
+        <a href="index.html" class="{{Route::current()->getName() == 'thirdParties.render' ? 'br-menu-link active' : 'br-menu-link'}}">
           <div class="br-menu-item">
-            <i class="menu-item-icon icon ion-ios-filing-outline tx-24"></i>
-            <span class="menu-item-label">Parametrización</span>
-            <i class="menu-item-arrow fa fa-angle-down"></i>
+            <i class="menu-item-icon icon ion-ios-person-outline tx-22"></i>
+            <span class="menu-item-label">Terceros</span>
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
-        <ul class="br-menu-sub nav flex-column">
-        <li class="nav-item"><a href="{{route('dependencies.render')}}" class="nav-link">Dependencias</a></li>
-        <li class="nav-item"><a href="{{route('employees.render')}}" class="nav-link">Funcionarios</a></li>
-          <li class="nav-item"><a href="buttons.html" class="nav-link">Buttons</a></li>
-          <li class="nav-item"><a href="cards.html" class="nav-link">Cards</a></li>
-          <li class="nav-item"><a href="icons.html" class="nav-link">Icons</a></li>
-          <li class="nav-item"><a href="modal.html" class="nav-link">Modal</a></li>
-          <li class="nav-item"><a href="pagination.html" class="nav-link">Pagination</a></li>
-          <li class="nav-item"><a href="popups.html" class="nav-link">Tooltip &amp; Popover</a></li>
-          <li class="nav-item"><a href="progress.html" class="nav-link">Progress</a></li>
-          <li class="nav-item"><a href="spinners.html" class="nav-link">Spinners</a></li>
-          <li class="nav-item"><a href="typography.html" class="nav-link">Typography</a></li>
-        </ul>
+
+        <a href="{{route('dependencies.render')}}" class="{{Route::current()->getName() == 'dependencies.render' ? 'br-menu-link active' : 'br-menu-link'}}">
+          <div class="br-menu-item">
+            <i class="menu-item-icon icon ion-ios-briefcase-outline tx-22"></i>
+            <span class="menu-item-label">Dependencias</span>
+          </div><!-- menu-item -->
+        </a><!-- br-menu-link -->
+
+        <a href="{{route('employees.render')}}" class="{{Route::current()->getName() == 'employees.render' ? 'br-menu-link active' : 'br-menu-link'}}">
+          <div class="br-menu-item">
+            <i class="menu-item-icon icon ion-ios-people-outline tx-22"></i>
+            <span class="menu-item-label">Funcionarios</span>
+          </div><!-- menu-item -->
+        </a><!-- br-menu-link -->
        
-        <ul class="br-menu-sub nav flex-column">
-          <li class="nav-item"><a href="navigation.html" class="nav-link">Basic Nav</a></li>
-          <li class="nav-item"><a href="navigation-layouts.html" class="nav-link">Nav Layouts</a></li>
-        </ul>
+        <a href="{{route('employees.render')}}" class="br-menu-link">
+          <div class="br-menu-item">
+            <i class="menu-item-icon icon ion-ios-email-outline tx-22"></i>
+            <span class="menu-item-label">Radicación</span>
+          </div><!-- menu-item -->
+        </a><!-- br-menu-link -->
+       
+       
         <a href="pages.html" class="br-menu-link">
           <div class="br-menu-item">
             <i class="menu-item-icon icon ion-ios-gear-outline tx-22"></i>
