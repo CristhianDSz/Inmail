@@ -36,7 +36,7 @@
         </a><!-- br-menu-link -->
         <ul class="br-menu-sub nav flex-column">
         <li class="nav-item"><a href="{{route('dependencies.render')}}" class="nav-link">Dependencias</a></li>
-          <li class="nav-item"><a href="alerts.html" class="nav-link">Alerts</a></li>
+        <li class="nav-item"><a href="{{route('employees.render')}}" class="nav-link">Funcionarios</a></li>
           <li class="nav-item"><a href="buttons.html" class="nav-link">Buttons</a></li>
           <li class="nav-item"><a href="cards.html" class="nav-link">Cards</a></li>
           <li class="nav-item"><a href="icons.html" class="nav-link">Icons</a></li>

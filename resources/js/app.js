@@ -28,6 +28,7 @@ Vue.use(VueSweetalert2, options)
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 import DependencyMain from './components/dependencies/DependencyMain.vue'
+import EmployeeMain from './components/employees/EmployeeMain.vue'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -37,10 +38,12 @@ import DependencyMain from './components/dependencies/DependencyMain.vue'
 
 /**EventEmitters -Buses */
 window.modalEmitter = new Vue()
+window.dependenciesEmitter = new Vue()
 
 const app = new Vue({
     el: '#app',
     components: {
-        DependencyMain
+        DependencyMain,
+        EmployeeMain
     }
 })
