@@ -25,7 +25,7 @@
             <span class="menu-item-label">Correspondencia</span>
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
-        <a href="index.html" class="{{Route::current()->getName() == 'thirdParties.render' ? 'br-menu-link active' : 'br-menu-link'}}">
+      <a href="{{ route('third_parties.render') }}" class="{{Route::current()->getName() == 'third_parties.render' ? 'br-menu-link active' : 'br-menu-link'}}">
           <div class="br-menu-item">
             <i class="menu-item-icon icon ion-ios-person-outline tx-22"></i>
             <span class="menu-item-label">Terceros</span>

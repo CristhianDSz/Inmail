@@ -1,6 +1,6 @@
 <template>
   <div class="bd bd-gray-300 rounded table-responsive">
-    <table class="table table-bordered">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>Nombre</th>

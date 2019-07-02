@@ -1,5 +1,5 @@
 <template>
-  <div class="col-10 offset-1">
+  <div class="col-12">
     <div class="text-right">
       <button class="btn btn-primary btn-link mb-3" @click="showModal">Agregar dependencia</button>
     </div>
@@ -43,5 +43,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.action-icon {
+  color: #00b297;
+}
 </style>

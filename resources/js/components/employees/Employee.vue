@@ -1,16 +1,20 @@
 <template>
-  <tr v-if="!editForm">
+  <tr v-if="!editForm" @dblclick="editForm =  true">
     <td>{{data.identification}}</td>
     <td>{{data.firstname}}</td>
     <td>{{data.lastname}}</td>
     <td>{{data.dependency.name}}</td>
     <td>
-      <a href="#" @click.prevent="editForm = true">Editar</a>
+      <a href="#" @click.prevent="editForm = true">
+        <i class="icon ion-edit tx-22 p-2 action-icon"></i>
+      </a>
 
-      <a href="#" @click.prevent="deleteEmployee">Eliminar</a>
+      <a href="#" @click.prevent="deleteEmployee">
+        <i class="icon ion-trash-a tx-22 p-2 action-icon"></i>
+      </a>
     </td>
   </tr>
-  <tr v-else>
+  <tr v-else @keyup.enter="editEmployee">
     <td>
       <input type="text" v-model="employee.identification" class="form-control">
     </td>
@@ -21,7 +25,7 @@
       <input type="text" v-model="employee.lastname" class="form-control">
     </td>
     <td>
-      <select v-model="employee.dependency_id">
+      <select v-model="employee.dependency_id" class="form-control">
         <option
           v-for="dependency in dependenciesData"
           :key="dependency.id"
@@ -30,9 +34,13 @@
       </select>
     </td>
     <td>
-      <a href="#" @click.prevent="editEmployee">Guardar</a>
+      <a href="#" @click.prevent="editEmployee">
+        <i class="icon ion-checkmark tx-22 p-1 action-icon"></i>
+      </a>
 
-      <a href="#" @click.prevent="editForm = false">Cancelar</a>
+      <a href="#" @click.prevent="editForm = false">
+        <i class="icon ion-close tx-22 p-1 action-icon"></i>
+      </a>
     </td>
   </tr>
 </template>
@@ -85,3 +93,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.action-icon {
+  color: #00b297;
+}
+</style>

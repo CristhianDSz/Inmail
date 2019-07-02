@@ -1,11 +1,15 @@
 <template>
-  <tr v-if="!editForm">
+  <tr v-if="!editForm" @dblclick="editForm = true">
     <td>{{data.name}}</td>
     <td>{{data.code}}</td>
     <td>
-      <a href="#" @click.prevent="editForm = true">Editar</a>
+      <a href="#" @click.prevent="editForm = true">
+        <i class="icon ion-edit tx-22 p-2 action-icon"></i>
+      </a>
 
-      <a href="#" @click.prevent="deleteDependency">Eliminar</a>
+      <a href="#" @click.prevent="deleteDependency">
+        <i class="icon ion-trash-a tx-22 p-2 action-icon"></i>
+      </a>
     </td>
   </tr>
   <tr v-else>
@@ -16,9 +20,13 @@
       <input type="text" v-model="dependency.code" class="form-control">
     </td>
     <td>
-      <a href="#" @click.prevent="editDependency">Guardar</a>
+      <a href="#" @click.prevent="editDependency">
+        <i class="icon ion-checkmark tx-22 p-1 action-icon"></i>
+      </a>
 
-      <a href="#" @click.prevent="editForm = false">Cancelar</a>
+      <a href="#" @click.prevent="editForm = false">
+        <i class="icon ion-close tx-22 p-1 action-icon"></i>
+      </a>
     </td>
   </tr>
 </template>
@@ -72,3 +80,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.action-icon {
+  color: #00b297;
+}
+</style>
