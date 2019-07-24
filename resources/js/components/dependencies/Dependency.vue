@@ -14,10 +14,10 @@
   </tr>
   <tr v-else>
     <td>
-      <input type="text" v-model="dependency.name" class="form-control">
+      <input type="text" v-model="dependency.name" class="form-control" />
     </td>
     <td>
-      <input type="text" v-model="dependency.code" class="form-control">
+      <input type="text" v-model="dependency.code" class="form-control" />
     </td>
     <td>
       <a href="#" @click.prevent="editDependency">
@@ -82,6 +82,6 @@ export default {
 </script>
 <style scoped>
 .action-icon {
-  color: #00b297;
+  color: #17a2b8;
 }
 </style>

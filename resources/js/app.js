@@ -30,6 +30,7 @@ Vue.use(VueSweetalert2, options)
 import DependencyMain from './components/dependencies/DependencyMain.vue'
 import EmployeeMain from './components/employees/EmployeeMain.vue'
 import ThirdPartyMain from './components/third_parties/ThirdPartyMain.vue'
+import RecordMain from './components/records/RecordMain.vue'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -47,6 +48,7 @@ const app = new Vue({
     components: {
         DependencyMain,
         EmployeeMain,
-        ThirdPartyMain
+        ThirdPartyMain,
+        RecordMain
     }
 })

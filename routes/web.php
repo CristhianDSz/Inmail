@@ -11,11 +11,16 @@
 |
 */
 
-Route::get('/', 'HomeController@index');
+Route::get('/', function () {
+    return redirect('/app/correspondence');
+});
 Route::get('app/dependencies', 'DependenciesController@render')->name('dependencies.render');
+Route::get('dependencies/employees', 'DependenciesController@getWithEmployees');
 Route::apiResource('dependencies', 'DependenciesController');
 Route::get('app/employees', 'EmployeesController@render')->name('employees.render');
 Route::apiResource('employees', 'EmployeesController');
 Route::get('app/third-parties', 'ThirdPartiesController@render')->name('third_parties.render');
 Route::apiResource('third-parties', 'ThirdPartiesController');
 Route::get('app/cities', 'CitiesController@index');
+Route::get('app/correspondence', 'RecordsController@render')->name('correspondence.render');
+Route::apiResource('records', 'RecordsController');

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Dependency;
 
 class DependenciesController extends Controller
@@ -11,9 +10,23 @@ class DependenciesController extends Controller
     {
         return view('dependencies.index');
     }
+
     public function index()
     {
-        return Dependency::all();
+        return Dependency::paginate(5);
+
+
+        // return [
+        //     'pagination' => [
+        //         'total' => $dependencies->total()
+        //     ],
+        //     'dependencies' => $dependencies
+        // ];
+    }
+
+    public function getWithEmployees()
+    {
+        return Dependency::with('employees')->get();
     }
 
     public function store()
