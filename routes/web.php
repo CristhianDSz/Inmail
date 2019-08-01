@@ -24,3 +24,8 @@ Route::apiResource('third-parties', 'ThirdPartiesController');
 Route::get('app/cities', 'CitiesController@index');
 Route::get('app/correspondence', 'RecordsController@render')->name('correspondence.render');
 Route::apiResource('records', 'RecordsController');
+Route::apiResource('roles', 'RolesController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -15,15 +15,14 @@ class CreateRecordsTable extends Migration
     {
         Schema::create('records', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->date('date');
-            $table->time('hour');
+            $table->timestamp('datetime')->useCurrent();
             $table->string('number');
             $table->enum('type', ['Entrada', 'Salida']);
-            $table->enum('document_type', ['Correo', 'Facturas'])->default('Correo');
-            $table->date('document_date');
-            $table->string('invoice_number');
-            $table->text('description');
-            $table->string('attacheds');
+            $table->enum('document_type', ['Correo', 'Facturas'])->default('Correo')->nullable();
+            $table->date('document_date')->nullable();
+            $table->string('invoice_number')->nullable();
+            $table->text('description')->nullable();
+            $table->string('attacheds')->nullable();
             $table->enum('status', ['Creado', 'Registrado', 'Entregado', 'Visado Control Interno', 'Visado Contabilidad'])->default('Creado');
             $table->integer('copy')->default(2);
             $table->unsignedBigInteger('third_party_id')->nullable();

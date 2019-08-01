@@ -50,6 +50,7 @@
             type="text"
             placeholder="Nro. de factura"
             :disabled="record.document_type == 'Correo'"
+            v-model="record.invoice_number"
           />
         </div>
       </div>
@@ -57,13 +58,25 @@
       <div class="col-md-4">
         <div class="form-group mg-md-l--1 bd-t-0-force">
           <label class="form-control-label">Descripción:</label>
-          <textarea class="form-control" cols="30" rows="3" placeholder="Correspondiente a..."></textarea>
+          <textarea
+            class="form-control"
+            cols="30"
+            rows="3"
+            placeholder="Correspondiente a..."
+            v-model="record.description"
+          ></textarea>
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group mg-md-l--1 bd-t-0-force">
           <label class="form-control-label">Anexos:</label>
-          <textarea class="form-control" cols="30" rows="3" placeholder="Viene en adjuntos..."></textarea>
+          <textarea
+            class="form-control"
+            cols="30"
+            rows="3"
+            placeholder="Viene en adjuntos..."
+            v-model="record.attacheds"
+          ></textarea>
         </div>
       </div>
       <!-- col-4 -->
@@ -74,12 +87,14 @@
         <div class="form-group mg-md-l--1 bd-t-0-force">
           <label class="form-control-label">Tercero:</label>
           <select class="form-control" v-model="record.third_party_id">
-            <option value="0">Seleccione</option>
-            <option
-              v-for="thirdParty in thirdParties"
-              :key="thirdParty.id"
-              :value="thirdParty.id"
-            >{{thirdParty.name}}</option>
+            <option value>Seleccione</option>
+            <template v-if="thirdParties.length">
+              <option
+                v-for="thirdParty in thirdParties"
+                :key="thirdParty.id"
+                :value="thirdParty.id"
+              >{{thirdParty.name}}</option>
+            </template>
           </select>
         </div>
       </div>
@@ -91,12 +106,14 @@
             v-model="record.dependency_id"
             @change="getEmployees(record.dependency_id)"
           >
-            <option value="0">Seleccione</option>
-            <option
-              v-for="dependency in dependencies"
-              :key="dependency.id"
-              :value="dependency.id"
-            >{{dependency.name}}</option>
+            <option value>Seleccione</option>
+            <template v-if="dependencies.length">
+              <option
+                v-for="dependency in dependencies"
+                :key="dependency.id"
+                :value="dependency.id"
+              >{{dependency.name}}</option>
+            </template>
           </select>
         </div>
       </div>
@@ -108,19 +125,32 @@
             v-model="record.employee_id"
             :disabled="record.dependency_id == '0'"
           >
-            <option value="0">Seleccione</option>
-            <option
-              v-for="employee in employees"
-              :key="employee.id"
-              :value="employee.id"
-            >{{employee.firstname}}</option>
+            <option value>Seleccione</option>
+            <template v-if="employees.length">
+              <option
+                v-for="employee in employees"
+                :key="employee.id"
+                :value="employee.id"
+              >{{employee.firstname}}</option>
+            </template>
           </select>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mg-md-l--1 bd-t-0-force">
+          <label class="form-control-label">Copias:</label>
+          <input class="form-control" placeholder="Cantidad de copias" v-model="record.copy" />
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mg-md-l--1 bd-t-0-force">
+          <label class="form-control-label">Cantidad de radicados:</label>
+          <input class="form-control" placeholder="Cantidad de copias" v-model="record.quantity" />
         </div>
       </div>
     </div>
     <div class="form-layout-footer bd pd-20 bd-t-0">
-      <button class="btn btn-info">Submit Form</button>
-      <button class="btn btn-secondary">Cancel</button>
+      <button class="btn btn-info" @click="postRecord">Registrar</button>
     </div>
     <!-- form-group -->
   </div>
@@ -134,9 +164,14 @@ export default {
         type: "Entrada",
         document_type: "Correo",
         document_date: "",
-        dependency_id: "0",
-        third_party_id: "0",
-        employee_id: "0"
+        invoice_number: "",
+        description: "",
+        attacheds: "",
+        dependency_id: "",
+        third_party_id: "",
+        employee_id: "",
+        copy: 2,
+        quantity: 1
       },
       thirdParties: [],
       dependencies: [],
@@ -152,6 +187,8 @@ export default {
         axios.spread((thirdParties, dependencies) => {
           this.thirdParties = thirdParties.data;
           this.dependencies = dependencies.data;
+          this.$emit("dependencies", dependencies.data);
+          this.$emit("thirdParties", thirdParties.data);
         })
       );
     },
@@ -170,21 +207,26 @@ export default {
         this.employees = dependency.employees.length
           ? dependency.employees
           : [];
+        this.$emit("employees", this.employees);
       }
+    },
+    postRecord() {
+      axios.post("/records", this.record).then(response => {
+        console.log(response.data);
+        this.$emit("success");
+        this.resetRecord();
+      });
     },
     resetRecord() {
       this.record = {
         type: "Entrada",
         document_type: "Correo",
         document_date: "",
-        dependency_id: "0",
-        third_party_id: "0",
-        employee_id: "0"
+        dependency_id: "",
+        third_party_id: "",
+        employee_id: ""
       };
     }
   }
 };
 </script>
-
-<style>
-</style>

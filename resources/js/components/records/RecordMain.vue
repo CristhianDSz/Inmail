@@ -20,150 +20,19 @@
           </div>
         </div>
         <div class="pd-10 rounded mg-t-10">
-          <!-- <ul
-            class="nav nav-outline flex-column flex-md-row justify-content-flex-start"
-            role="tablist"
-          >
-            <li class="nav-item" v-for="(typeRecordTab,index) in typeRecordsTabs" :key="index">
-              <a
-                class="nav-link"
-                :class="{'active': selectedTab === typeRecordTab}"
-                href="#"
-                @click.prevent="selectedTab = typeRecordTab"
-              >{{typeRecordTab}}</a>
-            </li>
-          </ul>-->
           <div class="content-tabs">
-            <table class="table table-valign-middle mg-b-0">
-              <tbody>
-                <tr>
-                  <td class="pd-l-0-force">
-                    <img src="http://via.placeholder.com/280x280" class="wd-40 rounded-circle" alt />
-                  </td>
-                  <td>
-                    <h6 class="tx-inverse tx-14 mg-b-0">Deborah Miner</h6>
-                    <span class="tx-12">@deborah.miner</span>
-                  </td>
-                  <td>Nov 01, 2017</td>
-                  <td>
-                    <span id="sparkline1">
-                      <canvas
-                        width="100"
-                        height="30"
-                        style="display: inline-block; width: 100px; height: 30px; vertical-align: top;"
-                      ></canvas>
-                    </span>
-                  </td>
-                  <td class="pd-r-0-force tx-center">
-                    <a href class="tx-gray-600">
-                      <i class="icon ion-more tx-18 lh-0"></i>
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="pd-l-0-force">
-                    <img src="http://via.placeholder.com/280x280" class="wd-40 rounded-circle" alt />
-                  </td>
-                  <td>
-                    <h6 class="tx-inverse tx-14 mg-b-0">Belinda Connor</h6>
-                    <span class="tx-12">@belinda.connor</span>
-                  </td>
-                  <td>Oct 28, 2017</td>
-                  <td>
-                    <span id="sparkline2">
-                      <canvas
-                        width="100"
-                        height="30"
-                        style="display: inline-block; width: 100px; height: 30px; vertical-align: top;"
-                      ></canvas>
-                    </span>
-                  </td>
-                  <td class="pd-r-0-force tx-center">
-                    <a href class="tx-gray-600">
-                      <i class="icon ion-more tx-18 lh-0"></i>
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="pd-l-0-force">
-                    <img src="http://via.placeholder.com/280x280" class="wd-40 rounded-circle" alt />
-                  </td>
-                  <td>
-                    <h6 class="tx-inverse tx-14 mg-b-0">Andrew Wiggins</h6>
-                    <span class="tx-12">@andrew.wiggins</span>
-                  </td>
-                  <td>Oct 27, 2017</td>
-                  <td>
-                    <span id="sparkline3">
-                      <canvas
-                        width="100"
-                        height="30"
-                        style="display: inline-block; width: 100px; height: 30px; vertical-align: top;"
-                      ></canvas>
-                    </span>
-                  </td>
-                  <td class="pd-r-0-force tx-center">
-                    <a href class="tx-gray-600">
-                      <i class="icon ion-more tx-18 lh-0"></i>
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="pd-l-0-force">
-                    <img src="http://via.placeholder.com/280x280" class="wd-40 rounded-circle" alt />
-                  </td>
-                  <td>
-                    <h6 class="tx-inverse tx-14 mg-b-0">Brandon Lawrence</h6>
-                    <span class="tx-12">@brandon.lawrence</span>
-                  </td>
-                  <td>Oct 27, 2017</td>
-                  <td>
-                    <span id="sparkline4">
-                      <canvas
-                        width="100"
-                        height="30"
-                        style="display: inline-block; width: 100px; height: 30px; vertical-align: top;"
-                      ></canvas>
-                    </span>
-                  </td>
-                  <td class="pd-r-0-force tx-center">
-                    <a href class="tx-gray-600">
-                      <i class="icon ion-more tx-18 lh-0"></i>
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="pd-l-0-force">
-                    <img src="http://via.placeholder.com/280x280" class="wd-40 rounded-circle" alt />
-                  </td>
-                  <td>
-                    <h6 class="tx-inverse tx-14 mg-b-0">Marilyn Tarter</h6>
-                    <span class="tx-12">@marilyn.tarter</span>
-                  </td>
-                  <td>Oct 27, 2017</td>
-                  <td>
-                    <span id="sparkline5">
-                      <canvas
-                        width="100"
-                        height="30"
-                        style="display: inline-block; width: 100px; height: 30px; vertical-align: top;"
-                      ></canvas>
-                    </span>
-                  </td>
-                  <td class="pd-r-0-force tx-center">
-                    <a href class="tx-gray-600">
-                      <i class="icon ion-more tx-18 lh-0"></i>
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <records ref="records"></records>
           </div>
         </div>
         <modal ref="recordModal" name="recordModal">
           <template slot="title">Crear nuevo registro</template>
           <template slot="body">
-            <record-form></record-form>
+            <record-form
+              @dependencies="passDependenciesToRecords"
+              @thirdParties="passThirdPartiesToRecords"
+              @employees="passEmployeesToRecords"
+              @success="getRecords"
+            ></record-form>
           </template>
         </modal>
       </div>
@@ -174,8 +43,9 @@
 <script>
 import Modal from "../utils/Modal";
 import RecordForm from "./RecordForm";
+import Records from "./Records";
 export default {
-  components: { Modal, RecordForm },
+  components: { Modal, RecordForm, Records },
   data() {
     return {
       records: [],
@@ -187,6 +57,18 @@ export default {
   methods: {
     showModal() {
       this.$refs.recordModal.showModal();
+    },
+    passDependenciesToRecords(dependencies = []) {
+      this.$refs.records.dependencies = dependencies;
+    },
+    passThirdPartiesToRecords(thirdParties = []) {
+      this.$refs.records.thirdParties = thirdParties;
+    },
+    passEmployeesToRecords(employees = []) {
+      this.$refs.records.employees = employees;
+    },
+    getRecords() {
+      this.$refs.records.getRecords();
     }
   }
 };

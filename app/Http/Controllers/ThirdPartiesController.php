@@ -13,7 +13,7 @@ class ThirdPartiesController extends Controller
 
     public function index()
     {
-        return ThirdParty::all();
+        return ThirdParty::orderBy('name')->paginate(30);
     }
 
     public function store()

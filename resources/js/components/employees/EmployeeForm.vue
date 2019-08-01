@@ -91,9 +91,9 @@ export default {
   methods: {
     getDependencies() {
       axios.get("/dependencies").then(dependencies => {
-        this.dependencies = dependencies.data;
-        this.employee.dependency_id = dependencies.data[0].id;
-        this.$emit("dependencies", dependencies.data);
+        this.dependencies = dependencies.data.data;
+        this.employee.dependency_id = dependencies.data.data[0].id;
+        this.$emit("dependencies", dependencies.data.data);
       });
     },
     postEmployee() {

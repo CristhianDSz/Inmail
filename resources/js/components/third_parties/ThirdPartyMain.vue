@@ -1,10 +1,19 @@
 <template>
   <div class="col-12">
-    <div class="text-right">
-      <button class="btn btn-primary btn-link mb-3" @click="showModal">Agregar tercero</button>
-    </div>
     <div class="card">
       <div class="card-body">
+        <div class="text-right">
+          <small class="font-weight-bold">Crear nuevo tercero</small>
+          <a
+            href="#"
+            class="btn btn-info btn-icon rounded-circle mg-r-5 mg-b-10 bd-4"
+            @click.prevent="showModal"
+          >
+            <div>
+              <i class="icon ion-plus"></i>
+            </div>
+          </a>
+        </div>
         <third-parties ref="thirdParties"></third-parties>
       </div>
     </div>

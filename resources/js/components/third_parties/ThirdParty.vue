@@ -18,16 +18,16 @@
   </tr>
   <tr v-else>
     <td>
-      <input type="text" v-model="thirdParty.identification" class="form-control">
+      <input type="text" v-model="thirdParty.identification" class="form-control" />
     </td>
     <td>
-      <input type="text" v-model="thirdParty.name" class="form-control">
+      <input type="text" v-model="thirdParty.name" class="form-control" />
     </td>
     <td>
-      <input type="text" v-model="thirdParty.address" class="form-control">
+      <input type="text" v-model="thirdParty.address" class="form-control" />
     </td>
     <td>
-      <input type="text" v-model="thirdParty.telephone" class="form-control">
+      <input type="text" v-model="thirdParty.telephone" class="form-control" />
     </td>
     <td>
       <select v-model="thirdParty.city" class="form-control">
@@ -39,7 +39,7 @@
       </select>
     </td>
     <td>
-      <input type="text" v-model="thirdParty.email_contact" class="form-control">
+      <input type="text" v-model="thirdParty.email_contact" class="form-control" />
     </td>
     <td>
       <a href="#" @click.prevent="editThirdParty">
@@ -109,6 +109,6 @@ export default {
 </script>
 <style scoped>
 .action-icon {
-  color: #00b297;
+  color: #17a2b8;
 }
 </style>

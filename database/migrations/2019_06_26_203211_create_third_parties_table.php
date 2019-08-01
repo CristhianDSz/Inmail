@@ -17,10 +17,10 @@ class CreateThirdPartiesTable extends Migration
             $table->bigIncrements('id');
             $table->string('identification');
             $table->string('name');
-            $table->string('address');
-            $table->string('telephone');
-            $table->string('city');
-            $table->string('email_contact');
+            $table->string('address')->nullable();
+            $table->string('telephone')->nullable();
+            $table->string('city')->nullable();
+            $table->string('email_contact')->nullable();
             $table->timestamps();
         });
     }
