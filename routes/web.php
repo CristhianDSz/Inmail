@@ -24,7 +24,13 @@ Route::apiResource('third-parties', 'ThirdPartiesController');
 Route::get('app/cities', 'CitiesController@index');
 Route::get('app/correspondence', 'RecordsController@render')->name('correspondence.render');
 Route::apiResource('records', 'RecordsController');
-Route::apiResource('roles', 'RolesController');
+
+Route::group(['prefix' => 'config'], function () {
+    Route::apiResource('roles', 'RolesController');
+    Route::apiResource('permissions', 'PermissionsController');
+    Route::resource('companies', 'CompaniesController');
+});
+
 
 Auth::routes();
 

@@ -182,7 +182,8 @@ body {
   font-size: 0.875rem;
   font-weight: normal;
   line-height: 1.5;
-  color: #868ba1;
+  /* color: #868ba1; */
+  color: #5a5b63;
   background-color: #E9ECEF;
 }
 

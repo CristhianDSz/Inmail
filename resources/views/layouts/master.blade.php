@@ -21,13 +21,13 @@
     <div class="br-sideleft overflow-y-auto">
       <label class="sidebar-label pd-x-15 mg-t-20">Menú principal</label>
       <div class="br-sideleft-menu">
-      <a href="{{ route('correspondence.render') }}" class="{{Route::current()->getName() == 'correspondence.render' ? 'br-menu-link active' : 'br-menu-link'}}">
+      <a href="{{ route('correspondence.render') }}" class="{{Route::current()->named('correspondence.render')  ? 'br-menu-link active' : 'br-menu-link'}}">
           <div class="br-menu-item">
             <i class="menu-item-icon icon ion-ios-home-outline tx-22"></i>
             <span class="menu-item-label">Correspondencia</span>
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
-      <a href="{{ route('third_parties.render') }}" class="{{Route::current()->getName() == 'third_parties.render' ? 'br-menu-link active' : 'br-menu-link'}}">
+      <a href="{{ route('third_parties.render') }}" class="{{Route::current()->named('third_parties.render') ? 'br-menu-link active' : 'br-menu-link'}}">
           <div class="br-menu-item">
             <i class="menu-item-icon icon ion-ios-person-outline tx-22"></i>
             <span class="menu-item-label">Terceros</span>
@@ -56,7 +56,8 @@
         </a><!-- br-menu-link -->
        
 
-        <a href="#" class="br-menu-link">
+      <a href="#" class="{{
+              Route::current()->getPrefix() === '/config' ? 'br-menu-link active' : 'br-menu-link'}}" id="config-item">
             <div class="br-menu-item">
               <i class="menu-item-icon ion-ios-gear-outline tx-20"></i>
               <span class="menu-item-label">Configuración</span>
@@ -65,9 +66,9 @@
           </a>
         <ul class="br-menu-sub nav flex-column">
             <li class="nav-item"><a href="chart-flot.html" class="nav-link">Usuarios</a></li>
-            <li class="nav-item"><a href="chart-chartjs.html" class="nav-link">Permisos</a></li>
-            <li class="nav-item"><a href="chart-rickshaw.html" class="nav-link">Roles</a></li>
-            <li class="nav-item"><a href="chart-rickshaw.html" class="nav-link">Empresa</a></li>
+        <li class="nav-item"><a href="{{route('permissions.index') }}" class="nav-link">Permisos</a></li>
+        <li class="nav-item"><a href="{{ route('roles.index') }}" class="nav-link">Roles</a></li>
+        <li class="nav-item"><a href="{{route('companies.index') }}" class="nav-link">Empresa</a></li>
            
           </ul>
           
@@ -218,9 +219,11 @@
             </div><!-- dropdown -->
             <div class="dropdown">
               <a href="" class="nav-link nav-link-profile" data-toggle="dropdown">
+                @if (Auth::check())
                 <span class="logged-name hidden-md-down">
                     {{ Auth::user()->name }}
                 </span>
+                @endif
                 <img src="http://via.placeholder.com/64x64" class="wd-32 rounded-circle" alt="">
                 <span class="square-10 bg-success"></span>
               </a>
@@ -255,10 +258,24 @@
                 @yield('content')
             </div>
         </div>
+        <footer class="br-footer">
+            <div class="footer-center">
+              <div class="mg-b-2">Copyright © 2019. Index S.A.S. Todos los derechos reservados.</div>
+              <div>In-Mail - Software web de Correspondencia.</div>
+            </div>
+          
+          </footer> 
     </div>
-
+    
     <script src="{{asset('js/app.js')}}"></script>
     <script src="{{asset('js/perfect_scrollbar/perfect-scrollbar.jquery.min.js')}}"></script>
     <script src="{{asset('js/template.js')}}"></script>
+    <script>
+      $("#config-item").click(function () {
+       $(".br-menu-link.active").removeClass('active')
+       $(this).addClass('active')
+      })
+    </script>
+      @yield('scripts')
     </body>
 </html>
