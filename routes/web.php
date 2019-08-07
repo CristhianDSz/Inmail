@@ -26,7 +26,7 @@ Route::get('app/correspondence', 'RecordsController@render')->name('corresponden
 Route::apiResource('records', 'RecordsController');
 
 Route::group(['prefix' => 'config'], function () {
-    Route::apiResource('roles', 'RolesController');
+    Route::resource('roles', 'RolesController');
     Route::apiResource('permissions', 'PermissionsController');
     Route::resource('companies', 'CompaniesController');
 });

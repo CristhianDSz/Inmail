@@ -13,9 +13,8 @@ class SeedDataInPermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('permissions', function (Blueprint $table) {
-            //
-        });
+        $seeder = new PermissionSeeder();
+        $seeder->run();
     }
 
     /**

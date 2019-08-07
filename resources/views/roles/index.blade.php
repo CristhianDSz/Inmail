@@ -4,40 +4,42 @@
    Roles
 @endsection
 
+@section('styles')
+<link rel="stylesheet" href="{{asset('css/multiselect/select2.min.css')}}">
+    
+@endsection
+
 @section('content')
         <div class="col-lg-6">
+          @include('partials.errors')
+          @include('partials.messages')
+
           <div class="card shadow-base bd-0">
             <div class="form-layout form-layout-4">
                     <h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Crear un nuevo rol</h6>
                     <p class="mg-b-30 tx-gray-600">Apartado destinado para la creación de roles</p>
-                    <div class="row">
-                      <label class="col-sm-4 form-control-label">Firstname: <span class="tx-danger">*</span></label>
-                      <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                        <input type="text" class="form-control" placeholder="Enter firstname">
-                      </div>
-                    </div><!-- row -->
-                    <div class="row mg-t-20">
-                      <label class="col-sm-4 form-control-label">Lastname: <span class="tx-danger">*</span></label>
-                      <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                        <input type="text" class="form-control" placeholder="Enter lastname">
-                      </div>
-                    </div>
-                    <div class="row mg-t-20">
-                      <label class="col-sm-4 form-control-label">Email: <span class="tx-danger">*</span></label>
-                      <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                        <input type="text" class="form-control" placeholder="Enter email address">
-                      </div>
-                    </div>
-                    <div class="row mg-t-20">
-                      <label class="col-sm-4 form-control-label">Address: <span class="tx-danger">*</span></label>
-                      <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                        <textarea rows="2" class="form-control" placeholder="Enter your address"></textarea>
-                      </div>
-                    </div>
-                    <div class="form-layout-footer mg-t-30">
-                      <button class="btn btn-info">Submit Form</button>
-                      <button class="btn btn-secondary">Cancel</button>
-                    </div><!-- form-layout-footer -->
+                <form method="POST" action="{{route('roles.store')}}">
+                      @csrf
+                      <div class="row">
+                          <label class="col-sm-4 form-control-label">Nombre del rol: <span class="tx-danger">*</span></label>
+                          <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                          <input type="text" name="name" class="form-control" placeholder="Nombre del rol" value="{{old('name') }}">
+                          </div>
+                        </div><!-- row -->
+                        <div class="row mg-t-20">
+                            <label class="col-sm-4 form-control-label">Permisos: <span class="tx-danger">*</span></label>
+                          <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                                <select name="permissions[]" id="permissions" class="form-control select-roles" multiple>
+                                    @foreach ($permissions as $permission)
+                                  <option class="tx-bold" value="{{$permission->id}}">{{$permission->description}}</option>
+                                    @endforeach
+                                  </select>
+                          </div>
+                        </div>
+                        <div class="form-layout-footer mg-t-30">
+                          <button type="submit" class="btn btn-info">Crear rol</button>
+                        </div><!-- form-layout-footer -->
+                   </form>
                   </div>
           </div><!-- card -->
         </div><!-- col-6 -->
@@ -52,15 +54,32 @@
                       </tr>
                     </thead>
                     <tbody>
+                      @foreach ($roles as $role)
                       <tr>
-                        <td>Administrador</td>
+                      <td><a href="{{route('roles.edit',$role->id)}}">{{$role->name}}</a></td>
                         <td>
-                          <p><strong class="tx-11 tx-medium">TERCEROS:</strong><br>Crear | Actualizar | Eliminar </p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil numquam doloremque voluptatem possimus culpa. Mollitia, repellendus a dolorum voluptas officiis, recusandae maiores molestiae, rerum aliquam vel possimus inventore natus. Consequuntur.</p>
-                        </td>
-                      </tr>
+                           <ul>
+                            @foreach ($role->permissions as $permission)
+                           <li>{{$permission->description}}</li>
+                            @endforeach
+                           </ul>
+                          </td>
+                        </tr>
+                      @endforeach
                     </tbody>
                   </table>
           </div><!-- card -->
         </div><!-- col-6 -->
+@endsection
+
+@section('scripts')
+      <script src="{{asset('js/multiselect/select2.min.js')}}"></script>
+      <script>
+        $(document).ready(function () {
+          $('.select-roles').select2({
+            theme:'classic',
+
+          })
+        })
+      </script>
 @endsection
