@@ -2884,7 +2884,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.all([this.getThirdParties(), this.getDependencies()]).then(axios.spread(function (thirdParties, dependencies) {
-        _this.thirdParties = thirdParties.data;
+        _this.thirdParties = thirdParties.data.data;
         _this.dependencies = dependencies.data;
 
         _this.$emit("dependencies", dependencies.data);

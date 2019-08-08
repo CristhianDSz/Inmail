@@ -52,7 +52,7 @@
         <a href="{{route('employees.render')}}" class="br-menu-link">
           <div class="br-menu-item">
             <i class="menu-item-icon icon ion-ios-email-outline tx-22"></i>
-            <span class="menu-item-label">Registro</span>
+            <span class="menu-item-label">Seguimiento</span>
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
        
@@ -66,7 +66,7 @@
             </div><!-- menu-item -->
           </a>
         <ul class="br-menu-sub nav flex-column">
-            <li class="nav-item"><a href="chart-flot.html" class="nav-link">Usuarios</a></li>
+        <li class="nav-item"><a href="{{route('users.index')}}" class="nav-link">Usuarios</a></li>
         <li class="nav-item"><a href="{{route('permissions.index') }}" class="nav-link">Permisos</a></li>
         <li class="nav-item"><a href="{{ route('roles.index') }}" class="nav-link">Roles</a></li>
         <li class="nav-item"><a href="{{route('companies.index') }}" class="nav-link">Empresa</a></li>
@@ -261,7 +261,7 @@
         </div>
         <footer class="br-footer">
             <div class="footer-center">
-              <div class="mg-b-2">Copyright © 2019. Index S.A.S. Todos los derechos reservados.</div>
+              <div class="mg-b-2">Copyright © 2019. Indexs S.A.S. Todos los derechos reservados.</div>
               <div>In-Mail - Software web de Correspondencia.</div>
             </div>
           

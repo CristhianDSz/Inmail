@@ -29,6 +29,7 @@ Route::group(['prefix' => 'config'], function () {
     Route::resource('roles', 'RolesController');
     Route::apiResource('permissions', 'PermissionsController');
     Route::resource('companies', 'CompaniesController');
+    Route::resource('users', 'UsersController');
 });
 
 

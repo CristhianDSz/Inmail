@@ -185,7 +185,7 @@ export default {
     getAllData() {
       axios.all([this.getThirdParties(), this.getDependencies()]).then(
         axios.spread((thirdParties, dependencies) => {
-          this.thirdParties = thirdParties.data;
+          this.thirdParties = thirdParties.data.data;
           this.dependencies = dependencies.data;
           this.$emit("dependencies", dependencies.data);
           this.$emit("thirdParties", thirdParties.data);

@@ -65,6 +65,16 @@
                           </ul>
                         </td>
                       </tr>
+                      <tr>
+                        <td>Seguimiento</td>
+                        <td>
+                         <p>Apartado conformado por los siguientes permisos:</p>
+                         <ul>
+                            <li>Visado Control Interno</li>
+                            <li>Visado Contabilidad</li>
+                          </ul>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
           </div><!-- card -->

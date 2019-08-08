@@ -37,7 +37,7 @@
                           </div>
                         </div>
                         <div class="form-layout-footer mg-t-30">
-                          <button type="submit" class="btn btn-info">Crear rol</button>
+                          <button type="submit" class="btn btn-teal">Crear rol</button>
                         </div><!-- form-layout-footer -->
                    </form>
                   </div>
