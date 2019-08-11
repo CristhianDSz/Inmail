@@ -41,4 +41,13 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class)->withTimestamps();
     }
+
+    public function existentRole($id)
+    {
+        foreach ($this->roles->pluck('id') as $idRole) {
+            if ($idRole ===  $id) {
+                return true;
+            }
+        }
+    }
 }

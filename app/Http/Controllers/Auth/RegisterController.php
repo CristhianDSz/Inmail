@@ -36,9 +36,7 @@ class RegisterController extends Controller
      * @return void
      */
     public function __construct()
-    {
-        $this->middleware('guest');
-    }
+    { }
 
     /**
      * Get a validator for an incoming registration request.
@@ -53,6 +51,7 @@ class RegisterController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'roles' => ['required']
         ]);
     }
 
@@ -66,6 +65,7 @@ class RegisterController extends Controller
     {
         return User::create([
             'name' => $data['name'],
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
@@ -75,8 +75,9 @@ class RegisterController extends Controller
     {
         $this->validator(request()->all())->validate();
 
-        event(new Registered($user = $this->create(request()->all())));
+        $user = $this->create(request()->all());
 
+        $user->roles()->attach(request()->input('roles'));
 
         return redirect($this->redirectPath());
     }

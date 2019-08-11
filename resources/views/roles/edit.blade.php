@@ -1,24 +1,18 @@
 @extends('layouts.master')
 
 @section('pageTitle')
-   Roles
-@endsection
-
-@section('styles')
-<link rel="stylesheet" href="{{asset('css/multiselect/select2.min.css')}}">
-    
+   Edición de roles
 @endsection
 
 @section('content')
-        <div class="col-3"></div>
-        <div class="col-lg-6">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
           @include('partials.errors')
           @include('partials.messages')
 
           <div class="card shadow-base bd-0">
             <div class="form-layout form-layout-4">
-                    <h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Editar un rol</h6>
-                    <p class="mg-b-30 tx-gray-600">Apartado destinado para la edición de roles</p>
+                    <h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Editar rol</h6>
                 <form method="POST" action="{{route('roles.update',$role->id)}}">
                       @csrf
                       @method('PATCH')
@@ -31,7 +25,7 @@
                         <div class="row mg-t-20">
                             <label class="col-sm-4 form-control-label">Permisos: <span class="tx-danger">*</span></label>
                           <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                                <select name="permissions[]" id="permissions" class="form-control select-roles" multiple>
+                                <select name="permissions[]" id="permissions" class="form-control select2" multiple>
                                 @foreach ($permissions as $permission)
                                   <option class="tx-bold" value="{{$permission->id}}" 
                                     {{($role->existentPermission($permission->id)) ? 'selected' : ''}}>{{$permission->description}}</option>
@@ -40,23 +34,11 @@
                           </div>
                         </div>
                         <div class="form-layout-footer mg-t-30">
-                          <button type="submit" class="btn btn-info">Guardar rol</button>
+                          <button type="submit" class="btn btn-teal">Guardar rol</button>
                         <a href="{{ route('roles.index') }}" class="btn btn-secondary">Regresar</a>
                         </div><!-- form-layout-footer -->
                    </form>
                   </div>
           </div><!-- card -->
         </div><!-- col-6 -->
-@endsection
-
-@section('scripts')
-      <script src="{{asset('js/multiselect/select2.min.js')}}"></script>
-      <script>
-        $(document).ready(function () {
-          $('.select-roles').select2({
-            theme:'classic',
-
-          })
-        })
-      </script>
 @endsection

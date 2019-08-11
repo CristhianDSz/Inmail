@@ -4,11 +4,6 @@
    Roles
 @endsection
 
-@section('styles')
-<link rel="stylesheet" href="{{asset('css/multiselect/select2.min.css')}}">
-    
-@endsection
-
 @section('content')
         <div class="col-lg-6">
           @include('partials.errors')
@@ -29,7 +24,7 @@
                         <div class="row mg-t-20">
                             <label class="col-sm-4 form-control-label">Permisos: <span class="tx-danger">*</span></label>
                           <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                                <select name="permissions[]" id="permissions" class="form-control select-roles" multiple>
+                                <select name="permissions[]" id="permissions" class="form-control select2"data-placeholder="Seleccione permisos" multiple>
                                     @foreach ($permissions as $permission)
                                   <option class="tx-bold" value="{{$permission->id}}">{{$permission->description}}</option>
                                     @endforeach
@@ -70,16 +65,4 @@
                   </table>
           </div><!-- card -->
         </div><!-- col-6 -->
-@endsection
-
-@section('scripts')
-      <script src="{{asset('js/multiselect/select2.min.js')}}"></script>
-      <script>
-        $(document).ready(function () {
-          $('.select-roles').select2({
-            theme:'classic',
-
-          })
-        })
-      </script>
 @endsection

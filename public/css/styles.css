@@ -12538,7 +12538,7 @@ textarea.parsley-success:focus {
   padding: 3px 10px 3px 20px;
   border-color: transparent;
   border-radius: 2px;
-  background-color: #0866C6;
+  background-color: #00b297;
   color: #fff;
   line-height: 1.45;
 }
@@ -12562,7 +12562,7 @@ textarea.parsley-success:focus {
   background-color: #f8f9fa;
 }
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background-color: #0866C6;
+  background-color: #00b297;
 }
 .select2-container--default .select2-results > .select2-results__options {
   margin: 4px;

@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/perfect_scrollbar/perfect-scrollbar.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/ionicons/css/ionicons.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/multiselect/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     @yield('styles')
 
@@ -270,6 +271,7 @@
     
     <script src="{{asset('js/app.js')}}"></script>
     <script src="{{asset('js/perfect_scrollbar/perfect-scrollbar.jquery.min.js')}}"></script>
+    <script src="{{asset('js/multiselect/select2.min.js')}}"></script>
     <script src="{{asset('js/template.js')}}"></script>
     <script>
       $("#config-item").click(function () {
