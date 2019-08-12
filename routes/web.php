@@ -32,6 +32,8 @@ Route::group(['prefix' => 'config'], function () {
     Route::resource('users', 'UsersController');
 });
 
+Route::post('app/records/pdf', 'RecordsController@getPdf')->name('records.pdf');
+
 
 Auth::routes();
 

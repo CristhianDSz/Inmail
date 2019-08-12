@@ -1,17 +1,20 @@
 <template>
-  <tr v-if="!editForm" @dblclick="editForm = true">
+  <tr>
     <td class="pd-l-0-force">{{data.number}}</td>
     <td>{{data.type}}</td>
     <td>{{data.datetime}}</td>
     <td>{{data.document_type}}</td>
-    <td>{{data.status}}</td>
+    <td>
+      <span class="square-8 mg-r-5 rounded-circle" :class="statusColors[data.status]"></span>
+      {{data.status}}
+    </td>
     <!-- <td>{{data.third_party.name}}</td>
     <td>
       <h6 class="tx-inverse tx-14 mg-b-0">{{data.employee.name}}</h6>
       <span class="tx-12">{{data.dependency.name}}</span>
     </td>-->
     <td>
-      <a href="#" @click.prevent="editForm = true">
+      <a href="#" @click.prevent="$emit('recordClick', record)">
         <i class="icon ion-edit tx-22 p-2 action-icon"></i>
       </a>
 
@@ -58,22 +61,18 @@ export default {
   data() {
     return {
       record: {},
-      editForm: false
+      editForm: false,
+      statusColors: {
+        Creado: "bg-danger",
+        Registrado: "bg-warning",
+        Entregado: "bg-success"
+      }
     };
   },
   created() {
     this.record = this.data;
   },
   methods: {
-    editRecord() {
-      this.putRecord();
-    },
-    putRecord() {
-      axios.put(`/records/${this.record.id}`, this.record).then(response => {
-        console.log(response.data);
-        this.editForm = false;
-      });
-    },
     deleteRecord() {
       this.askingBeforeDelete().then(result => {
         if (result.value) {

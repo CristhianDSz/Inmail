@@ -20,6 +20,7 @@
           :employeesData="employees"
           :thirdPartiesData="thirdParties"
           @deleted="getRecords"
+          @recordClick="passRecordToMain"
         ></record>
       </tbody>
     </table>
@@ -50,7 +51,11 @@ export default {
     getRecords() {
       axios.get("/records").then(records => {
         this.records = records.data;
+        this.$emit("quantity", records.data.length);
       });
+    },
+    passRecordToMain(record) {
+      this.$emit("selectedRecord", record);
     }
   }
 };

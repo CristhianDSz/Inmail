@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="d-flex justify-content-between">
           <div class="text-left">
-            <small class="font-weight-bold">Total radicados: 10</small>
+            <small class="font-weight-bold">Total radicados: {{totalRecords}}</small>
           </div>
           <div class="text-right">
             <small class="font-weight-bold">Crear nuevo registro</small>
@@ -21,7 +21,7 @@
         </div>
         <div class="pd-10 rounded mg-t-10">
           <div class="content-tabs">
-            <records ref="records"></records>
+            <records ref="records" @selectedRecord="passRecordEditForm" @quantity="setTotalRecords"></records>
           </div>
         </div>
         <modal ref="recordModal" name="recordModal">
@@ -35,6 +35,18 @@
             ></record-form>
           </template>
         </modal>
+        <modal ref="recordEditModal" name="recordEditModal" v-if="editForm=true">
+          <template slot="title">Editar registro</template>
+          <template slot="body">
+            <record-edit-form
+              @dependencies="passDependenciesToRecords"
+              @thirdParties="passThirdPartiesToRecords"
+              @employees="passEmployeesToRecords"
+              @success="getRecords"
+              :record="currentRecord"
+            ></record-edit-form>
+          </template>
+        </modal>
       </div>
     </div>
   </div>
@@ -43,14 +55,18 @@
 <script>
 import Modal from "../utils/Modal";
 import RecordForm from "./RecordForm";
+import RecordEditForm from "./RecordEditForm";
 import Records from "./Records";
 export default {
-  components: { Modal, RecordForm, Records },
+  components: { Modal, RecordForm, RecordEditForm, Records },
   data() {
     return {
       records: [],
       typeRecordsTabs: ["Entrada", "Salida"],
-      selectedTab: "Entrada"
+      selectedTab: "Entrada",
+      editForm: false,
+      currentRecord: "",
+      totalRecords: 0
     };
   },
   created() {},
@@ -69,6 +85,15 @@ export default {
     },
     getRecords() {
       this.$refs.records.getRecords();
+      modalEmitter.$emit("close");
+    },
+    passRecordEditForm(record) {
+      this.currentRecord = record;
+      this.editForm = true;
+      this.$refs.recordEditModal.showModal();
+    },
+    setTotalRecords(records) {
+      this.totalRecords = records;
     }
   }
 };

@@ -1,15 +1,18 @@
 <template>
   <div class="form-layout form-layout-2">
+    <p class="mg-b-30 tx-semibold">{{record.number}}</p>
+
     <div class="row no-gutters">
       <div class="col-md-4">
         <div class="form-group">
           <label class="form-control-label">
-            Tipo de radicado:
+            Estado de Radicado:
             <span class="tx-danger">*</span>
           </label>
-          <select class="form-control" v-model="record.type">
-            <option value="Entrada">Entrada</option>
-            <option value="Salida">Salida</option>
+          <select class="form-control" v-model="record.status">
+            <option value="Creado">Creado</option>
+            <option value="Registrado">Registrado</option>
+            <option value="Entregado">Entregado</option>
           </select>
         </div>
       </div>
@@ -87,7 +90,6 @@
         <div class="form-group mg-md-l--1 bd-t-0-force">
           <label class="form-control-label">Tercero:</label>
           <select class="form-control" v-model="record.third_party_id">
-            <option value>Seleccione</option>
             <template v-if="thirdParties.length">
               <option
                 v-for="thirdParty in thirdParties"
@@ -106,7 +108,6 @@
             v-model="record.dependency_id"
             @change="getEmployees(record.dependency_id)"
           >
-            <option value>Seleccione</option>
             <template v-if="dependencies.length">
               <option
                 v-for="dependency in dependencies"
@@ -123,9 +124,8 @@
           <select
             class="form-control"
             v-model="record.employee_id"
-            :disabled="record.dependency_id == '0'"
+            :disabled="record.dependency_id == ''"
           >
-            <option value>Seleccione</option>
             <template v-if="employees.length">
               <option
                 v-for="employee in employees"
@@ -136,21 +136,9 @@
           </select>
         </div>
       </div>
-      <div class="col-md-2">
-        <div class="form-group mg-md-l--1 bd-t-0-force">
-          <label class="form-control-label">Copias:</label>
-          <input class="form-control" placeholder="Cantidad de copias" v-model="record.copy" />
-        </div>
-      </div>
-      <div class="col-md-2">
-        <div class="form-group mg-md-l--1 bd-t-0-force">
-          <label class="form-control-label">Cantidad de radicados:</label>
-          <input class="form-control" placeholder="Cantidad de copias" v-model="record.quantity" />
-        </div>
-      </div>
     </div>
     <div class="form-layout-footer bd pd-20 bd-t-0">
-      <button class="btn btn-info" @click="postRecord">Registrar</button>
+      <button class="btn btn-info" @click="putRecord">Registrar</button>
     </div>
     <!-- form-group -->
   </div>
@@ -158,21 +146,10 @@
 
 <script>
 export default {
+  props: ["record"],
   data() {
     return {
-      record: {
-        type: "Entrada",
-        document_type: "Correo",
-        document_date: "",
-        invoice_number: "",
-        description: "",
-        attacheds: "",
-        dependency_id: "",
-        third_party_id: "",
-        employee_id: "",
-        copy: 2,
-        quantity: 1
-      },
+      recordStates: ["Creado", "Registrado", "Entregado"],
       thirdParties: [],
       dependencies: [],
       employees: []
@@ -210,53 +187,14 @@ export default {
         this.$emit("employees", this.employees);
       }
     },
-    postRecord() {
-      axios.post("/records", this.record).then(response => {
-        this.$swal({
-          title: "Correcto",
-          text: response.data.message,
-          type: "success",
-          confirmButtonText: "Generar pdf"
-        }).then(result => {
-          if (result.value) {
-            this.postRecordsPdf(response.data.records);
-          }
-        });
+    putRecord() {
+      axios.put(`/records/${this.record.id}`, this.record).then(response => {
         this.$emit("success");
+        console.log(response.data.message);
         this.resetRecord();
       });
     },
-    postRecordsPdf(records) {
-      axios
-        .post(`/app/records/pdf`, records, {
-          responseType: "arraybuffer",
-          headers: { Accept: "application/pdf" }
-        })
-        .then(response => {
-          let blob = new Blob([response.data], { type: "application/pdf" });
-          let link = document.createElement("a");
-          //link.href = window.URL.createObjectURL(blob);
-          let url = window.URL.createObjectURL(blob);
-          window.open(url);
-          //link.download = "registros.pdf";
-          //link.click();
-        });
-    },
-    resetRecord() {
-      this.record = {
-        type: "Entrada",
-        document_type: "Correo",
-        document_date: "",
-        invoice_number: "",
-        description: "",
-        attacheds: "",
-        dependency_id: "",
-        third_party_id: "",
-        employee_id: "",
-        copy: 2,
-        quantity: 1
-      };
-    }
+    resetRecord() {}
   }
 };
 </script>
