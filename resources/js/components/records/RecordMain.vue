@@ -35,10 +35,11 @@
             ></record-form>
           </template>
         </modal>
-        <modal ref="recordEditModal" name="recordEditModal" v-if="editForm=true">
+        <modal ref="recordEditModal" name="recordEditModal">
           <template slot="title">Editar registro</template>
           <template slot="body">
             <record-edit-form
+              v-if="editForm"
               @dependencies="passDependenciesToRecords"
               @thirdParties="passThirdPartiesToRecords"
               @employees="passEmployeesToRecords"

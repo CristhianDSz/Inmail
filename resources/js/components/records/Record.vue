@@ -1,10 +1,10 @@
 <template>
   <tr>
-    <td class="pd-l-0-force">{{data.number}}</td>
-    <td>{{data.type}}</td>
-    <td>{{data.datetime}}</td>
-    <td>{{data.document_type}}</td>
-    <td>
+    <td class="pd-l-0-force tx-semibold">{{data.number}}</td>
+    <td class="tx-medium">{{data.type}}</td>
+    <td class="tx-medium">{{datetimeFormat}}</td>
+    <td class="tx-medium">{{data.document_type}}</td>
+    <td class="tx-medium">
       <span class="square-8 mg-r-5 rounded-circle" :class="statusColors[data.status]"></span>
       {{data.status}}
     </td>
@@ -91,14 +91,20 @@ export default {
         type: "warning",
         showCancelButton: true,
         confirmButtonText: "Si, eliminar!",
+        confirmButtonColor: "#00b297",
         cancelButtonText: "Cancelar"
       });
+    }
+  },
+  computed: {
+    datetimeFormat() {
+      return moment(this.data.datetime).format("MM/DD/YYYY HH:mm");
     }
   }
 };
 </script>
 <style scoped>
 .action-icon {
-  color: #17a2b8;
+  color: #00b297;
 }
 </style>

@@ -1,145 +1,206 @@
 <template>
   <div class="form-layout form-layout-2">
     <p class="mg-b-30 tx-semibold">{{record.number}}</p>
+    <form @submit.prevent="validateForm">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="form-control-label">
+              Estado de Radicado:
+              <span class="tx-danger">*</span>
+            </label>
+            <select
+              class="form-control"
+              name="status"
+              v-validate="'required|alpha'"
+              data-vv-as="estado"
+              v-model="record.status"
+            >
+              <option value="Creado">Creado</option>
+              <option value="Registrado">Registrado</option>
+              <option value="Entregado">Entregado</option>
+            </select>
+            <small class="text-danger" v-if="errors.has('status')">{{errors.first('status')}}</small>
+          </div>
+        </div>
+        <!-- col-4 -->
+        <div class="col-md-4 mg-t--1 mg-md-t-0">
+          <div class="form-group mg-md-l--1">
+            <label class="form-control-label">
+              Tipo de documento:
+              <span class="tx-danger">*</span>
+            </label>
 
-    <div class="row no-gutters">
-      <div class="col-md-4">
-        <div class="form-group">
-          <label class="form-control-label">
-            Estado de Radicado:
-            <span class="tx-danger">*</span>
-          </label>
-          <select class="form-control" v-model="record.status">
-            <option value="Creado">Creado</option>
-            <option value="Registrado">Registrado</option>
-            <option value="Entregado">Entregado</option>
-          </select>
+            <input
+              v-if="record.type == 'Salida'"
+              class="form-control"
+              name="document_type"
+              v-validate="'required|alpha'"
+              data-vv-as="tipo"
+              type="text"
+              value="Correo"
+              :disabled="true"
+            />
+            <select
+              class="form-control"
+              name="document_type"
+              v-validate="'required|alpha'"
+              data-vv-as="tipo"
+              v-model="record.document_type"
+              v-else
+            >
+              <option value="Correo">Correo</option>
+              <option value="Facturas">Facturas</option>
+            </select>
+            <small
+              class="text-danger"
+              v-if="errors.has('document_type')"
+            >{{errors.first('document_type')}}</small>
+          </div>
+        </div>
+        <!-- col-4 -->
+        <div class="col-md-4 mg-t--1 mg-md-t-0">
+          <div class="form-group mg-md-l--1">
+            <label class="form-control-label">Fecha del documento:</label>
+            <input
+              class="form-control"
+              type="date"
+              name="document_date"
+              v-validate="'required'"
+              data-vv-as="fecha documento"
+              v-model="record.document_date"
+            />
+            <small
+              class="text-danger"
+              v-if="errors.has('document_date')"
+            >{{errors.first('document_date')}}</small>
+          </div>
+        </div>
+        <!-- col-4 -->
+        <div class="col-md-4">
+          <div class="form-group bd-t-0-force">
+            <label class="form-control-label">Número de factura:</label>
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Nro. de factura"
+              :disabled="record.document_type == 'Correo'"
+              v-model="record.invoice_number"
+            />
+          </div>
+        </div>
+        <!-- col-8 -->
+        <div class="col-md-4">
+          <div class="form-group mg-md-l--1 bd-t-0-force">
+            <label class="form-control-label">Descripción:</label>
+            <input
+              class="form-control"
+              name="description"
+              placeholder="Correspondiente a..."
+              v-validate="'required|min:3'"
+              data-vv-as="descripción"
+              v-model="record.description"
+            />
+            <small
+              class="text-danger"
+              v-if="errors.has('description')"
+            >{{errors.first('description')}}</small>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group mg-md-l--1 bd-t-0-force">
+            <label class="form-control-label">Anexos:</label>
+            <input
+              class="form-control"
+              name="attacheds"
+              v-validate="'required|min:3'"
+              data-vv-as="anexos"
+              placeholder="Viene en adjuntos..."
+              v-model="record.attacheds"
+            />
+            <small class="text-danger" v-if="errors.has('attacheds')">{{errors.first('attacheds')}}</small>
+          </div>
+        </div>
+        <!-- col-4 -->
+      </div>
+      <!-- row -->
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <div class="form-group mg-md-l--1 bd-t-0-force">
+            <label class="form-control-label">Tercero:</label>
+            <select
+              class="form-control"
+              name="thirdParty"
+              v-validate="'required'"
+              data-vv-as="tercero"
+              v-model="record.third_party_id"
+            >
+              <template v-if="thirdParties.length">
+                <option
+                  v-for="thirdParty in thirdParties"
+                  :key="thirdParty.id"
+                  :value="thirdParty.id"
+                >{{thirdParty.name}}</option>
+              </template>
+            </select>
+            <small
+              class="text-danger"
+              v-if="errors.has('thirdParty')"
+            >{{errors.first('thirdParty')}}</small>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group mg-md-l--1 bd-t-0-force">
+            <label class="form-control-label">Dependencia:</label>
+            <select
+              class="form-control"
+              v-model="record.dependency_id"
+              name="dependency"
+              v-validate="'required'"
+              data-vv-as="dependencia"
+              @change="getEmployees(record.dependency_id)"
+            >
+              <template v-if="dependencies.length">
+                <option
+                  v-for="dependency in dependencies"
+                  :key="dependency.id"
+                  :value="dependency.id"
+                >{{dependency.name}}</option>
+              </template>
+            </select>
+            <small
+              class="text-danger"
+              v-if="errors.has('dependency')"
+            >{{errors.first('dependency')}}</small>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group mg-md-l--1 bd-t-0-force">
+            <label class="form-control-label">Empleado:</label>
+            <select
+              class="form-control"
+              v-model="record.employee_id"
+              name="employee"
+              v-validate="'required'"
+              data-vv-as="empleado"
+              :disabled="record.dependency_id == ''"
+            >
+              <template v-if="employees.length">
+                <option
+                  v-for="employee in employees"
+                  :key="employee.id"
+                  :value="employee.id"
+                >{{employee.firstname}}</option>
+              </template>
+            </select>
+            <small class="text-danger" v-if="errors.has('employee')">{{errors.first('employee')}}</small>
+          </div>
         </div>
       </div>
-      <!-- col-4 -->
-      <div class="col-md-4 mg-t--1 mg-md-t-0">
-        <div class="form-group mg-md-l--1">
-          <label class="form-control-label">
-            Tipo de documento:
-            <span class="tx-danger">*</span>
-          </label>
-
-          <input
-            v-if="record.type == 'Salida'"
-            class="form-control"
-            type="text"
-            value="Correo"
-            :disabled="true"
-          />
-          <select class="form-control" v-model="record.document_type" v-else>
-            <option value="Correo">Correo</option>
-            <option value="Facturas">Facturas</option>
-          </select>
-        </div>
+      <div class="form-layout-footer bd pd-20 bd-t-0">
+        <button type="submit" class="btn btn-teal">Registrar</button>
       </div>
-      <!-- col-4 -->
-      <div class="col-md-4 mg-t--1 mg-md-t-0">
-        <div class="form-group mg-md-l--1">
-          <label class="form-control-label">Fecha del documento:</label>
-          <input class="form-control" type="date" v-model="record.document_date" />
-        </div>
-      </div>
-      <!-- col-4 -->
-      <div class="col-md-4">
-        <div class="form-group bd-t-0-force">
-          <label class="form-control-label">Número de factura:</label>
-          <input
-            class="form-control"
-            type="text"
-            placeholder="Nro. de factura"
-            :disabled="record.document_type == 'Correo'"
-            v-model="record.invoice_number"
-          />
-        </div>
-      </div>
-      <!-- col-8 -->
-      <div class="col-md-4">
-        <div class="form-group mg-md-l--1 bd-t-0-force">
-          <label class="form-control-label">Descripción:</label>
-          <textarea
-            class="form-control"
-            cols="30"
-            rows="3"
-            placeholder="Correspondiente a..."
-            v-model="record.description"
-          ></textarea>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group mg-md-l--1 bd-t-0-force">
-          <label class="form-control-label">Anexos:</label>
-          <textarea
-            class="form-control"
-            cols="30"
-            rows="3"
-            placeholder="Viene en adjuntos..."
-            v-model="record.attacheds"
-          ></textarea>
-        </div>
-      </div>
-      <!-- col-4 -->
-    </div>
-    <!-- row -->
-    <div class="row no-gutters">
-      <div class="col-md-4">
-        <div class="form-group mg-md-l--1 bd-t-0-force">
-          <label class="form-control-label">Tercero:</label>
-          <select class="form-control" v-model="record.third_party_id">
-            <template v-if="thirdParties.length">
-              <option
-                v-for="thirdParty in thirdParties"
-                :key="thirdParty.id"
-                :value="thirdParty.id"
-              >{{thirdParty.name}}</option>
-            </template>
-          </select>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group mg-md-l--1 bd-t-0-force">
-          <label class="form-control-label">Dependencia:</label>
-          <select
-            class="form-control"
-            v-model="record.dependency_id"
-            @change="getEmployees(record.dependency_id)"
-          >
-            <template v-if="dependencies.length">
-              <option
-                v-for="dependency in dependencies"
-                :key="dependency.id"
-                :value="dependency.id"
-              >{{dependency.name}}</option>
-            </template>
-          </select>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group mg-md-l--1 bd-t-0-force">
-          <label class="form-control-label">Empleado:</label>
-          <select
-            class="form-control"
-            v-model="record.employee_id"
-            :disabled="record.dependency_id == ''"
-          >
-            <template v-if="employees.length">
-              <option
-                v-for="employee in employees"
-                :key="employee.id"
-                :value="employee.id"
-              >{{employee.firstname}}</option>
-            </template>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="form-layout-footer bd pd-20 bd-t-0">
-      <button class="btn btn-info" @click="putRecord">Registrar</button>
-    </div>
+    </form>
     <!-- form-group -->
   </div>
 </template>
@@ -187,14 +248,25 @@ export default {
         this.$emit("employees", this.employees);
       }
     },
+    async validateForm() {
+      let valid = await this.$validator.validateAll();
+      if (valid) {
+        this.putRecord();
+        return;
+      }
+      this.$swal(
+        "Error",
+        "Debe corregir los errores antes de continuar",
+        "error"
+      );
+    },
     putRecord() {
       axios.put(`/records/${this.record.id}`, this.record).then(response => {
         this.$emit("success");
         console.log(response.data.message);
-        this.resetRecord();
+        this.$validator.reset();
       });
-    },
-    resetRecord() {}
+    }
   }
 };
 </script>

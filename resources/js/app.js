@@ -9,6 +9,8 @@ require('./bootstrap')
 // window.Vue = require('vue')
 import Vue from 'vue'
 import VueSweetalert2 from 'vue-sweetalert2'
+import VeeValidate, { Validator } from 'vee-validate'
+import es from 'vee-validate/dist/locale/es'
 
 const options = {
     confirmButtonColor: '#41b882',
@@ -16,6 +18,9 @@ const options = {
 }
 
 Vue.use(VueSweetalert2, options)
+Validator.localize({ es: es })
+
+Vue.use(VeeValidate, { locale: 'es', fieldsBagName: 'vvFields' })
 
 /**
  * The following block of code may be used to automatically register your
