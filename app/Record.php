@@ -76,4 +76,9 @@ class Record extends Model
         }
         return $newRecordNumber;
     }
+
+    public function getFormatDatetimeAttribute()
+    {
+        return Carbon::parse($this->datetime)->format('d/m/Y');
+    }
 }

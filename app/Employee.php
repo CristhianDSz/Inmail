@@ -12,4 +12,9 @@ class Employee extends Model
     {
         return $this->belongsTo(Dependency::class);
     }
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->firstname} {$this->lastname}";
+    }
 }

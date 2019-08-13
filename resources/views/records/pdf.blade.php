@@ -6,6 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Radicados PDF</title>
     <style>
+        @page { size: 3.2cm 5.7cm landscape; }
+
         body{
             margin-top: 40px;
             margin-left: 80px;

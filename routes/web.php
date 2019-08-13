@@ -33,6 +33,8 @@ Route::group(['prefix' => 'config'], function () {
 });
 
 Route::post('app/records/pdf', 'RecordsController@getPdf')->name('records.pdf');
+Route::get('formats', 'FormatsController@index')->name('formats.index');
+Route::post('formats', 'FormatsController@filter')->name('formats.filter');
 
 
 Auth::routes();
