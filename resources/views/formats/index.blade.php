@@ -11,13 +11,14 @@
         <div class="d-flex align-items-center justify-content-between mg-b-30">
           <div>
             <h6 class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1">Filtrar por fecha</h6>
-            <p class="mg-b-0"><i class="icon ion-calendar mg-r-5"></i>{{$currentDate}} -  {{$currentDate}}</p>
+            <p class="mg-b-0"><i class="icon ion-calendar mg-r-5"></i>{{$firstDate}} -  {{$secondDate}}</p>
           </div>
+        <a title="Generar planilla" href="{{route('formats.pdf',['first_date' => $firstDate,'second_date'=> $secondDate])}}"><i class="icon ion-clipboard tx-32 tx-teal"></i></a>
         </div><!-- d-flex -->
         
-        <form class="row mg-b-20">
-            <input class="form-control form-control-sm mg-r-5 col-4" type="date" name="first_date">
-            <input class="form-control form-control-sm mg-l-5  col-4" type="date" name="second_date">
+      <form class="row mg-b-20" method="GET" action="{{route('formats.index')}}">
+        <input class="form-control form-control-sm mg-r-5 col-4" type="date" name="first_date" value="{{$firstDate}}">
+        <input class="form-control form-control-sm mg-l-5  col-4" type="date" name="second_date" value="{{$secondDate}}">
             <button type="submit" class="btn btn-outline-teal tx-11 tx-uppercase tx-medium tx-spacing-1 pd-x-30 mg-l-10 bd-2 col-2">Filtrar</button>
         </form>
 

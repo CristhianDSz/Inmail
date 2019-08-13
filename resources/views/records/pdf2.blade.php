@@ -10,8 +10,8 @@
     </style>
     <style>
        html,body{
-            height:100%;
-            width:100%;
+            height:97%;
+            width:97%;
             margin:0;
             padding:0;
         }
@@ -23,7 +23,7 @@
 
         .container img {
             width: 40%;
-            padding: 5px;
+            padding-top: 10px;
             display: block;
         }
 
@@ -68,19 +68,23 @@
     </style>
 </head>
 <body>
-    @foreach ($records as $record)
-        @for ($i = 0; $i < $record['copy']; $i++)
-        <div class="container">
-            <img src="{{public_path('img/Sticker.png')}}">
-            <p class="title-record">Radicado:</p>
-            <p class="record-number">{{$record['number']}}</p>
-            <p class="cite">(Citar en caso de respuesta)</p>
-            <p class="cite">{{$record['datetime']}}</p>
-            <p class="footer-message">Correspondencia {{$record['type'] === 'Entrada' ? 'Recibida' : 'Enviada'}}</p>
-        </div>
-        <div class="page-break"></div>
-        @endfor
-    @endforeach
+   @if (count($records))
+        @foreach ($records as $record)
+            @if ($record['copy'] > 0)
+                @for ($i = 0; $i < $record['copy']; $i++)
+                <div class="container">
+                    <img src="{{public_path('img/Sticker.png')}}">
+                    <p class="title-record">Radicado:</p>
+                    <p class="record-number">{{$record['number']}}</p>
+                    <p class="cite">(Citar en caso de respuesta)</p>
+                    <p class="cite">{{$record['datetime']}}</p>
+                    <p class="footer-message">Correspondencia {{$record['type'] === 'Entrada' ? 'Recibida' : 'Enviada'}}</p>
+                </div>
+                <div class="page-break"></div>
+                @endfor
+            @endif
+        @endforeach
+   @endif
     
 </body>
 </html>
