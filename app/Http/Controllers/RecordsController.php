@@ -94,8 +94,6 @@ class RecordsController extends Controller
         $records = request()->all();
 
         $counter = 0;
-        // return view('records.pdf2', compact('records'));
-        //$pdf = PDF::loadView('records.pdf', compact('records', 'counter'));
         $pdf = PDF::loadView('records.pdf2', compact('records', 'counter'));
 
         return $pdf->download('radicados.pdf');

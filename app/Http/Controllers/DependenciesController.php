@@ -13,7 +13,7 @@ class DependenciesController extends Controller
 
     public function index()
     {
-        return Dependency::paginate(5);
+        return Dependency::paginate(30);
 
 
         // return [

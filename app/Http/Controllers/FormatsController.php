@@ -27,9 +27,9 @@ class FormatsController extends Controller
             $todayRecords = Record::whereRaw('DATE(datetime) between ? and ? ', [$firstDate, $secondDate]);
         }
 
-        $todayRecords = $todayRecords->where('type', 'Entrada')->where('status', 'Registrado')->orderBy('datetime', 'desc')->with('thirdParty')->with('employee');
-
+        $todayRecords = $todayRecords->where('type', 'Entrada')->where('status', 'Registrado')->with('thirdParty')->with('employee');
         $todayRecords = $todayRecords->get();
+
 
         return view('formats.index', compact('firstDate', 'secondDate', 'todayRecords'));
     }
@@ -37,7 +37,7 @@ class FormatsController extends Controller
     public function getPdf($first_date, $second_date)
     {
         $company = Company::first();
-        $records = Record::whereRaw('DATE(datetime) between ? and ? ', [$first_date, $second_date])->where('type', 'Entrada')->where('status', 'Registrado')->orderBy('datetime', 'desc')->with('thirdParty')->with('employee')->get();
+        $records = Record::whereRaw('DATE(datetime) between ? and ? ', [$first_date, $second_date])->where('type', 'Entrada')->where('status', 'Registrado')->orderBy('datetime', 'desc')->with('thirdParty')->with('employee')->get()->sortBy('employee.firstname');
 
         // return view('formats.pdf', compact('records', 'company'));
         $pdf = PDF::loadView('formats.pdf', compact('records', 'company'));
