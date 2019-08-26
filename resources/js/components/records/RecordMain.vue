@@ -1,6 +1,11 @@
 <template>
-  <div class="container mt-4">
-    <div class="card">
+  <div class="row row-sm">
+    <card title="Entrada" text="0" color="teal"></card>
+    <card title="Salida" text="0" color="danger"></card>
+    <card title="Sin registrar" text="0" color="primary"></card>
+    <card title="Hoy" text="0" color="br-primary"></card>
+
+    <div class="card col-12 mt-4">
       <div class="card-body">
         <div class="d-flex justify-content-between">
           <div class="text-left">
@@ -55,11 +60,12 @@
 
 <script>
 import Modal from "../utils/Modal";
+import Card from "./Card";
 import RecordForm from "./RecordForm";
 import RecordEditForm from "./RecordEditForm";
 import Records from "./Records";
 export default {
-  components: { Modal, RecordForm, RecordEditForm, Records },
+  components: { Modal, Card, RecordForm, RecordEditForm, Records },
   data() {
     return {
       records: [],

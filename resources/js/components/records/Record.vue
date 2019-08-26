@@ -8,49 +8,17 @@
       <span class="square-8 mg-r-5 rounded-circle" :class="statusColors[data.status]"></span>
       {{data.status}}
     </td>
-    <!-- <td>{{data.third_party.name}}</td>
+
     <td>
-      <h6 class="tx-inverse tx-14 mg-b-0">{{data.employee.name}}</h6>
-      <span class="tx-12">{{data.dependency.name}}</span>
-    </td>-->
-    <td>
-      <a href="#" @click.prevent="$emit('recordClick', record)">
-        <i class="icon ion-edit tx-22 p-2 action-icon"></i>
+      <a href="#" @click.prevent="$emit('recordClick', record)" v-if="showEditOption">
+        <i class="icon ion-edit tx-22 p-2 tx-teal"></i>
       </a>
 
       <a href="#" @click.prevent="deleteRecord">
-        <i class="icon ion-trash-a tx-22 p-2 action-icon"></i>
+        <i class="icon ion-trash-a tx-22 p-2 tx-teal"></i>
       </a>
     </td>
   </tr>
-
-  <!-- <td>
-      <select v-model="record.dependency_id" class="form-control">
-        <option
-          v-for="third_party in thirdPartiesData"
-          :key="third_party.id"
-          :value="third_party.id"
-        >{{third_party.name}}</option>
-      </select>
-    </td>
-    <td>
-      <select v-model="record.dependency_id" class="form-control">
-        <option
-          v-for="dependency in dependenciesData"
-          :key="dependency.id"
-          :value="dependency.id"
-        >{{dependency.name}}</option>
-      </select>
-    </td>
-    <td>
-      <select v-model="record.employee_id" class="form-control">
-        <option
-          v-for="employee in employeesData"
-          :key="employee.id"
-          :value="employee.id"
-        >{{employee.name}}</option>
-      </select>
-  </td>-->
 </template>
 
 <script>
@@ -61,11 +29,12 @@ export default {
   data() {
     return {
       record: {},
-      editForm: false,
       statusColors: {
         Creado: "bg-danger",
         Registrado: "bg-warning",
-        Entregado: "bg-success"
+        Entregado: "bg-success",
+        "Visado Control Interno": "bg-primary",
+        "Visado Contabilidad": "bg-primary"
       }
     };
   },
@@ -84,6 +53,7 @@ export default {
         }
       });
     },
+
     askingBeforeDelete() {
       return this.$swal({
         title: "Está seguro (a)?",
@@ -99,12 +69,10 @@ export default {
   computed: {
     datetimeFormat() {
       return moment(this.data.datetime).format("MM/DD/YYYY HH:mm");
+    },
+    showEditOption() {
+      return this.data.status === "Creado" || this.data.status === "Registrado";
     }
   }
 };
 </script>
-<style scoped>
-.action-icon {
-  color: #00b297;
-}
-</style>

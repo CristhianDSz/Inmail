@@ -1,22 +1,23 @@
 @extends('layouts.master')
 
 @section('content')
+ <div class="row row-sm">
     <div class="col-lg-12 mg-t-20 mg-lg-t-0">
-     @include('partials.errors')
-        <div class="card bd-0">
-          <div class="card-header bg-white bd-0">
-            <h6 class="tx-medium tx-14">Editar de empresa</h6>
-          </div>
-        <form action="{{route('companies.update',$company->id) }}" method="POST" enctype="multipart/form-data">
-          
-          @include('companies.form',[
-            'submitButtonText' => 'Editar cambios'
-          ])
-          @method('PATCH')
-          </form>
-        </div><!-- card -->
-    </div><!-- col-6 -->
-
+        @include('partials.errors')
+           <div class="card bd-0">
+             <div class="card-header bg-white bd-0">
+               <h6 class="tx-medium tx-14">Editar de empresa</h6>
+             </div>
+           <form action="{{route('companies.update',$company->id) }}" method="POST" enctype="multipart/form-data">
+             
+             @include('companies.form',[
+               'submitButtonText' => 'Editar cambios'
+             ])
+             @method('PATCH')
+             </form>
+           </div><!-- card -->
+       </div><!-- col-6 -->
+ </div>
 @section('scripts')
     <script>
       function readFile(event,elementOutput) {

@@ -43,6 +43,16 @@ class Record extends Model
         return $query->where('type', $type)->orderBy('id', 'desc');
     }
 
+    public function scopeTrackingCi($query, $record)
+    {
+        $query->where('number', 'LIKE', "%$record%")->where('status', 'Entregado')->with('employee.dependency');
+    }
+
+    public function scopeTrackingCo($query, $record)
+    {
+        $query->where('number', 'LIKE', "%$record%")->where('status', 'Visado Control Interno')->with('employee.dependency');
+    }
+
     public static function makeRecordNumber($record = null, $recordString)
     {
         $digits = null;

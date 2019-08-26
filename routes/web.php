@@ -20,6 +20,7 @@ Route::apiResource('dependencies', 'DependenciesController');
 Route::get('app/employees', 'EmployeesController@render')->name('employees.render');
 Route::apiResource('employees', 'EmployeesController');
 Route::get('app/third-parties', 'ThirdPartiesController@render')->name('third_parties.render');
+Route::get('third-parties/data', 'ThirdPartiesController@getData');
 Route::apiResource('third-parties', 'ThirdPartiesController');
 Route::get('app/cities', 'CitiesController@index');
 Route::get('app/correspondence', 'RecordsController@render')->name('correspondence.render');
@@ -35,8 +36,10 @@ Route::group(['prefix' => 'config'], function () {
 Route::post('app/records/pdf', 'RecordsController@getPdf')->name('records.pdf');
 Route::get('formats', 'FormatsController@index')->name('formats.index');
 Route::get('formats/pdf/{first_date}/{second_date}', 'FormatsController@getPdf')->name('formats.pdf');
+Route::get('app/tracking', 'TrackingController@index')->name('tracking.index');
+Route::patch('tracking/{record}', 'TrackingController@update')->name('tracking.update');
 
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');

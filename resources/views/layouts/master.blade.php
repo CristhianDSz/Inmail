@@ -50,7 +50,7 @@
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
        
-        <a href="{{route('employees.render')}}" class="br-menu-link">
+        <a href="{{route('tracking.index')}}" class="{{Route::current()->getName() == 'tracking.index' ? 'br-menu-link active' : 'br-menu-link'}}">
           <div class="br-menu-item">
             <i class="menu-item-icon icon ion-ios-email-outline tx-22"></i>
             <span class="menu-item-label">Seguimiento</span>
@@ -75,7 +75,7 @@
           </ul>
           
 
-        <a href="{{ route('formats.index') }}" class="br-menu-link">
+        <a href="{{ route('formats.index') }}" class="{{Route::current()->getName() == 'formats.index' ? 'br-menu-link active' : 'br-menu-link'}}">
           <div class="br-menu-item">
             <i class="menu-item-icon icon ion-ios-list-outline tx-22"></i>
             <span class="menu-item-label">Planilla</span>
@@ -256,9 +256,7 @@
         </div>
         
         <div class="br-pagebody mg-t-5 pd-x-30">
-            <div class="row row-sm">
-                @yield('content')
-            </div>
+          @yield('content')
         </div>
         <footer class="br-footer">
             <div class="footer-center">

@@ -16,6 +16,11 @@ class ThirdPartiesController extends Controller
         return ThirdParty::orderBy('name')->paginate(30);
     }
 
+    public function getData()
+    {
+        return ThirdParty::orderBy('name')->get();
+    }
+
     public function store()
     {
         $attributes = request()->validate([

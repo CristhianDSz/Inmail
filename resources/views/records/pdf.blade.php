@@ -76,7 +76,7 @@
                   @endif
                   <li>
                     <div class="info">
-                            <img src="{{public_path('img/Sticker.png')}}">
+                            <img src="{{asset('img/Sticker.png')}}">
                             <p class="record">
                                 <span>Radicado:</span>
                                 {{$record['number']}}

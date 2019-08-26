@@ -1,28 +1,30 @@
 <template>
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="text-right">
-          <small class="font-weight-bold">Crear nueva dependencia</small>
-          <a
-            href="#"
-            class="btn btn-info btn-icon rounded-circle mg-r-5 mg-b-10 bd-4"
-            @click.prevent="showModal"
-          >
-            <div>
-              <i class="icon ion-plus"></i>
-            </div>
-          </a>
+  <div class="row row-sm">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="text-right">
+            <small class="font-weight-bold">Crear nueva dependencia</small>
+            <a
+              href="#"
+              class="btn btn-info btn-icon rounded-circle mg-r-5 mg-b-10 bd-4"
+              @click.prevent="showModal"
+            >
+              <div>
+                <i class="icon ion-plus"></i>
+              </div>
+            </a>
+          </div>
+          <dependencies ref="dependencies"></dependencies>
         </div>
-        <dependencies ref="dependencies"></dependencies>
       </div>
+      <modal name="dependencyModal" :isLg="true" ref="modal">
+        <template slot="title">Agregar nueva dependencia</template>
+        <template slot="body">
+          <dependency-form @success="reloadDependencies"></dependency-form>
+        </template>
+      </modal>
     </div>
-    <modal name="dependencyModal" :isLg="true" ref="modal">
-      <template slot="title">Agregar nueva dependencia</template>
-      <template slot="body">
-        <dependency-form @success="reloadDependencies"></dependency-form>
-      </template>
-    </modal>
   </div>
 </template>
 
