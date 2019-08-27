@@ -15,15 +15,15 @@
         <p class="tx-semibold">{{record.document_type}}</p>
         <p class="tx-semibold">{{documentDate}}</p>
       </div>
-       <div class="col-2">
-          <p><span class="tx-bold"><u>Número de factura</u></span></p>
+       <div class="col-1.5">
+          <p><span class="tx-bold"><u>Nro. de factura</u></span></p>
           <p><span class="tx-bold"><u>Descripción</u></span></p>
           <p><span class="tx-bold"><u>Adjuntos</u></span></p>
           <p><span class="tx-bold"><u>Tercero</u></span></p>
           <p><span class="tx-bold"><u>Empleado</u></span></p>
           <p><span class="tx-bold"><u>Dependencia</u></span></p>
       </div>
-        <div class="col-2">
+        <div class="col-3">
         <p class="tx-medium">{{record.invoice_number || 'No aplica'}}</p>
         <p class="tx-medium">{{record.description}}</p>
         <p class="tx-medium">{{record.attacheds}}</p>

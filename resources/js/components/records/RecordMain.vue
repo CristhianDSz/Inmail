@@ -24,7 +24,7 @@
             </a>
           </div>
         </div>
-        <div class="pd-10 rounded mg-t-10">
+        <div class="pd-10 rounded mg-t-5">
           <div class="content-tabs">
             <records ref="records" 
             @selectedRecord="passRecordEditForm"
