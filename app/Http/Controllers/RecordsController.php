@@ -18,7 +18,7 @@ class RecordsController extends Controller
 
     public function index()
     {
-        return Record::orderBy('type')->orderBy('number')->get();
+        return Record::orderBy('type')->orderBy('number')->with('employee:id,firstname,lastname')->with('thirdParty:id,name')->with('dependency:id,name')->get();
     }
 
     public function store()

@@ -14,6 +14,10 @@
         <i class="icon ion-edit tx-22 p-2 tx-teal"></i>
       </a>
 
+      <a href="#" title="Ver detalles" @click.prevent="$emit('recordDetailsClick', record)" v-if="showDetailsOption">
+        <i class="icon ion-eye tx-22 p-2 tx-teal"></i>
+      </a>
+
       <a href="#" @click.prevent="deleteRecord">
         <i class="icon ion-trash-a tx-22 p-2 tx-teal"></i>
       </a>
@@ -72,6 +76,9 @@ export default {
     },
     showEditOption() {
       return this.data.status === "Creado" || this.data.status === "Registrado";
+    },
+    showDetailsOption () {
+      return this.data.status === "Entregado" || this.data.status === "Visado Control Interno"
     }
   }
 };

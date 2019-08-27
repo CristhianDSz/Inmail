@@ -21,6 +21,7 @@
           :thirdPartiesData="thirdParties"
           @deleted="getRecords"
           @recordClick="passRecordToMain"
+          @recordDetailsClick="passRecordDetailToMain"
         ></record>
       </tbody>
     </table>
@@ -38,24 +39,56 @@ export default {
       records: [],
       dependencies: [],
       thirdParties: [],
-      employees: []
+      employees: [],
+      totalOutRecords:0
     };
   },
   created() {
     this.getRecords();
-    // dependenciesEmitter.$on("dependencies", data => {
-    //   this.dependencies = data;
-    // });
   },
   methods: {
     getRecords() {
       axios.get("/records").then(records => {
         this.records = records.data;
+        this.setTotalInRecords(records.data)
+        this.setTotalOutRecords(records.data)
+        this.setTotalUnregisterRecords(records.data)
+        this.setTotalTodayRecords(records.data)
         this.$emit("quantity", records.data.length);
       });
     },
     passRecordToMain(record) {
       this.$emit("selectedRecord", record);
+    },
+    passRecordDetailToMain(record) {
+      this.$emit('detailRecord',record)
+    },
+    setTotalInRecords(records = []) {
+      let totalInRecords = records.filter(record => {
+        return record.type === 'Entrada'
+      })
+     this.$emit('inRecords', totalInRecords.length)
+    },
+    setTotalOutRecords(records = []) {
+      let totalOutRecords = records.filter(record => {
+        return record.type === 'Salida'
+      })
+     this.$emit('outRecords', totalOutRecords.length)
+    },
+    setTotalUnregisterRecords(records = []) {
+      let totalunregisteredRecords = records.filter(record => {
+        return record.status === 'Creado'
+      })
+     this.$emit('unregisteredRecords', totalunregisteredRecords.length)
+    },
+    setTotalTodayRecords(records = []) {
+      let recordDate, currentDate = null
+      let todayRecords = records.filter(record => {
+        recordDate = moment(record.datetime).format('YYYY-MM-DD')
+        currentDate = moment().format('YYYY-MM-DD')
+        return recordDate === currentDate
+      })
+     this.$emit('todayRecords',todayRecords.length)
     }
   }
 };

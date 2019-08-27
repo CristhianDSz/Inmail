@@ -1,9 +1,9 @@
 <template>
   <div class="row row-sm">
-    <card title="Entrada" text="0" color="teal"></card>
-    <card title="Salida" text="0" color="danger"></card>
-    <card title="Sin registrar" text="0" color="primary"></card>
-    <card title="Hoy" text="0" color="br-primary"></card>
+    <card title="Entrada" :text="totalInRecords" color="teal"></card>
+    <card title="Salida" :text="totalOutRecords" color="danger"></card>
+    <card title="Sin registrar" :text="totalUnregisteredRecords" color="primary"></card>
+    <card title="Hoy" :text="totalTodayRecords" color="br-primary"></card>
 
     <div class="card col-12 mt-4">
       <div class="card-body">
@@ -26,7 +26,15 @@
         </div>
         <div class="pd-10 rounded mg-t-10">
           <div class="content-tabs">
-            <records ref="records" @selectedRecord="passRecordEditForm" @quantity="setTotalRecords"></records>
+            <records ref="records" 
+            @selectedRecord="passRecordEditForm"
+            @detailRecord="passRecordDetail"
+            @quantity="totalRecords = $event"
+            @inRecords="totalInRecords = $event"
+            @outRecords="totalOutRecords = $event"
+            @unregisteredRecords="totalUnregisteredRecords = $event"
+            @todayRecords = "totalTodayRecords = $event"
+            ></records>
           </div>
         </div>
         <modal ref="recordModal" name="recordModal">
@@ -44,13 +52,19 @@
           <template slot="title">Editar registro</template>
           <template slot="body">
             <record-edit-form
-              v-if="editForm"
+              v-if="showEdit"
               @dependencies="passDependenciesToRecords"
               @thirdParties="passThirdPartiesToRecords"
               @employees="passEmployeesToRecords"
               @success="getRecords"
               :record="currentRecord"
             ></record-edit-form>
+          </template>
+        </modal>
+        <modal ref="recordDetailModal" name="recordDetailModal">
+          <template slot="title">Detalle de registro</template>
+          <template slot="body">
+            <record-detail :record="currentRecord" v-if="showDetail"></record-detail>
           </template>
         </modal>
       </div>
@@ -63,17 +77,23 @@ import Modal from "../utils/Modal";
 import Card from "./Card";
 import RecordForm from "./RecordForm";
 import RecordEditForm from "./RecordEditForm";
+import RecordDetail from "./RecordDetail"
 import Records from "./Records";
 export default {
-  components: { Modal, Card, RecordForm, RecordEditForm, Records },
+  components: { Modal, Card, RecordForm, RecordEditForm, RecordDetail, Records },
   data() {
     return {
       records: [],
       typeRecordsTabs: ["Entrada", "Salida"],
       selectedTab: "Entrada",
-      editForm: false,
+      showEdit: false,
+      showDetail:false,
       currentRecord: "",
-      totalRecords: 0
+      totalRecords: 0,
+      totalInRecords: 0,
+      totalOutRecords: 0,
+      totalUnregisteredRecords:0,
+      totalTodayRecords:0
     };
   },
   created() {},
@@ -96,11 +116,13 @@ export default {
     },
     passRecordEditForm(record) {
       this.currentRecord = record;
-      this.editForm = true;
+      this.showEdit = true;
       this.$refs.recordEditModal.showModal();
     },
-    setTotalRecords(records) {
-      this.totalRecords = records;
+    passRecordDetail(record) {
+      this.currentRecord = record
+      this.showDetail = true
+      this.$refs.recordDetailModal.showModal()
     }
   }
 };
