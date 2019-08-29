@@ -13,7 +13,7 @@
             name="identification"
             v-model="thirdParty.identification"
             placeholder="Cédula de ciudadanía o NIT"
-          >
+          />
         </div>
       </div>
       <div class="col-md-4">
@@ -28,7 +28,7 @@
             name="name"
             v-model="thirdParty.name"
             placeholder="Ingrese los nombres"
-          >
+          />
         </div>
       </div>
       <!-- col-4 -->
@@ -44,7 +44,7 @@
             name="lastname"
             v-model="thirdParty.address"
             placeholder="Ingrese la dirección"
-          >
+          />
         </div>
       </div>
       <div class="col-md-4 mg-t--1 mg-md-t-0">
@@ -58,7 +58,7 @@
             v-model="thirdParty.telephone"
             class="form-control"
             placeholder="Ingrese el teléfono"
-          >
+          />
         </div>
       </div>
 
@@ -89,7 +89,7 @@
             v-model="thirdParty.email_contact"
             class="form-control"
             placeholder="Ingrese el correo de contacto"
-          >
+          />
         </div>
       </div>
       <!-- col-4 -->
@@ -123,6 +123,18 @@ export default {
   methods: {
     getCities() {
       axios.get("/app/cities").then(cities => {
+        cities.data.push(
+          {
+            c_digo_dane_del_municipio: "11001",
+            municipio: "Bogotá",
+            departamento: "Cundinamarca"
+          },
+          {
+            c_digo_dane_del_municipio: "00001",
+            municipio: "Exterior",
+            departamento: "Fuera del país"
+          }
+        );
         this.cities = cities.data;
         citiesEmitter.$emit("cities", cities.data);
       });

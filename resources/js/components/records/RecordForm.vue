@@ -100,54 +100,19 @@
         <div class="col-md-4">
           <div class="form-group mg-md-l--1 bd-t-0-force">
             <label class="form-control-label">Tercero:</label>
-            <select class="form-control" v-model="record.third_party_id">
-              <option value>Seleccione</option>
-              <template v-if="thirdParties.length">
-                <option
-                  v-for="thirdParty in thirdParties"
-                  :key="thirdParty.id"
-                  :value="thirdParty.id"
-                >{{thirdParty.name}}</option>
-              </template>
-            </select>
+            <multiselect class="form-control" :selectLabel="''" :deselectLabel="''" :maxHeight="200" v-model="thirdPartyRecord" :options="thirdParties" label="name" placeholder="Seleccione"></multiselect>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group mg-md-l--1 bd-t-0-force">
             <label class="form-control-label">Dependencia:</label>
-            <select
-              class="form-control"
-              v-model="record.dependency_id"
-              @change="getEmployees(record.dependency_id)"
-            >
-              <option value>Seleccione</option>
-              <template v-if="dependencies.length">
-                <option
-                  v-for="dependency in dependencies"
-                  :key="dependency.id"
-                  :value="dependency.id"
-                >{{dependency.name}}</option>
-              </template>
-            </select>
+            <multiselect class="form-control" :selectLabel="''" :deselectLabel="''"  :maxHeight="400" v-model="dependencyRecord" :options="dependencies" label="name"   @input="getEmployees(dependencyRecord.id)" placeholder="Seleccione"></multiselect>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group mg-md-l--1 bd-t-0-force">
             <label class="form-control-label">Empleado:</label>
-            <select
-              class="form-control"
-              v-model="record.employee_id"
-              :disabled="record.dependency_id == '0'"
-            >
-              <option value>Seleccione</option>
-              <template v-if="employees.length">
-                <option
-                  v-for="employee in employees"
-                  :key="employee.id"
-                  :value="employee.id"
-                >{{employee.firstname}}</option>
-              </template>
-            </select>
+             <multiselect class="form-control" :selectLabel="''" :deselectLabel="''" :maxHeight="200" v-model="employeeRecord" :options="employees" label="firstname" placeholder="Seleccione"></multiselect>
           </div>
         </div>
         <div class="col-md-2">
@@ -206,7 +171,11 @@ export default {
       },
       thirdParties: [],
       dependencies: [],
-      employees: []
+      employees: [],
+      //Multiselect
+      thirdPartyRecord:"",
+      dependencyRecord:"",
+      employeeRecord:""
     };
   },
   created() {
@@ -254,6 +223,9 @@ export default {
       );
     },
     postRecord() {
+      this.record.third_party_id = this.thirdPartyRecord.id
+      this.record.dependency_id = this.dependencyRecord.id
+      this.record.employee_id = this.employeeRecord.id
       axios.post("/records", this.record).then(response => {
         this.$swal({
           title: "Correcto",

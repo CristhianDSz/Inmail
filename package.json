@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "moment": "^2.24.0",
-        "vee-validate": "^2.2.15"
+        "vee-validate": "^2.2.15",
+        "vue-multiselect": "^2.1.6"
     }
 }

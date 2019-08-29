@@ -16,10 +16,11 @@
           <option value="datetime">Fecha más reciente</option>
           <option value="document_type">Tipo de documento</option>
           <option value="status">Estado</option>
+          <option value="name">Tercero</option>
         </select>
       </div>
     </div>
-    <table class="table table-valign-middle mg-b-0" v-if="records.length">
+    <table class="table table-responsive table-valign-middle mg-b-0" v-if="records.length">
       <thead>
         <tr>
           <th>Número</th>
@@ -40,7 +41,6 @@
           :thirdPartiesData="thirdParties"
           @deleted="getRecords"
           @recordClick="passRecordToMain"
-          @recordDetailsClick="passRecordDetailToMain"
         ></record>
       </tbody>
     </table>
@@ -64,7 +64,7 @@ export default {
       employees: [],
       totalOutRecords: 0,
       recordSearch: "",
-      recordOrder: "number"
+      recordOrder: "datetime"
     };
   },
   created() {
@@ -84,9 +84,6 @@ export default {
     },
     passRecordToMain(record) {
       this.$emit("selectedRecord", record);
-    },
-    passRecordDetailToMain(record) {
-      this.$emit("detailRecord", record);
     },
     setTotalInRecords(records = []) {
       let totalInRecords = records.filter(record => {
@@ -124,30 +121,34 @@ export default {
         this.records =  RecordSorter.sortByStringField(this.records,"document_type")
       } else if (field === "status") {
         this.records =  RecordSorter.sortByStringField(this.records,"status")
-      } else {
+      } else if (field === "name") {
+        this.records =   RecordSorter.sortByObjectNameField(this.records,"third_party")
+      }
+       else {
         this.records = RecordSorter.sortByCharAndNumber(this.records)
       }
-    }
+    },
   },
   watch: {
     /** Search a record for type, status, number, datetime or document_type property */
-    recordSearch() {
-      if (this.recordSearch.length > 0) {
-        this.records = this.records.filter(record => {
+     recordSearch() {
+      if (this.recordSearch.length) {
+        this.records = this.originalRecords.filter(record => {
           return (
-            record.type.indexOf(this.recordSearch) > -1 ||
-            record.status.indexOf(this.recordSearch) > -1 ||
-            record.number.indexOf(this.recordSearch) > -1 ||
+            record.type.toLowerCase().indexOf(this.recordSearch.toLowerCase()) > -1 ||
+            record.status.toLowerCase().indexOf(this.recordSearch.toLowerCase()) > -1 ||
+            record.number.toLowerCase().indexOf(this.recordSearch.toLowerCase()) > -1 ||
             moment(record.datetime)
               .format("MM/DD/YYYY")
               .indexOf(this.recordSearch) > -1 ||
-            record.document_type.indexOf(this.recordSearch) > -1
+            record.document_type.toLowerCase().indexOf(this.recordSearch.toLowerCase()) > -1
           );
         });
       } else {
         this.records = this.originalRecords;
       }
-    }
+    },
+   
   }
 };
 </script>

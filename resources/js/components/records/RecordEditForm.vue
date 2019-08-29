@@ -128,21 +128,20 @@
         <div class="col-md-4">
           <div class="form-group mg-md-l--1 bd-t-0-force">
             <label class="form-control-label">Tercero:</label>
-            <select
+            <multiselect
               class="form-control"
               name="thirdParty"
-              v-validate="'required'"
-              data-vv-as="tercero"
-              v-model="record.third_party_id"
-            >
-              <template v-if="thirdParties.length">
-                <option
-                  v-for="thirdParty in thirdParties"
-                  :key="thirdParty.id"
-                  :value="thirdParty.id"
-                >{{thirdParty.name}}</option>
-              </template>
-            </select>
+              data-vv-as="Tercero"
+              v-validate="'required|min:3'"
+              :selectLabel="''"
+              :deselectLabel="''"
+              :maxHeight="200"
+              v-model="currentThirdParty"
+              track-by="id"
+              :options="thirdParties"
+              label="name"
+              placeholder="Seleccione"
+            ></multiselect>
             <small
               class="text-danger"
               v-if="errors.has('thirdParty')"
@@ -152,22 +151,20 @@
         <div class="col-md-4">
           <div class="form-group mg-md-l--1 bd-t-0-force">
             <label class="form-control-label">Dependencia:</label>
-            <select
+            <multiselect
               class="form-control"
-              v-model="record.dependency_id"
               name="dependency"
-              v-validate="'required'"
-              data-vv-as="dependencia"
-              @change="getEmployees(record.dependency_id)"
-            >
-              <template v-if="dependencies.length">
-                <option
-                  v-for="dependency in dependencies"
-                  :key="dependency.id"
-                  :value="dependency.id"
-                >{{dependency.name}}</option>
-              </template>
-            </select>
+              data-vv-as="Dependencia"
+              v-validate="'required|min:3'"
+              :selectLabel="''"
+              :deselectLabel="''"
+              :maxHeight="400"
+              v-model="currentDependency"
+              :options="dependencies"
+              label="name"
+              @input="getEmployees(currentDependency)"
+              placeholder="Seleccione"
+            ></multiselect>
             <small
               class="text-danger"
               v-if="errors.has('dependency')"
@@ -177,22 +174,19 @@
         <div class="col-md-4">
           <div class="form-group mg-md-l--1 bd-t-0-force">
             <label class="form-control-label">Empleado:</label>
-            <select
+            <multiselect
               class="form-control"
-              v-model="record.employee_id"
               name="employee"
-              v-validate="'required'"
-              data-vv-as="empleado"
-              :disabled="record.dependency_id == ''"
-            >
-              <template v-if="employees.length">
-                <option
-                  v-for="employee in employees"
-                  :key="employee.id"
-                  :value="employee.id"
-                >{{employee.firstname}}</option>
-              </template>
-            </select>
+              data-vv-as="Empleado"
+              v-validate="'required|min:3'"
+              :selectLabel="''"
+              :deselectLabel="''"
+              :maxHeight="200"
+              v-model="currentEmployee"
+              :options="employees"
+              label="firstname"
+              placeholder="Seleccione"
+            ></multiselect>
             <small class="text-danger" v-if="errors.has('employee')">{{errors.first('employee')}}</small>
           </div>
         </div>
@@ -213,39 +207,54 @@ export default {
       recordStates: ["Creado", "Registrado", "Entregado"],
       thirdParties: [],
       dependencies: [],
-      employees: []
+      employees: [],
+      //Multiselect
+      currentThirdParty: "",
+      currentDependency: "",
+      currentEmployee: ""
     };
   },
   created() {
     this.getAllData();
   },
+  
   methods: {
     getAllData() {
       axios.all([this.getThirdParties(), this.getDependencies()]).then(
         axios.spread((thirdParties, dependencies) => {
           this.thirdParties = thirdParties.data;
           this.dependencies = dependencies.data;
-          this.$emit("dependencies", dependencies.data);
-          this.$emit("thirdParties", thirdParties.data);
+          this.assignMultiSelectData();
         })
       );
     },
+
     getThirdParties() {
       return axios.get("/third-parties/data");
     },
     getDependencies() {
       return axios.get("/dependencies/employees");
     },
-    getEmployees(dependencyId) {
-      if (this.dependencies.length) {
-        let dependency = this.dependencies.find(dependency => {
-          return dependency.id === dependencyId;
-        });
-
+    assignMultiSelectData() {
+      this.currentThirdParty =
+        this.thirdParties.find(thirdParty => {
+          return thirdParty.id === this.record.third_party_id;
+        }) || null;
+      this.currentDependency =
+        this.dependencies.find(dependency => {
+          return dependency.id === this.record.dependency_id;
+        }) || null;
+      this.getEmployees(this.currentDependency);
+      this.currentEmployee =
+        this.employees.find(employee => {
+          return employee.id === this.record.employee_id;
+        }) || null;
+    },
+    getEmployees(dependency) {
+      if (dependency != null) {
         this.employees = dependency.employees.length
           ? dependency.employees
           : [];
-        this.$emit("employees", this.employees);
       }
     },
     async validateForm() {
@@ -261,11 +270,19 @@ export default {
       );
     },
     putRecord() {
+      this.record.third_party_id = this.currentThirdParty.id
+      this.record.dependency_id = this.currentDependency.id
+      this.record.employee_id = this.currentEmployee.id
       axios.put(`/records/${this.record.id}`, this.record).then(response => {
         this.$emit("success");
-        console.log(response.data.message);
         this.$validator.reset();
       });
+    }
+  },
+  watch: {
+    record() {
+      this.$validator.reset();
+      this.assignMultiSelectData();
     }
   }
 };

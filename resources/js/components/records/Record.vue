@@ -10,11 +10,11 @@
     </td>
 
     <td>
-      <a href="#" @click.prevent="$emit('recordClick', record)" v-if="showEditOption">
+      <a href="#" @click.prevent="emitEvent('recordClick', {record,edit:true})" v-if="showEditOption">
         <i class="icon ion-edit tx-22 p-2 tx-teal"></i>
       </a>
 
-      <a href="#" title="Ver detalles" @click.prevent="$emit('recordDetailsClick', record)" v-if="showDetailsOption">
+      <a href="#" title="Ver detalles" @click.prevent="emitEvent('recordClick', {record:data,edit:false})" v-if="showDetailsOption">
         <i class="icon ion-eye tx-22 p-2 tx-teal"></i>
       </a>
 
@@ -50,7 +50,6 @@ export default {
       this.askingBeforeDelete().then(result => {
         if (result.value) {
           axios.delete(`/records/${this.record.id}`).then(response => {
-            console.log(response.data);
             this.$emit("deleted");
             this.$swal("Eliminado", response.data.message, "success");
           });
@@ -68,6 +67,10 @@ export default {
         confirmButtonColor: "#00b297",
         cancelButtonText: "Cancelar"
       });
+    },
+
+    emitEvent(name, data) {
+        this.$emit(name,data)
     }
   },
   computed: {

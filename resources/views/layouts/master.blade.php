@@ -132,53 +132,7 @@
         </div><!-- br-header-left -->
         <div class="br-header-right">
           <nav class="nav">
-            <div class="dropdown">
-              <a href="" class="nav-link pd-x-7 pos-relative" data-toggle="dropdown">
-                <i class="icon ion-ios-email-outline tx-24"></i>
-                <!-- start: if statement -->
-                <span class="square-8 bg-danger pos-absolute t-15 r-0 rounded-circle"></span>
-                <!-- end: if statement -->
-              </a>
-              <div class="dropdown-menu dropdown-menu-header wd-300 pd-0-force">
-                <div class="d-flex align-items-center justify-content-between pd-y-10 pd-x-20 bd-b bd-gray-200">
-                  <label class="tx-12 tx-info tx-uppercase tx-semibold tx-spacing-2 mg-b-0">Messages</label>
-                </div><!-- d-flex -->
-  
-                <div class="media-list">
-                  <!-- loop starts here -->
-                  <a href="" class="media-list-link">
-                    <div class="media pd-x-20 pd-y-15">
-                      <img src="http://via.placeholder.com/280x280" class="wd-40 rounded-circle" alt="">
-                      <div class="media-body">
-                        <div class="d-flex align-items-center justify-content-between mg-b-5">
-                          <p class="mg-b-0 tx-medium tx-gray-800 tx-14">Usuario</p>
-                          <span class="tx-11 tx-gray-500">2 minutes ago</span>
-                        </div><!-- d-flex -->
-                        <p class="tx-12 mg-b-0">Ha cambiado el estado del registro E019-001 a entregado.</p>
-                      </div>
-                    </div><!-- media -->
-                  </a>
-                  <a href="" class="media-list-link">
-                    <div class="media pd-x-20 pd-y-15">
-                      <img src="http://via.placeholder.com/280x280" class="wd-40 rounded-circle" alt="">
-                      <div class="media-body">
-                        <div class="d-flex align-items-center justify-content-between mg-b-5">
-                          <p class="mg-b-0 tx-medium tx-gray-800 tx-14">Usuario</p>
-                          <span class="tx-11 tx-gray-500">2 minutes ago</span>
-                        </div><!-- d-flex -->
-                        <p class="tx-12 mg-b-0">Ha cambiado el estado del registro E019-009 a entregado.</p>
-                      </div>
-                    </div><!-- media -->
-                  </a>
-                  <!-- loop ends here -->
-                  
-                  <div class="pd-y-10 tx-center bd-t">
-                    <a href="" class="tx-12"><i class="fa fa-angle-down mg-r-5"></i> Mostrar todos los mensajes</a>
-                  </div>
-                </div><!-- media-list -->
-              </div><!-- dropdown-menu -->
-            </div><!-- dropdown -->
-            <div class="dropdown">
+            {{-- <div class="dropdown">
               <a href="" class="nav-link pd-x-7 pos-relative" data-toggle="dropdown">
                 <i class="icon ion-ios-bell-outline tx-24"></i>
                 <!-- start: if statement -->
@@ -218,7 +172,7 @@
                   </div>
                 </div><!-- media-list -->
               </div><!-- dropdown-menu -->
-            </div><!-- dropdown -->
+            </div><!-- dropdown --> --}}
             <div class="dropdown">
               <a href="" class="nav-link nav-link-profile" data-toggle="dropdown">
                 @if (Auth::check())

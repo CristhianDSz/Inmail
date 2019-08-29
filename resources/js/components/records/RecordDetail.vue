@@ -38,7 +38,6 @@
 <script>
 export default {
 props:["record"],
-
 computed: {
   recordDate() {
     return moment(this.record.datetime).format('DD/MM/YYYY HH:mm')

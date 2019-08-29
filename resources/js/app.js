@@ -11,12 +11,15 @@ import Vue from 'vue'
 import VueSweetalert2 from 'vue-sweetalert2'
 import VeeValidate, { Validator } from 'vee-validate'
 import es from 'vee-validate/dist/locale/es'
+import Multiselect from 'vue-multiselect'
+
 
 const options = {
     confirmButtonColor: '#41b882',
     cancelButtonColor: '#ff7674'
 }
 
+Vue.component('multiselect', Multiselect)
 Vue.use(VueSweetalert2, options)
 Validator.localize({ es: es })
 
@@ -56,6 +59,7 @@ const app = new Vue({
         EmployeeMain,
         ThirdPartyMain,
         RecordMain,
-        Notification
+        Notification,
+        Multiselect
     }
 })

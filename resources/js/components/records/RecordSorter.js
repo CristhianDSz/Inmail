@@ -10,24 +10,36 @@ export default class RecordSorter {
             return a[field].toLowerCase().localeCompare(b[field].toLowerCase())
         })
     }
+
+    static sortByObjectNameField(records = [], field={}) {
+        let nullRecords = []
+        return records.filter(record => {
+            if (record[field] === null) nullRecords.push(record)
+            return record[field] !== null
+        }).sort((a, b) => {
+            return a[field].name.toLowerCase().localeCompare(b[field].name.toLowerCase())
+        }).concat(nullRecords)
+    }
     /**
-     * Create array for first letter pass as char ("E"), after sort for last record number segment, this is the number of sequence, ej: E019-001 --> 001, finally do the same for the other char ("S"), ej: S019-001 ---> 001 and concat the two arrays
+     * Create arrays for first letter pass as char "E" and char "S", after sort them for last record number segment, this is the number of sequence, ej: E019-001 --> 001 and finally concat the two arrays
      * @param {array} records
      * @param {string} char
      * @param {string} char
+     * @param {string} prop
      */
-    static sortByCharAndNumber(records = [], char = 'E', char2 = 'S') {
+    static sortByCharAndNumber(records = [], char = 'E', char2 = 'S', prop = 'number') {
         let charRecords = []
         let char2Records = []
-        records.forEach(record => {
-            if (record.number.split('-')[0].charAt(0) === char) {
-                charRecords.push(record)
-            } else if (record.number.split('-')[0].charAt(0) === char2) {
-                char2Records.push(record)
-            }
+       
+        charRecords = records.filter(record => {
+            return record[prop].split('-')[0].charAt(0) === char
         })
 
-        const sortArray = function(records = [], prop = 'number') {
+        char2Records =  records.filter(record => {
+            return record[prop].split('-')[0].charAt(0) === char2
+        })
+
+        const sortArray = function(records = []) {
             return records.sort((a, b) => {
                 return (
                     Number(a[prop].split('-')[1]) -

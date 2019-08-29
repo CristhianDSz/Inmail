@@ -27,8 +27,7 @@
         <div class="pd-10 rounded mg-t-5">
           <div class="content-tabs">
             <records ref="records" 
-            @selectedRecord="passRecordEditForm"
-            @detailRecord="passRecordDetail"
+            @selectedRecord="passRecord"
             @quantity="totalRecords = $event"
             @inRecords="totalInRecords = $event"
             @outRecords="totalOutRecords = $event"
@@ -52,10 +51,7 @@
           <template slot="title">Editar registro</template>
           <template slot="body">
             <record-edit-form
-              v-if="showEdit"
-              @dependencies="passDependenciesToRecords"
-              @thirdParties="passThirdPartiesToRecords"
-              @employees="passEmployeesToRecords"
+              v-if="showEditForm"
               @success="getRecords"
               :record="currentRecord"
             ></record-edit-form>
@@ -86,8 +82,8 @@ export default {
       records: [],
       typeRecordsTabs: ["Entrada", "Salida"],
       selectedTab: "Entrada",
-      showEdit: false,
-      showDetail:false,
+      showEditForm: false,
+      showDetail: false,
       currentRecord: "",
       totalRecords: 0,
       totalInRecords: 0,
@@ -114,16 +110,18 @@ export default {
       this.$refs.records.getRecords();
       modalEmitter.$emit("close");
     },
-    passRecordEditForm(record) {
-      this.currentRecord = record;
-      this.showEdit = true;
-      this.$refs.recordEditModal.showModal();
+    passRecord(data) {
+      this.currentRecord = data.record;
+      if (data.edit) {
+        this.showEditForm= data.edit;
+        this.showDetail = !data.edit
+        this.$refs.recordEditModal.showModal();
+      } else {
+         this.showDetail = !data.edit
+         this.showEditForm = data.edit
+         this.$refs.recordDetailModal.showModal()
+      }
     },
-    passRecordDetail(record) {
-      this.currentRecord = record
-      this.showDetail = true
-      this.$refs.recordDetailModal.showModal()
-    }
   }
 };
 </script>
