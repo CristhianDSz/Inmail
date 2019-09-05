@@ -1,6 +1,6 @@
 <template>
-  <div class="bd bd-gray-300 rounded table-responsive">
-    <table class="table table-striped">
+  <div class="rounded table-responsive">
+    <table class="table">
       <thead>
         <tr>
           <th>Documento de identidad</th>

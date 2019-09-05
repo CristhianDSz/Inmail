@@ -7,7 +7,7 @@
     <td class="text-center">{{data.city}}</td>
     <td class="text-center">{{data.email_contact}}</td>
     <td class="text-center">
-      <a href="#" @click.prevent="editForm = true">
+      <a href="#" @click.prevent="showEditForm">
         <i class="icon ion-edit tx-22 p-2 action-icon"></i>
       </a>
 
@@ -18,31 +18,33 @@
   </tr>
   <tr v-else>
     <td>
-      <input type="text" v-model="thirdParty.identification" class="form-control" />
+      <input type="text" name="identification" v-validate="'required|min:6'" data-vv-as="Identificación" v-model="thirdParty.identification" class="form-control" />
+      <small class="text-danger" v-if="errors.has('identification')">{{errors.first('identification')}}</small>
     </td>
     <td>
-      <input type="text" v-model="thirdParty.name" class="form-control" />
+      <input type="text" name="name" v-validate="'required|min:3'" data-vv-as="Nombre" v-model="thirdParty.name" class="form-control" />
+      <small class="text-danger" v-if="errors.has('name')">{{errors.first('name')}}</small>
     </td>
     <td>
-      <input type="text" v-model="thirdParty.address" class="form-control" />
+      <input type="text" name="address" v-validate="'required|min:3'" data-vv-as="Dirección" v-model="thirdParty.address" class="form-control" />
+      <small class="text-danger" v-if="errors.has('address')">{{errors.first('address')}}</small>
     </td>
     <td>
-      <input type="text" v-model="thirdParty.telephone" class="form-control" />
+      <input type="text" name="telephone" v-validate="'required|min:7|numeric'"
+      data-vv-as="Teléfono" v-model="thirdParty.telephone" class="form-control" />
+      <small class="text-danger" v-if="errors.has('telephone')">{{errors.first('telephone')}}</small>
     </td>
     <td>
-      <select v-model="thirdParty.city" class="form-control">
-        <option
-          v-for="city in cities"
-          :key="city.c_digo_dane_del_municipio"
-          :value="city.municipio"
-        >{{city.municipio}}, {{city.departamento}}</option>
-      </select>
+       <multiselect name="city" v-validate="'required'" data-vv-as="Ciudad" :selectLabel="''" :deselectLabel="''" :maxHeight="200" v-model="thirdPartyCity" :options="cities" label="municipio" placeholder="Seleccione"></multiselect>
+      <small class="text-danger" v-if="errors.has('city')">{{errors.first('city')}}</small>
     </td>
     <td>
-      <input type="text" v-model="thirdParty.email_contact" class="form-control" />
+      <input type="text" name="email_contact" v-validate="'email'" data-vv-as="Correo" v-model="thirdParty.email_contact" class="form-control" />
+      <small class="text-danger" v-if="errors.has('email_contact')">{{errors.first('email_contact')}}</small>
     </td>
+    
     <td>
-      <a href="#" @click.prevent="editThirdParty">
+      <a href="#" @click.prevent="validateForm">
         <i class="icon ion-checkmark tx-22 p-1 action-icon"></i>
       </a>
 
@@ -60,7 +62,9 @@ export default {
     return {
       thirdParty: {},
       cities: [],
-      editForm: false
+      editForm: false,
+      //Multiselect
+      thirdPartyCity:""
     };
   },
   created() {
@@ -70,10 +74,32 @@ export default {
     });
   },
   methods: {
+    showEditForm() {
+      this.getCurrentCity()
+      this.editForm = true
+    },
+    getCurrentCity() {
+      this.thirdPartyCity = this.cities.find(city => {
+        return city.municipio === this.data.city
+      })
+    },
+     async validateForm() {
+      let valid = await this.$validator.validateAll();
+      if (valid) {
+        this.editThirdParty();
+        return;
+      }
+      this.$swal(
+        "Error!",
+        "Debe corregir los errores antes de continuar",
+        "error"
+      );
+    },
     editThirdParty() {
       this.putThirdParty();
     },
     putThirdParty() {
+      this.thirdParty.city = this.thirdPartyCity.municipio
       axios
         .put(`/third-parties/${this.thirdParty.id}`, this.thirdParty)
         .then(response => {

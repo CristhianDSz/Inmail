@@ -29,7 +29,7 @@ class ThirdPartiesController extends Controller
             'address' => 'required||min:3',
             'telephone' => 'required|numeric',
             'city' => 'required|min:3',
-            'email_contact' => 'required|email',
+            'email_contact' => 'nullable|email',
         ]);
 
         ThirdParty::create($attributes);
@@ -46,7 +46,7 @@ class ThirdPartiesController extends Controller
             'address' => 'required||min:3',
             'telephone' => 'required|numeric',
             'city' => 'required|min:3',
-            'email_contact' => 'required|email',
+            'email_contact' => 'nullable|email',
         ]);
 
         $thirdParty->update($attributes);

@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="postDependency" class="form-layout form-layout-2">
+  <form @submit.prevent="validateForm" class="form-layout form-layout-2">
     <div class="row no-gutters">
       <div class="col-md-8">
         <div class="form-group">
@@ -10,10 +10,13 @@
           <input
             class="form-control"
             type="text"
-            name="firstname"
+            name="name"
+            v-validate="'required|min:3'"
+            data-vv-as="Nombre"
             v-model="dependency.name"
             placeholder="Ingrese el nombre"
           >
+           <small class="text-danger" v-if="errors.has('name')">{{errors.first('name')}}</small>
         </div>
       </div>
       <!-- col-4 -->
@@ -26,10 +29,12 @@
           <input
             class="form-control"
             type="text"
-            name="lastname"
+            name="code"
+            v-validate="'required|min:2'"
             v-model="dependency.code"
             placeholder="Ingrese el código"
           >
+           <small class="text-danger" v-if="errors.has('code')">{{errors.first('code')}}</small>
         </div>
       </div>
       <!-- col-4 -->
@@ -53,11 +58,23 @@ export default {
     };
   },
   methods: {
+     async validateForm() {
+      let valid = await this.$validator.validateAll();
+      if (valid) {
+        this.postDependency();
+        return;
+      }
+      this.$swal(
+        "Error",
+        "Debe corregir los errores antes de continuar",
+        "error"
+      );
+     },
     postDependency() {
       axios.post("/dependencies", this.dependency).then(response => {
-        console.log(response.data);
         this.$emit("success");
         this.resetForm();
+        this.$validator.reset()
       });
     },
 

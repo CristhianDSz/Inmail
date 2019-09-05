@@ -1,11 +1,20 @@
 <template>
   <div class="row row-sm">
     <div class="col-12">
-      <div class="text-right">
-        <button class="btn btn-primary btn-link mb-3" @click="showModal">Agregar funcionario</button>
-      </div>
       <div class="card">
         <div class="card-body">
+           <div class="text-right">
+            <small class="font-weight-bold">Nuevo funcionario</small>
+            <a
+              href="#"
+              class="btn btn-info btn-icon rounded-circle mg-r-5 mg-b-10 bd-4"
+              @click.prevent="showModal"
+            >
+              <div>
+                <i class="icon ion-plus"></i>
+              </div>
+            </a>
+          </div>
           <employees ref="employees"></employees>
         </div>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="postThirdParty" class="form-layout form-layout-2">
+  <form @submit.prevent="validateForm" class="form-layout form-layout-2">
     <div class="row no-gutters">
       <div class="col-md-4">
         <div class="form-group">
@@ -11,9 +11,15 @@
             class="form-control"
             type="text"
             name="identification"
+            v-validate="'required|min:6'"
+            data-vv-as="Identificación"
             v-model="thirdParty.identification"
             placeholder="Cédula de ciudadanía o NIT"
           />
+          <small
+            class="text-danger"
+            v-if="errors.has('identification')"
+          >{{errors.first('identification')}}</small>
         </div>
       </div>
       <div class="col-md-4">
@@ -26,9 +32,12 @@
             class="form-control"
             type="text"
             name="name"
+            v-validate="'required|min:3'"
+            data-vv-as="Nombre"
             v-model="thirdParty.name"
             placeholder="Ingrese los nombres"
           />
+          <small class="text-danger" v-if="errors.has('name')">{{errors.first('name')}}</small>
         </div>
       </div>
       <!-- col-4 -->
@@ -41,10 +50,13 @@
           <input
             class="form-control"
             type="text"
-            name="lastname"
+            name="address"
+            v-validate="'required|min:5'"
+            data-vv-as="Dirección"
             v-model="thirdParty.address"
             placeholder="Ingrese la dirección"
           />
+          <small class="text-danger" v-if="errors.has('address')">{{errors.first('address')}}</small>
         </div>
       </div>
       <div class="col-md-4 mg-t--1 mg-md-t-0">
@@ -55,10 +67,13 @@
           </label>
           <input
             type="text"
+            name="telephone"
+            v-validate="'required|min:7|numeric'"
             v-model="thirdParty.telephone"
             class="form-control"
             placeholder="Ingrese el teléfono"
           />
+          <small class="text-danger" v-if="errors.has('telephone')">{{errors.first('telephone')}}</small>
         </div>
       </div>
 
@@ -68,28 +83,27 @@
             Ciudad:
             <span class="tx-danger">*</span>
           </label>
-          <select v-model="thirdParty.city" class="select2-container form-control">
-            <option
-              v-for="city in cities"
-              :key="city.c_digo_dane_del_municipio"
-              :value="city.municipio"
-            >{{city.municipio}}, {{city.departamento}}</option>
-          </select>
+          <multiselect class="form-control" name="city" v-validate="'required'" data-vv-as="Ciudad" :selectLabel="''" :deselectLabel="''" :maxHeight="200" v-model="thirdPartyCity" :options="cities" label="municipio" placeholder="Seleccione"></multiselect>
+          <small class="text-danger" v-if="errors.has('city')">{{errors.first('city')}}</small>
         </div>
       </div>
 
       <div class="col-md-4 mg-t--1 mg-md-t-0">
         <div class="form-group mg-md-l--1">
-          <label class="form-control-label">
-            Correo de contacto:
-            <span class="tx-danger">*</span>
-          </label>
+          <label class="form-control-label">Correo de contacto:</label>
           <input
             type="text"
+            name="email_contact"
+            v-validate="'email'"
+            data-vv-as="Correo de contacto"
             v-model="thirdParty.email_contact"
             class="form-control"
             placeholder="Ingrese el correo de contacto"
           />
+          <small
+            class="text-danger"
+            v-if="errors.has('email_contact')"
+          >{{errors.first('email_contact')}}</small>
         </div>
       </div>
       <!-- col-4 -->
@@ -114,7 +128,9 @@ export default {
         city: "",
         email_contact: ""
       },
-      cities: []
+      cities: [],
+      //Multiselect
+      thirdPartyCity:''
     };
   },
   created() {
@@ -122,29 +138,54 @@ export default {
   },
   methods: {
     getCities() {
-      axios.get("/app/cities").then(cities => {
-        cities.data.push(
-          {
-            c_digo_dane_del_municipio: "11001",
-            municipio: "Bogotá",
-            departamento: "Cundinamarca"
-          },
-          {
-            c_digo_dane_del_municipio: "00001",
-            municipio: "Exterior",
-            departamento: "Fuera del país"
-          }
-        );
-        this.cities = cities.data;
-        citiesEmitter.$emit("cities", cities.data);
-      });
+      axios
+        .get("/app/cities")
+        .then(cities => {
+          cities.data.push(
+            {
+              c_digo_dane_del_municipio: "11001",
+              municipio: "Bogotá",
+              departamento: "Cundinamarca"
+            },
+            {
+              c_digo_dane_del_municipio: "00001",
+              municipio: "Exterior",
+              departamento: "Fuera del país"
+            }
+          );
+          this.cities = cities.data;
+          citiesEmitter.$emit("cities", this.cities);
+        })
+        .catch(error => {
+          this.$swal(
+            "Error!",
+            "No se ha logrado obtener algunos datos",
+            "error"
+          );
+        });
+    },
+    async validateForm() {
+      let valid = await this.$validator.validateAll();
+      if (valid) {
+        this.postThirdParty();
+        return;
+      }
+      this.$swal(
+        "Error!",
+        "Debe corregir los errores antes de continuar",
+        "error"
+      );
     },
     postThirdParty() {
+      this.thirdParty.city = this.thirdPartyCity.municipio
       axios.post("/third-parties", this.thirdParty).then(response => {
-        console.log(response.data);
         this.$emit("success");
         this.resetForm();
-      });
+      }).catch(error => {
+        if(error.response.data.errors.hasOwnProperty('identification')) {
+          this.$swal('Error!',"Ya existe un tercero con ese Nit o cédula, ingrese uno diferente",'error')
+        }
+      })
     },
     resetForm() {
       for (let prop in this.thirdParty) {

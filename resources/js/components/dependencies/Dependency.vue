@@ -14,13 +14,15 @@
   </tr>
   <tr v-else>
     <td>
-      <input type="text" v-model="dependency.name" class="form-control" />
+      <input type="text" name="name" v-validate="'required|min:3'" data-vv-as="Nombre" v-model="dependency.name" class="form-control" />
+      <small class="text-danger" v-if="errors.has('name')">{{errors.first('name')}}</small>
     </td>
     <td>
-      <input type="text" v-model="dependency.code" class="form-control" />
+      <input type="text" name="code" v-validate="'required|min:2'" data-vv-as="Código" v-model="dependency.code" class="form-control" />
+      <small class="text-danger" v-if="errors.has('code')">{{errors.first('code')}}</small>
     </td>
     <td>
-      <a href="#" @click.prevent="editDependency">
+      <a href="#" @click.prevent="validateForm">
         <i class="icon ion-checkmark tx-22 p-1 action-icon"></i>
       </a>
 
@@ -44,6 +46,18 @@ export default {
     this.dependency = this.data;
   },
   methods: {
+     async validateForm() {
+      let valid = await this.$validator.validateAll();
+      if (valid) {
+        this.editDependency();
+        return;
+      }
+      this.$swal(
+        "Error",
+        "Debe corregir los errores antes de continuar",
+        "error"
+      );
+     },
     editDependency() {
       this.putDependency();
     },
@@ -51,7 +65,6 @@ export default {
       axios
         .put(`/dependencies/${this.dependency.id}`, this.dependency)
         .then(response => {
-          console.log(response.data);
           this.editForm = false;
         });
     },
@@ -59,7 +72,6 @@ export default {
       this.askingBeforeDelete().then(result => {
         if (result.value) {
           axios.delete(`/dependencies/${this.dependency.id}`).then(response => {
-            console.log(response.data);
             this.$emit("deleted");
             this.$swal("Eliminado", response.data.message, "success");
           });

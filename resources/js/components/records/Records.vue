@@ -130,7 +130,7 @@ export default {
     },
   },
   watch: {
-    /** Search a record for type, status, number, datetime or document_type property */
+    /** Search a record for type, status, number, datetime, document_type or third_party name property */
      recordSearch() {
       if (this.recordSearch.length) {
         this.records = this.originalRecords.filter(record => {
@@ -141,7 +141,8 @@ export default {
             moment(record.datetime)
               .format("MM/DD/YYYY")
               .indexOf(this.recordSearch) > -1 ||
-            record.document_type.toLowerCase().indexOf(this.recordSearch.toLowerCase()) > -1
+            record.document_type.toLowerCase().indexOf(this.recordSearch.toLowerCase()) > -1 ||
+            (record.third_party && record.third_party.name.toLowerCase().indexOf(this.recordSearch.toLowerCase()) > -1)
           );
         });
       } else {
