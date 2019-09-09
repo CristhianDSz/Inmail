@@ -7,7 +7,7 @@
 
 @section('content')
 <div class="row row-sm">
-    <div class="col-lg-10">
+    <div class="col-lg-12">
         <div class="card bd-0 shadow-base pd-30 mg-t-20">
             <div class="d-flex align-items-center justify-content-between mg-b-30">
               <div>
@@ -31,24 +31,36 @@
            <table class="table table-valign-middle mg-t-20">
              <thead>
                <tr>
-                 <th class="text-center">Radicado</th>
-                 <th class="text-center">Destinatario</th>
                  <th class="text-center">Fecha de creación</th>
+                 <th class="text-center">Radicado</th>
+                 <th class="text-center">Remitente</th>
+                 <th class="text-center">Número de factura</th>
+                 <th class="text-center">Destinatario</th>
+                 <th class="text-center">Descripción</th>
+                 <th class="text-center"></th>
                  <th></th>
                </tr>
              </thead>
             <tbody>
               @foreach ($records as $record)
               <tr>
+                <td class="tx-center">{{$record->format_date_time}}</td>
                 <td class="pd-l-0-force tx-center tx-medium">
                   {{$record->number}}
+                </td>
+                <td class="pd-l-0-force tx-center tx-medium">
+                  {{$record->thirdParty->name}}
+                </td>
+                <td class="pd-l-0-force tx-center tx-medium">
+                  {{$record->invoice_number ?? 'No registra'}}
                 </td>
                 <td class="tx-center">
                 <h6 class="tx-inverse tx-14 mg-b-0">{{$record->employee->fullname}}</h6>
                 <span class="tx-12">{{$record->employee->dependency->name}}</span>
                 </td>
-              <td class="tx-center">{{$record->format_date_time}}</td>
-                <td></td>
+                <td class="pd-l-0-force tx-center tx-medium">
+                  {{$record->description}}
+                  </td>
                 <td class="pd-r-0-force">
                 <form action="{{route('tracking.update',$record->id)}}" method="POST">
                   @csrf

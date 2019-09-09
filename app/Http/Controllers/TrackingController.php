@@ -8,14 +8,15 @@ class TrackingController extends Controller
 {
     public function index()
     {
-        $records = [];
+        // return  Record::trackingBy(request()->input('record_ci'),'Entregado')->get();
+        $records = Record::where('status','Entregado')->where('document_type','Facturas')->get();
 
         if (request()->has('record_ci')) {
             $this->validateRecord('record_ci');
-            $records = Record::trackingCi(request()->input('record_ci'))->get();
+            $records = Record::trackingBy(request()->input('record_ci'),'Entregado')->get();
         } elseif (request()->has('record_co')) {
             $this->validateRecord('record_co');
-            $records = Record::trackingCo(request()->input('record_co'))->get();
+            $records = Record::trackingBy(request()->input('record_co'),'Visado Control Interno')->get();
         }
 
         return view('tracking.index', compact('records'));
