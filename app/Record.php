@@ -7,6 +7,8 @@ use Carbon\Carbon;
 
 class Record extends Model
 {
+    const CURRENT_STATUS = ['Creado', 'Registrado', 'Entregado', 'Visado Control Interno', 'Visado Contabilidad'];
+
     protected $fillable = [
         'datetime',
         'number',
@@ -35,7 +37,7 @@ class Record extends Model
 
     public function thirdParty()
     {
-        return $this->belongsTo(ThirdParty::class, 'third_party_id');
+        return $this->belongsTo(ThirdParty::class);
     }
 
     public function scopeGetLast($query, $type)
@@ -43,14 +45,12 @@ class Record extends Model
         return $query->where('type', $type)->orderBy('id', 'desc');
     }
 
-    public function scopeTrackingCi($query, $record)
+    public function scopeTrackingBy($query, $record, $status)
     {
-        $query->where('number', 'LIKE', "%$record%")->where('status', 'Entregado')->with('employee.dependency');
-    }
+        if (in_array($status,self::CURRENT_STATUS)) {
 
-    public function scopeTrackingCo($query, $record)
-    {
-        $query->where('number', 'LIKE', "%$record%")->where('status', 'Visado Control Interno')->with('employee.dependency');
+            return $query->where('number', 'LIKE', "%$record%")->where('document_type','Facturas')->where('status', $status)->with('thirdParty')->with('employee.dependency');
+        } 
     }
 
     public static function makeRecordNumber($record = null, $recordString)
