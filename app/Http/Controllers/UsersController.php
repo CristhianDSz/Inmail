@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Role;
 use App\User;
 
@@ -10,9 +9,8 @@ class UsersController extends Controller
 {
     public function index()
     {
-
         $roles = Role::all(['id', 'name']);
-        $users = User::has('roles')->with('roles')->orderBy('username')->get();
+        $users = User::where('id','!=',auth()->user()->id)->has('roles')->with('roles')->orderBy('username')->get();
         return view('users.index', compact('roles', 'users'));
     }
 
