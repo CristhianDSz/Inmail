@@ -35,18 +35,7 @@
                       <input type="email" name="email" class="form-control form-control-sm" placeholder="Correo electrónico" value="{{$user->email }}">
                       </div>
                     </div><!-- row -->
-                  <div class="row mg-b-10">
-                      <label class="col-sm-5 form-control-label">Contraseña: <span class="tx-danger">*</span></label>
-                      <div class="col-sm-7 mg-t-10 mg-sm-t-0">
-                      <input type="password" name="password" class="form-control form-control-sm" placeholder="Contraseña" value="{{$user->password }}">
-                      </div>
-                    </div><!-- row -->
-                  <div class="row mg-b-10">
-                      <label class="col-sm-5 form-control-label">Confirmar contraseña: <span class="tx-danger">*</span></label>
-                      <div class="col-sm-7 mg-t-10 mg-sm-t-0">
-                      <input type="password" name="password_confirmation" class="form-control form-control-sm" placeholder="Contraseña" value="{{$user->password}}">
-                      </div>
-                    </div><!-- row -->
+                 
                     <div class="row mg-t-20">
                         <label class="col-sm-5 form-control-label">Roles: <span class="tx-danger">*</span></label>
                       <div class="col-sm-7 mg-t-10 mg-sm-t-0">
