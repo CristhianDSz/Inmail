@@ -8,8 +8,14 @@ use App\Dependency;
 
 class CompaniesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
+        $this->authorize('view', Company::class);
         $company = Company::first();
         $employees = Employee::count();
         $dependencies = Dependency::count();
@@ -23,11 +29,15 @@ class CompaniesController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Company::class);
+
         return view('companies.create');
     }
 
     public function store()
     {
+        $this->authorize('create', Company::class);
+
         $attributes = request()->validate([
             'name' => 'required|min:3',
             'identification' => 'required|min:8',
@@ -48,11 +58,15 @@ class CompaniesController extends Controller
 
     public function edit(Company $company)
     {
+        $this->authorize('update', $company);
+
         return view('companies.edit', compact('company'));
     }
 
     public function update(Company $company)
     {
+        $this->authorize('update', $company);
+
         $attributes = request()->validate([
             'name' => 'required|min:3',
             'identification' => 'required|min:8|unique:companies,identification,' . $company->id,

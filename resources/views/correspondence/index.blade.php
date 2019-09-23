@@ -9,6 +9,7 @@
 @endsection
 
 @section('content')
+@include('partials.messages')
    
    
   <record-main></record-main>

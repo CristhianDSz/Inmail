@@ -16,6 +16,10 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'create users', 'description' => 'Crear usuarios']);
         Permission::create(['name' => 'edit users', 'description' => 'Editar usuarios']);
         Permission::create(['name' => 'delete users', 'description' => 'Eliminar usuarios']);
+        Permission::create(['name' => 'show roles', 'description' => 'Listar roles']);
+        Permission::create(['name' => 'create roles', 'description' => 'Crear roles']);
+        Permission::create(['name' => 'edit roles', 'description' => 'Editar roles']);
+        Permission::create(['name' => 'delete roles', 'description' => 'Eliminar roles']);
         Permission::create(['name' => 'show third_parties', 'description' => 'Listar terceros']);
         Permission::create(['name' => 'create third_parties', 'description' => 'Crear terceros']);
         Permission::create(['name' => 'edit third_parties', 'description' => 'Editar terceros']);
@@ -35,5 +39,7 @@ class PermissionSeeder extends Seeder
 
         Permission::create(['name' => 'validate control', 'description' => 'Visado control interno']);
         Permission::create(['name' => 'validate accounting', 'description' => 'Visado contabilidad']);
+        Permission::create(['name' => 'create company', 'description' => 'Crear compañía']);
+        Permission::create(['name' => 'edit company', 'description' => 'Editar compañía']);
     }
 }

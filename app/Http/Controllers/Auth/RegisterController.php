@@ -73,6 +73,8 @@ class RegisterController extends Controller
 
     public function register()
     {
+        $this->authorize('create',auth()->user());
+
         $this->validator(request()->all())->validate();
 
         $user = $this->create(request()->all());

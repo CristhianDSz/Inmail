@@ -13,21 +13,22 @@
       @else
       
    <div class="row row-sm">
-            <div class="col-lg-9">
-                        <div class="br-section-wrapper br-sitemap-section pd-t-25">
-                            <div class="d-flex justify-content-end mg-0 pd-0">
-                            <a href="{{route('companies.edit',$company->id)}}">
-                                <i class="icon ion-edit tx-teal tx-18"></i>
-                                       
-                            </a>
-                                       
-                            </div>
-                            <div class="row">
-                                  <div class="col-md-6">
-                                        <p class="tx-bold">Nombre de la empresa:</p>
-                                  </div>
+      @can('view', App\Company::class)
+           <div class="col-lg-9">
+                  <div class="br-section-wrapper br-sitemap-section pd-t-25">
+                        <div class="d-flex justify-content-end mg-0 pd-0">
+                            @can('update', App\Company::class)
+                              <a href="{{route('companies.edit',$company->id)}}">
+                                    <i class="icon ion-edit tx-teal tx-18"></i>
+                              </a>
+                            @endcan
+                        </div>
+                        <div class="row">
+                              <div class="col-md-6">
+                                    <p class="tx-bold">Nombre de la empresa:</p>
+                              </div>
                             <div class="col-md-6"><p class="tx-medium">{{$company->name}}</p></div>
-                            </div>               
+                        </div>               
                             <div class="row">
                                   <div class="col-md-6">
                                         <p class="tx-bold">Nit/Cédula:</p>
@@ -79,9 +80,10 @@
                                   @endif
                 
                             </div>
-                            </div>               
-                        </div>
-                     </div>
+                        </div>               
+                  </div>
+            </div>      
+      @endcan
    </div>
       @endif
     

@@ -60,7 +60,10 @@
         <modal ref="recordDetailModal" name="recordDetailModal">
           <template slot="title">Detalle de registro</template>
           <template slot="body">
-            <record-detail :record="currentRecord" v-if="showDetail"></record-detail>
+            <record-detail 
+            :record="currentRecord" 
+            v-if="showDetail">
+            </record-detail>
           </template>
         </modal>
       </div>

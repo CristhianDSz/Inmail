@@ -67,7 +67,7 @@
                   @method('PATCH')
                   <button type="submit" class="btn btn-sm btn-warning">
                     <i class="icon ion-checkmark tx-15"></i>
-                    Visar</button>
+                    </button>
                 </form>
                 </td>
               </tr>

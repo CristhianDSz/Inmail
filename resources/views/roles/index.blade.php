@@ -6,39 +6,41 @@
 
 @section('content')
 <div class="row row-sm">
+    @can('create', App\Role::class)
     <div class="col-lg-6">
-        @include('partials.errors')
-        @include('partials.messages')
+      @include('partials.errors')
+      @include('partials.messages')
 
-        <div class="card shadow-base bd-0">
-          <div class="form-layout form-layout-4">
-                  <h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Crear un nuevo rol</h6>
-                  <p class="mg-b-30 tx-gray-600">Apartado destinado para la creación de roles</p>
-              <form method="POST" action="{{route('roles.store')}}">
-                    @csrf
-                    <div class="row">
-                        <label class="col-sm-4 form-control-label">Nombre del rol: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                        <input type="text" name="name" class="form-control" placeholder="Nombre del rol" value="{{old('name') }}">
-                        </div>
-                      </div><!-- row -->
-                      <div class="row mg-t-20">
-                          <label class="col-sm-4 form-control-label">Permisos: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                              <select name="permissions[]" id="permissions" class="form-control select2"data-placeholder="Seleccione permisos" multiple>
-                                  @foreach ($permissions as $permission)
-                                <option class="tx-bold" value="{{$permission->id}}">{{$permission->description}}</option>
-                                  @endforeach
-                                </select>
-                        </div>
+      <div class="card shadow-base bd-0">
+        <div class="form-layout form-layout-4">
+                <h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Crear un nuevo rol</h6>
+                <p class="mg-b-30 tx-gray-600">Apartado destinado para la creación de roles</p>
+            <form method="POST" action="{{route('roles.store')}}">
+                  @csrf
+                  <div class="row">
+                      <label class="col-sm-4 form-control-label">Nombre del rol: <span class="tx-danger">*</span></label>
+                      <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                      <input type="text" name="name" class="form-control" placeholder="Nombre del rol" value="{{old('name') }}">
                       </div>
-                      <div class="form-layout-footer mg-t-30">
-                        <button type="submit" class="btn btn-teal">Crear rol</button>
-                      </div><!-- form-layout-footer -->
-                 </form>
-                </div>
-        </div><!-- card -->
-      </div><!-- col-6 -->
+                    </div><!-- row -->
+                    <div class="row mg-t-20">
+                        <label class="col-sm-4 form-control-label">Permisos: <span class="tx-danger">*</span></label>
+                      <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                            <select name="permissions[]" id="permissions" class="form-control select2"data-placeholder="Seleccione permisos" multiple>
+                                @foreach ($permissions as $permission)
+                              <option class="tx-bold" value="{{$permission->id}}">{{$permission->description}}</option>
+                                @endforeach
+                              </select>
+                      </div>
+                    </div>
+                    <div class="form-layout-footer mg-t-30">
+                      <button type="submit" class="btn btn-teal">Crear rol</button>
+                    </div><!-- form-layout-footer -->
+               </form>
+              </div>
+      </div><!-- card -->
+    </div><!-- col-6 -->
+    @endcan
       <div class="col-lg-6 mg-t-20 mg-lg-t-0">
         <div class="card shadow-base bd-0">
          
@@ -52,7 +54,13 @@
                   <tbody>
                     @foreach ($roles as $role)
                     <tr>
-                    <td><a href="{{route('roles.edit',$role->id)}}">{{$role->name}}</a></td>
+                    <td>
+                      @can('update', $role)
+                        <a href="{{route('roles.edit',$role->id)}}">{{$role->name}}</a>
+                      @elsecan('view', $role)
+                        {{$role->name}}
+                      @endcan
+                    </td>
                       <td>
                          <ul>
                           @foreach ($role->permissions as $permission)
