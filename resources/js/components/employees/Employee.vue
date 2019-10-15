@@ -5,11 +5,11 @@
     <td>{{data.lastname}}</td>
     <td>{{data.dependency.name}}</td>
     <td>
-      <a href="#" @click.prevent="showEditForm">
+      <a href="#" @click.prevent="showEditForm" v-if="$can('edit employees')">
         <i class="icon ion-edit tx-22 p-2 tx-info"></i>
       </a>
 
-      <a href="#" @click.prevent="deleteEmployee">
+      <a href="#" @click.prevent="deleteEmployee" v-if="$can('delete employees')">
         <i class="icon ion-trash-a tx-22 p-2 tx-info"></i>
       </a>
     </td>
@@ -55,8 +55,10 @@
 </template>
 
 <script>
+import { permissionMixin} from '../../mixins/PermissionsMixin.js'
 export default {
   props: ["data", "dependenciesData"],
+  mixins: [permissionMixin],
   data() {
     return {
       employee: {},

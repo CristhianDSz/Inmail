@@ -239,7 +239,16 @@ export default {
         });
         this.$emit("success");
         this.resetRecord();
-      });
+      })
+      .catch(error => {
+        if (error.response.status == 400) {
+          return this.$swal({
+            title: 'Ha ocurrido un error',
+            text: error.response.data.message,
+            type: 'error'
+          })
+        }
+      })
     },
     postRecordsPdf(records) {
       axios
@@ -251,13 +260,10 @@ export default {
           this.$validator.reset();
           let blob = new Blob([response.data], { type: "application/pdf" });
           let link = document.createElement("a");
-          //link.href = window.URL.createObjectURL(blob);
           let url = window.URL.createObjectURL(blob);
           let windowPrint = window.open(url);
           windowPrint.focus();
           windowPrint.print();
-          //link.download = "registros.pdf";
-          //link.click();
         });
     },
     resetRecord() {

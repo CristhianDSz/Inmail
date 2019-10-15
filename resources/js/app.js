@@ -13,7 +13,6 @@ import VeeValidate, { Validator } from 'vee-validate'
 import es from 'vee-validate/dist/locale/es'
 import Multiselect from 'vue-multiselect'
 
-
 const options = {
     confirmButtonColor: '#41b882',
     cancelButtonColor: '#ff7674'
@@ -22,8 +21,8 @@ const options = {
 Vue.component('multiselect', Multiselect)
 Vue.use(VueSweetalert2, options)
 Validator.localize({ es: es })
-
 Vue.use(VeeValidate, { locale: 'es', fieldsBagName: 'vvFields' })
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -50,7 +49,6 @@ import Notification from './components/utils/Notification.vue'
 /**EventEmitters -Buses */
 window.modalEmitter = new Vue()
 window.dependenciesEmitter = new Vue()
-window.citiesEmitter = new Vue()
 
 const app = new Vue({
     el: '#app',

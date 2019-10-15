@@ -83,7 +83,7 @@
             Ciudad:
             <span class="tx-danger">*</span>
           </label>
-          <multiselect class="form-control" name="city" v-validate="'required'" data-vv-as="Ciudad" :selectLabel="''" :deselectLabel="''" :maxHeight="200" v-model="thirdPartyCity" :options="cities" label="municipio" placeholder="Seleccione"></multiselect>
+          <multiselect class="form-control" name="city" v-validate="'required'" data-vv-as="Ciudad" :selectLabel="''" :deselectLabel="''" :maxHeight="200" v-model="thirdPartyCity" :options="this.cities" placeholder="Seleccione"></multiselect>
           <small class="text-danger" v-if="errors.has('city')">{{errors.first('city')}}</small>
         </div>
       </div>
@@ -117,6 +117,7 @@
 </template>
 
 <script>
+import {cities} from './colombiaCities.js'
 export default {
   data() {
     return {
@@ -138,31 +139,11 @@ export default {
   },
   methods: {
     getCities() {
-      axios
-        .get("/app/cities")
-        .then(cities => {
-          cities.data.push(
-            {
-              c_digo_dane_del_municipio: "11001",
-              municipio: "Bogotá",
-              departamento: "Cundinamarca"
-            },
-            {
-              c_digo_dane_del_municipio: "00001",
-              municipio: "Exterior",
-              departamento: "Fuera del país"
-            }
-          );
-          this.cities = cities.data;
-          citiesEmitter.$emit("cities", this.cities);
+      cities.forEach(city => {
+        city.ciudades.forEach(ciudad => {
+          this.cities.push(ciudad)
         })
-        .catch(error => {
-          this.$swal(
-            "Error!",
-            "No se ha logrado obtener algunos datos",
-            "error"
-          );
-        });
+      })
     },
     async validateForm() {
       let valid = await this.$validator.validateAll();

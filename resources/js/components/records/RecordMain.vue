@@ -95,7 +95,8 @@ export default {
       totalTodayRecords:0
     };
   },
-  created() {},
+  created() {
+  },
   methods: {
     showModal() {
       this.$refs.recordModal.showModal();

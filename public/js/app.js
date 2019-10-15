@@ -1983,6 +1983,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _mixins_PermissionsMixin_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/PermissionsMixin.js */ "./resources/js/mixins/PermissionsMixin.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2024,8 +2025,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["data"],
+  mixins: [_mixins_PermissionsMixin_js__WEBPACK_IMPORTED_MODULE_1__["permissionMixin"]],
   data: function data() {
     return {
       dependency: {},
@@ -2328,6 +2331,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _mixins_PermissionsMixin_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/PermissionsMixin.js */ "./resources/js/mixins/PermissionsMixin.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2390,8 +2394,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["data", "dependenciesData"],
+  mixins: [_mixins_PermissionsMixin_js__WEBPACK_IMPORTED_MODULE_1__["permissionMixin"]],
   data: function data() {
     return {
       employee: {},
@@ -2870,6 +2876,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_Modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/Modal */ "./resources/js/components/utils/Modal.vue");
+/* harmony import */ var _mixins_PermissionsMixin_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/PermissionsMixin.js */ "./resources/js/mixins/PermissionsMixin.js");
 //
 //
 //
@@ -2898,10 +2905,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Modal: _utils_Modal__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  mixins: [_mixins_PermissionsMixin_js__WEBPACK_IMPORTED_MODULE_1__["permissionMixin"]],
   props: ["data", "dependenciesData", "thirdPartiesData", "employeesData"],
   data: function data() {
     return {
@@ -2952,10 +2961,10 @@ __webpack_require__.r(__webpack_exports__);
       return moment(this.data.datetime).format("MM/DD/YYYY HH:mm");
     },
     showEditOption: function showEditOption() {
-      return this.data.status === "Creado" || this.data.status === "Registrado";
+      return this.$can('edit records') && (this.data.status == 'Creado' || this.data.status == 'Registrado') || this.$can('edit delivered records');
     },
     showDetailsOption: function showDetailsOption() {
-      return this.data.status === "Entregado" || this.data.status === "Visado Control Interno";
+      return this.data.status === "Entregado" || this.data.status === "Visado Control Interno" || this.data.status === 'Visado Contabilidad';
     }
   }
 });
@@ -3015,7 +3024,25 @@ __webpack_require__.r(__webpack_exports__);
       return moment(this.record.datetime).format('DD/MM/YYYY HH:mm');
     },
     recordEmployee: function recordEmployee() {
-      return "".concat(this.record.employee.firstname, " ").concat(this.record.employee.lastname);
+      if (this.record.employee) {
+        return "".concat(this.record.employee.firstname, " ").concat(this.record.employee.lastname);
+      }
+
+      return 'Sin empleado';
+    },
+    recordThirdParty: function recordThirdParty() {
+      if (this.record.third_party) {
+        return this.record.third_party.name;
+      }
+
+      return 'Sin tercero';
+    },
+    recordDependency: function recordDependency() {
+      if (this.record.dependency) {
+        return this.record.dependency.name;
+      }
+
+      return 'Sin dependencia';
     },
     documentDate: function documentDate() {
       return moment(this.record.document_date).format('DD/MM/YYYY');
@@ -3346,6 +3373,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         _this3.$emit("success");
 
         _this3.$validator.reset();
+      })["catch"](function (error) {
+        if (error.response.status == 400) {
+          return _this3.$swal({
+            title: 'Ha ocurrido un error',
+            text: error.response.data.message,
+            type: 'error'
+          });
+        }
       });
     }
   },
@@ -3647,6 +3682,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         _this2.$emit("success");
 
         _this2.resetRecord();
+      })["catch"](function (error) {
+        if (error.response.status == 400) {
+          return _this2.$swal({
+            title: 'Ha ocurrido un error',
+            text: error.response.data.message,
+            type: 'error'
+          });
+        }
       });
     },
     postRecordsPdf: function postRecordsPdf(records) {
@@ -3663,13 +3706,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var blob = new Blob([response.data], {
           type: "application/pdf"
         });
-        var link = document.createElement("a"); //link.href = window.URL.createObjectURL(blob);
-
+        var link = document.createElement("a");
         var url = window.URL.createObjectURL(blob);
         var windowPrint = window.open(url);
         windowPrint.focus();
-        windowPrint.print(); //link.download = "registros.pdf";
-        //link.click();
+        windowPrint.print();
       });
     },
     resetRecord: function resetRecord() {
@@ -4165,6 +4206,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _mixins_PermissionsMixin_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/PermissionsMixin.js */ "./resources/js/mixins/PermissionsMixin.js");
+/* harmony import */ var _colombiaCities_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./colombiaCities.js */ "./resources/js/components/third_parties/colombiaCities.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -4228,7 +4271,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_PermissionsMixin_js__WEBPACK_IMPORTED_MODULE_1__["permissionMixin"]],
   props: ["data"],
   data: function data() {
     return {
@@ -4240,11 +4286,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   created: function created() {
+    this.thirdParty = this.data;
+  },
+  mounted: function mounted() {
     var _this = this;
 
-    this.thirdParty = this.data;
-    citiesEmitter.$on("cities", function (cities) {
-      _this.cities = cities;
+    _colombiaCities_js__WEBPACK_IMPORTED_MODULE_2__["cities"].forEach(function (city) {
+      city.ciudades.forEach(function (ciudad) {
+        _this.cities.push(ciudad);
+      });
     });
   },
   methods: {
@@ -4256,7 +4306,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       this.thirdPartyCity = this.cities.find(function (city) {
-        return city.municipio === _this2.data.city;
+        return city === _this2.data.city;
       });
     },
     validateForm: function () {
@@ -4305,9 +4355,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     putThirdParty: function putThirdParty() {
       var _this3 = this;
 
-      this.thirdParty.city = this.thirdPartyCity.municipio;
+      this.thirdParty.city = this.thirdPartyCity;
       axios.put("/third-parties/".concat(this.thirdParty.id), this.thirdParty).then(function (response) {
-        console.log(response.data);
         _this3.editForm = false;
       });
     },
@@ -4352,6 +4401,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _colombiaCities_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./colombiaCities.js */ "./resources/js/components/third_parties/colombiaCities.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -4476,6 +4526,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4499,20 +4550,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getCities: function getCities() {
       var _this = this;
 
-      axios.get("/app/cities").then(function (cities) {
-        cities.data.push({
-          c_digo_dane_del_municipio: "11001",
-          municipio: "Bogotá",
-          departamento: "Cundinamarca"
-        }, {
-          c_digo_dane_del_municipio: "00001",
-          municipio: "Exterior",
-          departamento: "Fuera del país"
+      _colombiaCities_js__WEBPACK_IMPORTED_MODULE_1__["cities"].forEach(function (city) {
+        city.ciudades.forEach(function (ciudad) {
+          _this.cities.push(ciudad);
         });
-        _this.cities = cities.data;
-        citiesEmitter.$emit("cities", _this.cities);
-      })["catch"](function (error) {
-        _this.$swal("Error!", "No se ha logrado obtener algunos datos", "error");
       });
     },
     validateForm: function () {
@@ -70445,37 +70486,45 @@ var render = function() {
           _c("td", [_vm._v(_vm._s(_vm.data.code))]),
           _vm._v(" "),
           _c("td", [
-            _c(
-              "a",
-              {
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    _vm.editForm = true
-                  }
-                }
-              },
-              [_c("i", { staticClass: "icon ion-edit tx-22 p-2 action-icon" })]
-            ),
+            _vm.$can("edit dependencies")
+              ? _c(
+                  "a",
+                  {
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.editForm = true
+                      }
+                    }
+                  },
+                  [
+                    _c("i", {
+                      staticClass: "icon ion-edit tx-22 p-2 action-icon"
+                    })
+                  ]
+                )
+              : _vm._e(),
             _vm._v(" "),
-            _c(
-              "a",
-              {
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.deleteDependency($event)
-                  }
-                }
-              },
-              [
-                _c("i", {
-                  staticClass: "icon ion-trash-a tx-22 p-2 action-icon"
-                })
-              ]
-            )
+            _vm.$can("delete dependencies")
+              ? _c(
+                  "a",
+                  {
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.deleteDependency($event)
+                      }
+                    }
+                  },
+                  [
+                    _c("i", {
+                      staticClass: "icon ion-trash-a tx-22 p-2 action-icon"
+                    })
+                  ]
+                )
+              : _vm._e()
           ])
         ]
       )
@@ -70886,33 +70935,41 @@ var render = function() {
           _c("td", [_vm._v(_vm._s(_vm.data.dependency.name))]),
           _vm._v(" "),
           _c("td", [
-            _c(
-              "a",
-              {
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.showEditForm($event)
-                  }
-                }
-              },
-              [_c("i", { staticClass: "icon ion-edit tx-22 p-2 tx-info" })]
-            ),
+            _vm.$can("edit employees")
+              ? _c(
+                  "a",
+                  {
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.showEditForm($event)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "icon ion-edit tx-22 p-2 tx-info" })]
+                )
+              : _vm._e(),
             _vm._v(" "),
-            _c(
-              "a",
-              {
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.deleteEmployee($event)
-                  }
-                }
-              },
-              [_c("i", { staticClass: "icon ion-trash-a tx-22 p-2 tx-info" })]
-            )
+            _vm.$can("delete employees")
+              ? _c(
+                  "a",
+                  {
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.deleteEmployee($event)
+                      }
+                    }
+                  },
+                  [
+                    _c("i", {
+                      staticClass: "icon ion-trash-a tx-22 p-2 tx-info"
+                    })
+                  ]
+                )
+              : _vm._e()
           ])
         ]
       )
@@ -71691,19 +71748,21 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _c(
-        "a",
-        {
-          attrs: { href: "#" },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.deleteRecord($event)
-            }
-          }
-        },
-        [_c("i", { staticClass: "icon ion-trash-a tx-22 p-2 tx-teal" })]
-      )
+      _vm.$can("delete records")
+        ? _c(
+            "a",
+            {
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.deleteRecord($event)
+                }
+              }
+            },
+            [_c("i", { staticClass: "icon ion-trash-a tx-22 p-2 tx-teal" })]
+          )
+        : _vm._e()
     ])
   ])
 }
@@ -71771,7 +71830,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("p", { staticClass: "tx-medium" }, [
-          _vm._v(_vm._s(_vm.record.third_party.name))
+          _vm._v(_vm._s(_vm.recordThirdParty))
         ]),
         _vm._v(" "),
         _c("p", { staticClass: "tx-semibold tx-teal" }, [
@@ -71779,7 +71838,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("p", { staticClass: "tx-medium" }, [
-          _vm._v(_vm._s(_vm.record.dependency.name))
+          _vm._v(_vm._s(_vm.recordDependency))
         ])
       ])
     ])
@@ -73494,37 +73553,45 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("td", { staticClass: "text-center" }, [
-            _c(
-              "a",
-              {
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.showEditForm($event)
-                  }
-                }
-              },
-              [_c("i", { staticClass: "icon ion-edit tx-22 p-2 action-icon" })]
-            ),
+            _vm.$can("edit third_parties")
+              ? _c(
+                  "a",
+                  {
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.showEditForm($event)
+                      }
+                    }
+                  },
+                  [
+                    _c("i", {
+                      staticClass: "icon ion-edit tx-22 p-2 action-icon"
+                    })
+                  ]
+                )
+              : _vm._e(),
             _vm._v(" "),
-            _c(
-              "a",
-              {
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.deleteThirdParty($event)
-                  }
-                }
-              },
-              [
-                _c("i", {
-                  staticClass: "icon ion-trash-a tx-22 p-2 action-icon"
-                })
-              ]
-            )
+            _vm.$can("delete third_parties")
+              ? _c(
+                  "a",
+                  {
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.deleteThirdParty($event)
+                      }
+                    }
+                  },
+                  [
+                    _c("i", {
+                      staticClass: "icon ion-trash-a tx-22 p-2 action-icon"
+                    })
+                  ]
+                )
+              : _vm._e()
           ])
         ]
       )
@@ -73700,7 +73767,6 @@ var render = function() {
                 deselectLabel: "",
                 maxHeight: 200,
                 options: _vm.cities,
-                label: "municipio",
                 placeholder: "Seleccione"
               },
               model: {
@@ -74037,8 +74103,7 @@ var render = function() {
                   selectLabel: "",
                   deselectLabel: "",
                   maxHeight: 200,
-                  options: _vm.cities,
-                  label: "municipio",
+                  options: this.cities,
                   placeholder: "Seleccione"
                 },
                 model: {
@@ -86635,7 +86700,6 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vee_validate__WEBPACK_IMPORTED_MO
 
 window.modalEmitter = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 window.dependenciesEmitter = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
-window.citiesEmitter = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
   components: {
@@ -88173,6 +88237,148 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/third_parties/colombiaCities.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/third_parties/colombiaCities.js ***!
+  \*****************************************************************/
+/*! exports provided: cities */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cities", function() { return cities; });
+var cities = [{
+  "id": 0,
+  "departamento": "Amazonas",
+  "ciudades": ["Leticia", "Puerto Nari\xF1o"]
+}, {
+  "id": 1,
+  "departamento": "Antioquia",
+  "ciudades": ["Abejorral", "Abriaqu\xED", "Alejandr\xEDa", "Amag\xE1", "Amalfi", "Andes", "Angel\xF3polis", "Angostura", "Anor\xED", "Anz\xE1", "Apartad\xF3", "Arboletes", "Argelia", "Armenia", "Barbosa", "Bello", "Belmira", "Betania", "Betulia", "Brice\xF1o", "Buritic\xE1", "C\xE1ceres", "Caicedo", "Caldas", "Campamento", "Ca\xF1asgordas", "Caracol\xED", "Caramanta", "Carepa", "Carolina del Pr\xEDncipe", "Caucasia", "Chigorod\xF3", "Cisneros", "Ciudad Bol\xEDvar", "Cocorn\xE1", "Concepci\xF3n", "Concordia", "Copacabana", "Dabeiba", "Donmat\xEDas", "Eb\xE9jico", "El Bagre", "El Carmen de Viboral", "El Pe\xF1ol", "El Retiro", "El Santuario", "Entrerr\xEDos", "Envigado", "Fredonia", "Frontino", "Giraldo", "Girardota", "G\xF3mez Plata", "Granada", "Guadalupe", "Guarne", "Guatap\xE9", "Heliconia", "Hispania", "Itag\xFC\xED", "Ituango", "Jard\xEDn", "Jeric\xF3", "La Ceja", "La Estrella", "La Pintada", "La Uni\xF3n", "Liborina", "Maceo", "Marinilla", "Medell\xEDn", "Montebello", "Murind\xF3", "Mutat\xE1", "Nari\xF1o", "Nech\xED", "Necocl\xED", "Olaya", "Peque", "Pueblorrico", "Puerto Berr\xEDo", "Puerto Nare", "Puerto Triunfo", "Remedios", "Rionegro", "Sabanalarga", "Sabaneta", "Salgar", "San Andr\xE9s de Cuerquia", "San Carlos", "San Francisco", "San Jer\xF3nimo", "San Jos\xE9 de la Monta\xF1a", "San Juan de Urab\xE1", "San Luis", "San Pedro de Urab\xE1", "San Pedro de los Milagros", "San Rafael", "San Roque", "San Vicente", "Santa B\xE1rbara", "Santa Fe de Antioquia", "Santa Rosa de Osos", "Santo Domingo", "Segovia", "Sons\xF3n", "Sopetr\xE1n", "T\xE1mesis", "Taraz\xE1", "Tarso", "Titirib\xED", "Toledo", "Turbo", "Uramita", "Urrao", "Valdivia", "Valpara\xEDso", "Vegach\xED", "Venecia", "Vig\xEDa del Fuerte", "Yal\xED", "Yarumal", "Yolomb\xF3", "Yond\xF3", "Zaragoza"]
+}, {
+  "id": 2,
+  "departamento": "Arauca",
+  "ciudades": ["Arauca", "Arauquita", "Cravo Norte", "Fortul", "Puerto Rond\xF3n", "Saravena", "Tame"]
+}, {
+  "id": 3,
+  "departamento": "Atl\xE1ntico",
+  "ciudades": ["Baranoa", "Barranquilla", "Campo de la Cruz", "Candelaria", "Galapa", "Juan de Acosta", "Luruaco", "Malambo", "Manat\xED", "Palmar de Varela", "Pioj\xF3", "Polonuevo", "Ponedera", "Puerto Colombia", "Repel\xF3n", "Sabanagrande", "Sabanalarga", "Santa Luc\xEDa", "Santo Tom\xE1s", "Soledad", "Su\xE1n", "Tubar\xE1", "Usiacur\xED"]
+}, {
+  "id": 4,
+  "departamento": "Bol\xEDvar",
+  "ciudades": ["Ach\xED", "Altos del Rosario", "Arenal", "Arjona", "Arroyohondo", "Barranco de Loba", "Brazuelo de Papayal", "Calamar", "Cantagallo", "Cartagena de Indias", "Cicuco", "Clemencia", "C\xF3rdoba", "El Carmen de Bol\xEDvar", "El Guamo", "El Pe\xF1\xF3n", "Hatillo de Loba", "Magangu\xE9", "Mahates", "Margarita", "Mar\xEDa la Baja", "Momp\xF3s", "Montecristo", "Morales", "Noros\xED", "Pinillos", "Regidor", "R\xEDo Viejo", "San Crist\xF3bal", "San Estanislao", "San Fernando", "San Jacinto del Cauca", "San Jacinto", "San Juan Nepomuceno", "San Mart\xEDn de Loba", "San Pablo", "Santa Catalina", "Santa Rosa", "Santa Rosa del Sur", "Simit\xED", "Soplaviento", "Talaigua Nuevo", "Tiquisio", "Turbaco", "Turban\xE1", "Villanueva", "Zambrano"]
+}, {
+  "id": 5,
+  "departamento": "Boyac\xE1",
+  "ciudades": ["Almeida", "Aquitania", "Arcabuco", "Bel\xE9n", "Berbeo", "Bet\xE9itiva", "Boavita", "Boyac\xE1", "Brice\xF1o", "Buenavista", "Busbanz\xE1", "Caldas", "Campohermoso", "Cerinza", "Chinavita", "Chiquinquir\xE1", "Ch\xEDquiza", "Chiscas", "Chita", "Chitaraque", "Chivat\xE1", "Chivor", "Ci\xE9nega", "C\xF3mbita", "Coper", "Corrales", "Covarach\xEDa", "Cubar\xE1", "Cucaita", "Cu\xEDtiva", "Duitama", "El Cocuy", "El Espino", "Firavitoba", "Floresta", "Gachantiv\xE1", "G\xE1meza", "Garagoa", "Guacamayas", "Guateque", "Guayat\xE1", "G\xFCic\xE1n", "Iza", "Jenesano", "Jeric\xF3", "La Capilla", "La Uvita", "La Victoria", "Labranzagrande", "Macanal", "Marip\xED", "Miraflores", "Mongua", "Mongu\xED", "Moniquir\xE1", "Motavita", "Muzo", "Nobsa", "Nuevo Col\xF3n", "Oicat\xE1", "Otanche", "Pachavita", "P\xE1ez", "Paipa", "Pajarito", "Panqueba", "Pauna", "Paya", "Paz del R\xEDo", "Pesca", "Pisba", "Puerto Boyac\xE1", "Qu\xEDpama", "Ramiriqu\xED", "R\xE1quira", "Rond\xF3n", "Saboy\xE1", "S\xE1chica", "Samac\xE1", "San Eduardo", "San Jos\xE9 de Pare", "San Luis de Gaceno", "San Mateo", "San Miguel de Sema", "San Pablo de Borbur", "Santa Mar\xEDa", "Santa Rosa de Viterbo", "Santa Sof\xEDa", "Santana", "Sativanorte", "Sativasur", "Siachoque", "Soat\xE1", "Socha", "Socot\xE1", "Sogamoso", "Somondoco", "Sora", "Sorac\xE1", "Sotaquir\xE1", "Susac\xF3n", "Sutamarch\xE1n", "Sutatenza", "Tasco", "Tenza", "Tiban\xE1", "Tibasosa", "Tinjac\xE1", "Tipacoque", "Toca", "Tog\xFC\xED", "T\xF3paga", "Tota", "Tunja", "Tunungu\xE1", "Turmequ\xE9", "Tuta", "Tutaz\xE1", "\xDAmbita", "Ventaquemada", "Villa de Leyva", "Viracach\xE1", "Zetaquira"]
+}, {
+  "id": 6,
+  "departamento": "Caldas",
+  "ciudades": ["Aguadas", "Anserma", "Aranzazu", "Belalc\xE1zar", "Chinchin\xE1", "Filadelfia", "La Dorada", "La Merced", "Manizales", "Manzanares", "Marmato", "Marquetalia", "Marulanda", "Neira", "Norcasia", "P\xE1cora", "Palestina", "Pensilvania", "Riosucio", "Risaralda", "Salamina", "Saman\xE1", "San Jos\xE9", "Sup\xEDa", "Victoria", "Villamar\xEDa", "Viterbo"]
+}, {
+  "id": 7,
+  "departamento": "Caquet\xE1",
+  "ciudades": ["Albania", "Bel\xE9n de los Andaqu\xEDes", "Cartagena del Chair\xE1", "Curillo", "El Doncello", "El Paujil", "Florencia", "La Monta\xF1ita", "Mil\xE1n", "Morelia", "Puerto Rico", "San Jos\xE9 del Fragua", "San Vicente del Cagu\xE1n", "Solano", "Solita", "Valpara\xEDso"]
+}, {
+  "id": 8,
+  "departamento": "Casanare",
+  "ciudades": ["Aguazul", "Ch\xE1meza", "Hato Corozal", "La Salina", "Man\xED", "Monterrey", "Nunch\xEDa", "Orocu\xE9", "Paz de Ariporo", "Pore", "Recetor", "Sabanalarga", "S\xE1cama", "San Luis de Palenque", "T\xE1mara", "Tauramena", "Trinidad", "Villanueva", "Yopal"]
+}, {
+  "id": 9,
+  "departamento": "Cauca",
+  "ciudades": ["Almaguer", "Argelia", "Balboa", "Bol\xEDvar", "Buenos Aires", "Cajib\xEDo", "Caldono", "Caloto", "Corinto", "El Tambo", "Florencia", "Guachen\xE9", "Guap\xED", "Inz\xE1", "Jambal\xF3", "La Sierra", "La Vega", "L\xF3pez de Micay", "Mercaderes", "Miranda", "Morales", "Padilla", "P\xE1ez", "Pat\xEDa", "Piamonte", "Piendam\xF3", "Popay\xE1n", "Puerto Tejada", "Purac\xE9", "Rosas", "San Sebasti\xE1n", "Santa Rosa", "Santander de Quilichao", "Silvia", "Sotar\xE1", "Su\xE1rez", "Sucre", "Timb\xEDo", "Timbiqu\xED", "Torib\xEDo", "Totor\xF3", "Villa Rica"]
+}, {
+  "id": 10,
+  "departamento": "Cesar",
+  "ciudades": ["Aguachica", "Agust\xEDn Codazzi", "Astrea", "Becerril", "Bosconia", "Chimichagua", "Chiriguan\xE1", "Curuman\xED", "El Copey", "El Paso", "Gamarra", "Gonz\xE1lez", "La Gloria (Cesar)", "La Jagua de Ibirico", "La Paz", "Manaure Balc\xF3n del Cesar", "Pailitas", "Pelaya", "Pueblo Bello", "R\xEDo de Oro", "San Alberto", "San Diego", "San Mart\xEDn", "Tamalameque", "Valledupar"]
+}, {
+  "id": 11,
+  "departamento": "Choc\xF3",
+  "ciudades": ["Acand\xED", "Alto Baud\xF3", "Bagad\xF3", "Bah\xEDa Solano", "Bajo Baud\xF3", "Bojay\xE1", "Cant\xF3n de San Pablo", "C\xE9rtegui", "Condoto", "El Atrato", "El Carmen de Atrato", "El Carmen del Dari\xE9n", "Istmina", "Jurad\xF3", "Litoral de San Juan", "Llor\xF3", "Medio Atrato", "Medio Baud\xF3", "Medio San Juan", "N\xF3vita", "Nuqu\xED", "Quibd\xF3", "R\xEDo Ir\xF3", "R\xEDo Quito", "Riosucio", "San Jos\xE9 del Palmar", "Sip\xED", "Tad\xF3", "Uni\xF3n Panamericana", "Ungu\xEDa"]
+}, {
+  "id": 12,
+  "departamento": "Cundinamarca",
+  "ciudades": ["Agua de Dios", "Alb\xE1n", "Anapoima", "Anolaima", "Apulo", "Arbel\xE1ez", "Beltr\xE1n", "Bituima", "Bogot\xE1", "Bojac\xE1", "Cabrera", "Cachipay", "Cajic\xE1", "Caparrap\xED", "C\xE1queza", "Carmen de Carupa", "Chaguan\xED", "Ch\xEDa", "Chipaque", "Choach\xED", "Chocont\xE1", "Cogua", "Cota", "Cucunub\xE1", "El Colegio", "El Pe\xF1\xF3n", "El Rosal", "Facatativ\xE1", "F\xF3meque", "Fosca", "Funza", "F\xFAquene", "Fusagasug\xE1", "Gachal\xE1", "Gachancip\xE1", "Gachet\xE1", "Gama", "Girardot", "Granada", "Guachet\xE1", "Guaduas", "Guasca", "Guataqu\xED", "Guatavita", "Guayabal de S\xEDquima", "Guayabetal", "Guti\xE9rrez", "Jerusal\xE9n", "Jun\xEDn", "La Calera", "La Mesa", "La Palma", "La Pe\xF1a", "La Vega", "Lenguazaque", "Machet\xE1", "Madrid", "Manta", "Medina", "Mosquera", "Nari\xF1o", "Nemoc\xF3n", "Nilo", "Nimaima", "Nocaima", "Pacho", "Paime", "Pandi", "Paratebueno", "Pasca", "Puerto Salgar", "Pul\xED", "Quebradanegra", "Quetame", "Quipile", "Ricaurte", "San Antonio del Tequendama", "San Bernardo", "San Cayetano", "San Francisco", "San Juan de Rioseco", "Sasaima", "Sesquil\xE9", "Sibat\xE9", "Silvania", "Simijaca", "Soacha", "Sop\xF3", "Subachoque", "Suesca", "Supat\xE1", "Susa", "Sutatausa", "Tabio", "Tausa", "Tena", "Tenjo", "Tibacuy", "Tibirita", "Tocaima", "Tocancip\xE1", "Topaip\xED", "Ubal\xE1", "Ubaque", "Ubat\xE9", "Une", "\xDAtica", "Venecia", "Vergara", "Vian\xED", "Villag\xF3mez", "Villapinz\xF3n", "Villeta", "Viot\xE1", "Yacop\xED", "Zipac\xF3n", "Zipaquir\xE1"]
+}, {
+  "id": 13,
+  "departamento": "C\xF3rdoba",
+  "ciudades": ["Ayapel", "Buenavista", "Canalete", "Ceret\xE9", "Chim\xE1", "Chin\xFA", "Ci\xE9naga de Oro", "Cotorra", "La Apartada", "Lorica", "Los C\xF3rdobas", "Momil", "Montel\xEDbano", "Monter\xEDa", "Mo\xF1itos", "Planeta Rica", "Pueblo Nuevo", "Puerto Escondido", "Puerto Libertador", "Pur\xEDsima", "Sahag\xFAn", "San Andr\xE9s de Sotavento", "San Antero", "San Bernardo del Viento", "San Carlos", "San Jos\xE9 de Ur\xE9", "San Pelayo", "Tierralta", "Tuch\xEDn", "Valencia"]
+}, {
+  "id": 14,
+  "departamento": "Guain\xEDa",
+  "ciudades": ["In\xEDrida"]
+}, {
+  "id": 15,
+  "departamento": "Guaviare",
+  "ciudades": ["Calamar", "El Retorno", "Miraflores", "San Jos\xE9 del Guaviare"]
+}, {
+  "id": 16,
+  "departamento": "Huila",
+  "ciudades": ["Acevedo", "Agrado", "Aipe", "Algeciras", "Altamira", "Baraya", "Campoalegre", "Colombia", "El Pital", "El\xEDas", "Garz\xF3n", "Gigante", "Guadalupe", "Hobo", "\xCDquira", "Isnos", "La Argentina", "La Plata", "N\xE1taga", "Neiva", "Oporapa", "Paicol", "Palermo", "Palestina", "Pitalito", "Rivera", "Saladoblanco", "San Agust\xEDn", "Santa Mar\xEDa", "Suaza", "Tarqui", "Tello", "Teruel", "Tesalia", "Timan\xE1", "Villavieja", "Yaguar\xE1"]
+}, {
+  "id": 17,
+  "departamento": "La Guajira",
+  "ciudades": ["Albania", "Barrancas", "Dibulla", "Distracci\xF3n", "El Molino", "Fonseca", "Hatonuevo", "La Jagua del Pilar", "Maicao", "Manaure", "Riohacha", "San Juan del Cesar", "Uribia", "Urumita", "Villanueva"]
+}, {
+  "id": 18,
+  "departamento": "Magdalena",
+  "ciudades": ["Algarrobo", "Aracataca", "Ariguan\xED", "Cerro de San Antonio", "Chibolo", "Chibolo", "Ci\xE9naga", "Concordia", "El Banco", "El Pi\xF1\xF3n", "El Ret\xE9n", "Fundaci\xF3n", "Guamal", "Nueva Granada", "Pedraza", "Piji\xF1o del Carmen", "Pivijay", "Plato", "Pueblo Viejo", "Remolino", "Sabanas de San \xC1ngel", "Salamina", "San Sebasti\xE1n de Buenavista", "San Zen\xF3n", "Santa Ana", "Santa B\xE1rbara de Pinto", "Santa Marta", "Sitionuevo", "Tenerife", "Zapay\xE1n", "Zona Bananera"]
+}, {
+  "id": 19,
+  "departamento": "Meta",
+  "ciudades": ["Acac\xEDas", "Barranca de Up\xEDa", "Cabuyaro", "Castilla la Nueva", "Cubarral", "Cumaral", "El Calvario", "El Castillo", "El Dorado", "Fuente de Oro", "Granada", "Guamal", "La Macarena", "La Uribe", "Lejan\xEDas", "Mapirip\xE1n", "Mesetas", "Puerto Concordia", "Puerto Gait\xE1n", "Puerto Lleras", "Puerto L\xF3pez", "Puerto Rico", "Restrepo", "San Carlos de Guaroa", "San Juan de Arama", "San Juanito", "San Mart\xEDn", "Villavicencio", "Vista Hermosa"]
+}, {
+  "id": 20,
+  "departamento": "Nari\xF1o",
+  "ciudades": ["Aldana", "Ancuy\xE1", "Arboleda", "Barbacoas", "Bel\xE9n", "Buesaco", "Chachag\xFC\xED", "Col\xF3n", "Consac\xE1", "Contadero", "C\xF3rdoba", "Cuaspud", "Cumbal", "Cumbitara", "El Charco", "El Pe\xF1ol", "El Rosario", "El Tabl\xF3n", "El Tambo", "Francisco Pizarro", "Funes", "Guachucal", "Guaitarilla", "Gualmat\xE1n", "Iles", "Imu\xE9s", "Ipiales", "La Cruz", "La Florida", "La Llanada", "La Tola", "La Uni\xF3n", "Leiva", "Linares", "Los Andes", "Mag\xFC\xED Pay\xE1n", "Mallama", "Mosquera", "Nari\xF1o", "Olaya Herrera", "Ospina", "Pasto", "Policarpa", "Potos\xED", "Providencia", "Puerres", "Pupiales", "Ricaurte", "Roberto Pay\xE1n", "Samaniego", "San Bernardo", "San Jos\xE9 de Alb\xE1n", "San Lorenzo", "San Pablo", "San Pedro de Cartago", "Sandon\xE1", "Santa B\xE1rbara", "Santacruz", "Sapuyes", "Taminango", "Tangua", "Tumaco", "T\xFAquerres", "Yacuanquer"]
+}, {
+  "id": 21,
+  "departamento": "Norte de Santander",
+  "ciudades": ["\xC1brego", "Arboledas", "Bochalema", "Bucarasica", "C\xE1chira", "C\xE1cota", "Chin\xE1cota", "Chitag\xE1", "Convenci\xF3n", "C\xFAcuta", "Cucutilla", "Duran\xEDa", "El Carmen", "El Tarra", "El Zulia", "Gramalote", "Hacar\xED", "Herr\xE1n", "La Esperanza", "La Playa de Bel\xE9n", "Labateca", "Los Patios", "Lourdes", "Mutiscua", "Oca\xF1a", "Pamplona", "Pamplonita", "Puerto Santander", "Ragonvalia", "Salazar de Las Palmas", "San Calixto", "San Cayetano", "Santiago", "Santo Domingo de Silos", "Sardinata", "Teorama", "Tib\xFA", "Toledo", "Villa Caro", "Villa del Rosario"]
+}, {
+  "id": 22,
+  "departamento": "Putumayo",
+  "ciudades": ["Col\xF3n", "Mocoa", "Orito", "Puerto As\xEDs", "Puerto Caicedo", "Puerto Guzm\xE1n", "Puerto Legu\xEDzamo", "San Francisco", "San Miguel", "Santiago", "Sibundoy", "Valle del Guamuez", "Villagarz\xF3n"]
+}, {
+  "id": 23,
+  "departamento": "Quind\xEDo",
+  "ciudades": ["Armenia", "Buenavista", "Calarc\xE1", "Circasia", "C\xF3rdoba", "Filandia", "G\xE9nova", "La Tebaida", "Montenegro", "Pijao", "Quimbaya", "Salento"]
+}, {
+  "id": 24,
+  "departamento": "Risaralda",
+  "ciudades": ["Ap\xEDa", "Balboa", "Bel\xE9n de Umbr\xEDa", "Dosquebradas", "Gu\xE1tica", "La Celia", "La Virginia", "Marsella", "Mistrat\xF3", "Pereira", "Pueblo Rico", "Quinch\xEDa", "Santa Rosa de Cabal", "Santuario"]
+}, {
+  "id": 25,
+  "departamento": "San Andr\xE9s y Providencia",
+  "ciudades": ["Providencia y Santa Catalina Islas", "San Andr\xE9s"]
+}, {
+  "id": 26,
+  "departamento": "Santander",
+  "ciudades": ["Aguada", "Albania", "Aratoca", "Barbosa", "Barichara", "Barrancabermeja", "Betulia", "Bol\xEDvar", "Bucaramanga", "Cabrera", "California", "Capitanejo", "Carcas\xED", "Cepit\xE1", "Cerrito", "Charal\xE1", "Charta", "Chima", "Chipat\xE1", "Cimitarra", "Concepci\xF3n", "Confines", "Contrataci\xF3n", "Coromoro", "Curit\xED", "El Carmen de Chucur\xED", "El Guacamayo", "El Pe\xF1\xF3n", "El Play\xF3n", "El Socorro", "Encino", "Enciso", "Flori\xE1n", "Floridablanca", "Gal\xE1n", "G\xE1mbita", "Gir\xF3n", "Guaca", "Guadalupe", "Guapot\xE1", "Guavat\xE1", "G\xFCepsa", "Hato", "Jes\xFAs Mar\xEDa", "Jord\xE1n", "La Belleza", "La Paz", "Land\xE1zuri", "Lebrija", "Los Santos", "Macaravita", "M\xE1laga", "Matanza", "Mogotes", "Molagavita", "Ocamonte", "Oiba", "Onzaga", "Palmar", "Palmas del Socorro", "P\xE1ramo", "Piedecuesta", "Pinchote", "Puente Nacional", "Puerto Parra", "Puerto Wilches", "Rionegro", "Sabana de Torres", "San Andr\xE9s", "San Benito", "San Gil", "San Joaqu\xEDn", "San Jos\xE9 de Miranda", "San Miguel", "San Vicente de Chucur\xED", "Santa B\xE1rbara", "Santa Helena del Op\xF3n", "Simacota", "Suaita", "Sucre", "Surat\xE1", "Tona", "Valle de San Jos\xE9", "V\xE9lez", "Vetas", "Villanueva", "Zapatoca"]
+}, {
+  "id": 27,
+  "departamento": "Sucre",
+  "ciudades": ["Buenavista", "Caimito", "Chal\xE1n", "Colos\xF3", "Corozal", "Cove\xF1as", "El Roble", "Galeras", "Guaranda", "La Uni\xF3n", "Los Palmitos", "Majagual", "Morroa", "Ovejas", "Sampu\xE9s", "San Antonio de Palmito", "San Benito Abad", "San Juan de Betulia", "San Marcos", "San Onofre", "San Pedro", "Sinc\xE9", "Sincelejo", "Sucre", "Tol\xFA", "Tol\xFA Viejo"]
+}, {
+  "id": 28,
+  "departamento": "Tolima",
+  "ciudades": ["Alpujarra", "Alvarado", "Ambalema", "Anzo\xE1tegui", "Armero", "Ataco", "Cajamarca", "Carmen de Apical\xE1", "Casabianca", "Chaparral", "Coello", "Coyaima", "Cunday", "Dolores", "El Espinal", "Fal\xE1n", "Flandes", "Fresno", "Guamo", "Herveo", "Honda", "Ibagu\xE9", "Icononzo", "L\xE9rida", "L\xEDbano", "Mariquita", "Melgar", "Murillo", "Natagaima", "Ortega", "Palocabildo", "Piedras", "Planadas", "Prado", "Purificaci\xF3n", "Rioblanco", "Roncesvalles", "Rovira", "Salda\xF1a", "San Antonio", "San Luis", "Santa Isabel", "Su\xE1rez", "Valle de San Juan", "Venadillo", "Villahermosa", "Villarrica"]
+}, {
+  "id": 29,
+  "departamento": "Valle del Cauca",
+  "ciudades": ["Alcal\xE1", "Andaluc\xEDa", "Ansermanuevo", "Argelia", "Bol\xEDvar", "Buenaventura", "Buga", "Bugalagrande", "Caicedonia", "Cali", "Calima", "Candelaria", "Cartago", "Dagua", "El \xC1guila", "El Cairo", "El Cerrito", "El Dovio", "Florida", "Ginebra", "Guacar\xED", "Jamund\xED", "La Cumbre", "La Uni\xF3n", "La Victoria", "Obando", "Palmira", "Pradera", "Restrepo", "Riofr\xEDo", "Roldanillo", "San Pedro", "Sevilla", "Toro", "Trujillo", "Tulu\xE1", "Ulloa", "Versalles", "Vijes", "Yotoco", "Yumbo", "Zarzal"]
+}, {
+  "id": 30,
+  "departamento": "Vaup\xE9s",
+  "ciudades": ["Carur\xFA", "Mit\xFA", "Taraira"]
+}, {
+  "id": 31,
+  "departamento": "Vichada",
+  "ciudades": ["Cumaribo", "La Primavera", "Puerto Carre\xF1o", "Santa Rosal\xEDa"]
+}];
+
+/***/ }),
+
 /***/ "./resources/js/components/utils/Modal.vue":
 /*!*************************************************!*\
   !*** ./resources/js/components/utils/Modal.vue ***!
@@ -88308,6 +88514,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Notification_vue_vue_type_template_id_bfe4b298___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/mixins/PermissionsMixin.js":
+/*!*************************************************!*\
+  !*** ./resources/js/mixins/PermissionsMixin.js ***!
+  \*************************************************/
+/*! exports provided: permissionMixin */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "permissionMixin", function() { return permissionMixin; });
+var permissionMixin = {
+  methods: {
+    $can: function $can(permissionName) {
+      return Permissions.indexOf(permissionName) !== -1;
+    }
+  }
+};
 
 /***/ }),
 

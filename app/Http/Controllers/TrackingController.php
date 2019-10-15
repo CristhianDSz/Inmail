@@ -6,10 +6,29 @@ use App\Record;
 
 class TrackingController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        // return  Record::trackingBy(request()->input('record_ci'),'Entregado')->get();
-        $records = Record::where('status','Entregado')->where('document_type','Facturas')->get();
+        $records = Record::where('document_type','Facturas');
+
+        if (auth()->user()->can('viewControl', Record::class) && 
+            auth()->user()->can('viewAccounting', Record::class)) {
+                $records = $records->where('status','Entregado')->orWhere('status','Visado Control Interno');
+        }
+        elseif (auth()->user()->can('viewControl', Record::class)) {
+            $records = $records->where('status','Entregado');
+        }
+
+        elseif (auth()->user()->can('viewAccounting', Record::class)) {
+            $records = $records->where('status','Visado Control Interno');
+        }
+
+        $records = $records->get();
 
         if (request()->has('record_ci')) {
             $this->validateRecord('record_ci');

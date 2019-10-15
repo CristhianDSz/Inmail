@@ -18,7 +18,7 @@
         <i class="icon ion-eye tx-22 p-2 tx-teal"></i>
       </a>
 
-      <a href="#" @click.prevent="deleteRecord">
+      <a href="#" @click.prevent="deleteRecord" v-if="$can('delete records')">
         <i class="icon ion-trash-a tx-22 p-2 tx-teal"></i>
       </a>
     </td>
@@ -27,8 +27,10 @@
 
 <script>
 import Modal from "../utils/Modal";
+import { permissionMixin} from '../../mixins/PermissionsMixin.js'
 export default {
   components: { Modal },
+  mixins: [permissionMixin],
   props: ["data", "dependenciesData", "thirdPartiesData", "employeesData"],
   data() {
     return {
@@ -78,10 +80,12 @@ export default {
       return moment(this.data.datetime).format("MM/DD/YYYY HH:mm");
     },
     showEditOption() {
-      return this.data.status === "Creado" || this.data.status === "Registrado";
+      return (this.$can('edit records') && (this.data.status == 'Creado' ||
+      this.data.status == 'Registrado')) || 
+      this.$can('edit delivered records');
     },
     showDetailsOption () {
-      return this.data.status === "Entregado" || this.data.status === "Visado Control Interno"
+      return this.data.status === "Entregado" || this.data.status === "Visado Control Interno" || this.data.status === 'Visado Contabilidad'
     }
   }
 };

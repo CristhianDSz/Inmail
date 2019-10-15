@@ -3,22 +3,35 @@
 namespace App\Policies;
 
 use App\User;
-use App\Record;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Policies\PermissionPolicy;
 
 class RecordPolicy
 {
     use HandlesAuthorization;
     
     /**
-     * Determine whether the user can view any records.
+     * Determine whether the user can view the record.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Record  $record
+     * @return mixed
+     */
+    public function view(User $user)
+    {
+        return PermissionPolicy::hasPermission($user, "show records");
+    }
+
+    /**
+     * Determine whether the user can view the records.
      *
      * @param  \App\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAccounting(User $user)
     {
-        //
+        return PermissionPolicy::hasPermission($user, "validate accounting");
+        
     }
 
     /**
@@ -28,9 +41,10 @@ class RecordPolicy
      * @param  \App\Record  $record
      * @return mixed
      */
-    public function view(User $user, Record $record)
+    public function viewControl(User $user)
     {
-        //
+        return PermissionPolicy::hasPermission($user, "validate control");
+        
     }
 
     /**
@@ -41,7 +55,7 @@ class RecordPolicy
      */
     public function create(User $user)
     {
-        //
+        return PermissionPolicy::hasPermission($user, "create records");
     }
 
     /**
@@ -51,9 +65,9 @@ class RecordPolicy
      * @param  \App\Record  $record
      * @return mixed
      */
-    public function update(User $user, Record $record)
+    public function update(User $user)
     {
-        //
+        return PermissionPolicy::hasPermission($user, "edit records");
     }
 
     /**
@@ -63,9 +77,9 @@ class RecordPolicy
      * @param  \App\Record  $record
      * @return mixed
      */
-    public function delete(User $user, Record $record)
+    public function delete(User $user)
     {
-        //
+        return PermissionPolicy::hasPermission($user, "delete records");
     }
 
     /**
@@ -75,9 +89,9 @@ class RecordPolicy
      * @param  \App\Record  $record
      * @return mixed
      */
-    public function restore(User $user, Record $record)
+    public function restore(User $user)
     {
-        //
+        //Implementar solo si es necesario
     }
 
     /**
@@ -87,8 +101,8 @@ class RecordPolicy
      * @param  \App\Record  $record
      * @return mixed
      */
-    public function forceDelete(User $user, Record $record)
+    public function forceDelete(User $user)
     {
-        //
+        //Implementar solo si es necesario
     }
 }

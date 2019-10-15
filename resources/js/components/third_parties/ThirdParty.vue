@@ -7,11 +7,11 @@
     <td class="text-center">{{data.city}}</td>
     <td class="text-center">{{data.email_contact}}</td>
     <td class="text-center">
-      <a href="#" @click.prevent="showEditForm">
+      <a href="#" @click.prevent="showEditForm" v-if="$can('edit third_parties')">
         <i class="icon ion-edit tx-22 p-2 action-icon"></i>
       </a>
 
-      <a href="#" @click.prevent="deleteThirdParty">
+      <a href="#" @click.prevent="deleteThirdParty" v-if="$can('delete third_parties')">
         <i class="icon ion-trash-a tx-22 p-2 action-icon"></i>
       </a>
     </td>
@@ -35,7 +35,7 @@
       <small class="text-danger" v-if="errors.has('telephone')">{{errors.first('telephone')}}</small>
     </td>
     <td>
-       <multiselect name="city" v-validate="'required'" data-vv-as="Ciudad" :selectLabel="''" :deselectLabel="''" :maxHeight="200" v-model="thirdPartyCity" :options="cities" label="municipio" placeholder="Seleccione"></multiselect>
+       <multiselect name="city" v-validate="'required'" data-vv-as="Ciudad" :selectLabel="''" :deselectLabel="''" :maxHeight="200" v-model="thirdPartyCity" :options="cities" placeholder="Seleccione"></multiselect>
       <small class="text-danger" v-if="errors.has('city')">{{errors.first('city')}}</small>
     </td>
     <td>
@@ -56,7 +56,10 @@
 </template>
 
 <script>
+import { permissionMixin} from '../../mixins/PermissionsMixin.js'
+import {cities} from './colombiaCities.js'
 export default {
+  mixins: [permissionMixin],
   props: ["data"],
   data() {
     return {
@@ -69,9 +72,13 @@ export default {
   },
   created() {
     this.thirdParty = this.data;
-    citiesEmitter.$on("cities", cities => {
-      this.cities = cities;
-    });
+  },
+  mounted() {
+    cities.forEach(city => {
+      city.ciudades.forEach(ciudad => {
+        this.cities.push(ciudad)
+      })
+    })
   },
   methods: {
     showEditForm() {
@@ -80,7 +87,7 @@ export default {
     },
     getCurrentCity() {
       this.thirdPartyCity = this.cities.find(city => {
-        return city.municipio === this.data.city
+        return city === this.data.city
       })
     },
      async validateForm() {
@@ -99,11 +106,10 @@ export default {
       this.putThirdParty();
     },
     putThirdParty() {
-      this.thirdParty.city = this.thirdPartyCity.municipio
+      this.thirdParty.city = this.thirdPartyCity
       axios
         .put(`/third-parties/${this.thirdParty.id}`, this.thirdParty)
         .then(response => {
-          console.log(response.data);
           this.editForm = false;
         });
     },

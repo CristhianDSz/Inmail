@@ -8,7 +8,10 @@
    Funcionarios
 @endsection
 
-
 @section('content')
-  <employee-main></employee-main>
+  @can('view', App\Dependency::class)
+    <employee-main></employee-main>
+  @else
+    <p class="alert alert-warning tx-medium">Actualmente no tiene permisos para ver esta sección. Contacte al administrador para más información</p>
+  @endcan
 @endsection

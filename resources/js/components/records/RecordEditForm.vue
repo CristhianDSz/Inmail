@@ -276,7 +276,16 @@ export default {
       axios.put(`/records/${this.record.id}`, this.record).then(response => {
         this.$emit("success");
         this.$validator.reset();
-      });
+      })
+      .catch(error => {
+        if (error.response.status == 400) {
+          return this.$swal({
+            title: 'Ha ocurrido un error',
+            text: error.response.data.message,
+            type: 'error'
+          })
+        }
+      })
     }
   },
   watch: {

@@ -17,15 +17,26 @@
             
             @include('partials.errors')
             @include('partials.messages')
-          <form action="{{route('tracking.index')}}" method="GET">
-    
+
+            @can('viewControl', App\Record::class)
+              <form action="{{route('tracking.index')}}" method="GET">
                 <div class="d-flex align-items-center justify-content-center bg-gray-100 ht-md-80 bd pd-x-20">
                     <div class="d-md-flex pd-y-20 pd-md-y-0">
                     <input type="text" name="record_ci" class="form-control" placeholder="Ingrese criterio de búsqueda" value="{{old('record_ci')}}">
                       <button class="btn btn-teal pd-y-13 pd-x-20 bd-0 mg-md-l-10 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2">Buscar</button>
                     </div>
-                  </div>
-            </form>
+                </div>
+              </form>
+            @elsecan('viewAccounting', App\Record::class)
+              <form action="{{route('tracking.index')}}" method="GET">
+                <div class="d-flex align-items-center justify-content-center bg-gray-100 ht-md-80 bd pd-x-20">
+                    <div class="d-md-flex pd-y-20 pd-md-y-0">
+                    <input type="text" name="record_co" class="form-control" placeholder="Ingrese criterio de búsqueda" value="{{old('record_co')}}">
+                      <button class="btn btn-teal pd-y-13 pd-x-20 bd-0 mg-md-l-10 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2">Buscar</button>
+                    </div>
+                </div>
+              </form>
+            @endcan
         
            @if (count($records) > 0)
            <table class="table table-valign-middle mg-t-20">

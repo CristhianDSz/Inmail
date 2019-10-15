@@ -23,39 +23,57 @@
     <div class="br-sideleft overflow-y-auto">
       <label class="sidebar-label pd-x-15 mg-t-20">Menú principal</label>
       <div class="br-sideleft-menu">
-      <a href="{{ route('correspondence.render') }}" class="{{Route::current()->named('correspondence.render')  ? 'br-menu-link active' : 'br-menu-link'}}">
+      @can('view', App\Record::class)
+        <a href="{{ route('correspondence.render') }}" class="{{Route::current()->named('correspondence.render')  ? 'br-menu-link active' : 'br-menu-link'}}">
           <div class="br-menu-item">
             <i class="menu-item-icon icon ion-ios-home-outline tx-22"></i>
             <span class="menu-item-label">Correspondencia</span>
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
-      <a href="{{ route('third_parties.render') }}" class="{{Route::current()->named('third_parties.render') ? 'br-menu-link active' : 'br-menu-link'}}">
+      @endcan
+
+      @can('view', App\ThirdParty::class)
+        <a href="{{ route('third_parties.render') }}" class="{{Route::current()->named('third_parties.render') ? 'br-menu-link active' : 'br-menu-link'}}">
           <div class="br-menu-item">
             <i class="menu-item-icon icon ion-ios-person-outline tx-22"></i>
             <span class="menu-item-label">Terceros</span>
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
+      @endcan
+     
+      @can('view', App\Dependency::class)
+          <a href="{{route('dependencies.render')}}" class="{{Route::current()->getName() == 'dependencies.render' ? 'br-menu-link active' : 'br-menu-link'}}">
+            <div class="br-menu-item">
+              <i class="menu-item-icon icon ion-ios-briefcase-outline tx-22"></i>
+              <span class="menu-item-label">Dependencias</span>
+            </div><!-- menu-item -->
+          </a><!-- br-menu-link -->  
+      @endcan
 
-        <a href="{{route('dependencies.render')}}" class="{{Route::current()->getName() == 'dependencies.render' ? 'br-menu-link active' : 'br-menu-link'}}">
-          <div class="br-menu-item">
-            <i class="menu-item-icon icon ion-ios-briefcase-outline tx-22"></i>
-            <span class="menu-item-label">Dependencias</span>
-          </div><!-- menu-item -->
-        </a><!-- br-menu-link -->
-
+      @can('view', App\Employee::class)
         <a href="{{route('employees.render')}}" class="{{Route::current()->getName() == 'employees.render' ? 'br-menu-link active' : 'br-menu-link'}}">
           <div class="br-menu-item">
             <i class="menu-item-icon icon ion-ios-people-outline tx-22"></i>
             <span class="menu-item-label">Funcionarios</span>
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
+      @endcan
        
-        <a href="{{route('tracking.index')}}" class="{{Route::current()->getName() == 'tracking.index' ? 'br-menu-link active' : 'br-menu-link'}}">
-          <div class="br-menu-item">
-            <i class="menu-item-icon icon ion-ios-email-outline tx-22"></i>
-            <span class="menu-item-label">Seguimiento</span>
-          </div><!-- menu-item -->
-        </a><!-- br-menu-link -->
+       @can('viewControl', App\Record::class)
+       <a href="{{route('tracking.index')}}" class="{{Route::current()->getName() == 'tracking.index' ? 'br-menu-link active' : 'br-menu-link'}}">
+        <div class="br-menu-item">
+          <i class="menu-item-icon icon ion-ios-email-outline tx-22"></i>
+          <span class="menu-item-label">Seguimiento</span>
+        </div><!-- menu-item -->
+      </a><!-- br-menu-link -->
+       @elsecan('viewAccounting', App\Record::class)
+       <a href="{{route('tracking.index')}}" class="{{Route::current()->getName() == 'tracking.index' ? 'br-menu-link active' : 'br-menu-link'}}">
+        <div class="br-menu-item">
+          <i class="menu-item-icon icon ion-ios-email-outline tx-22"></i>
+          <span class="menu-item-label">Seguimiento</span>
+        </div><!-- menu-item -->
+      </a><!-- br-menu-link -->
+       @endcan
        
 
       <a href="#" class="{{
@@ -203,6 +221,14 @@
        $(".br-menu-link.active").removeClass('active')
        $(this).addClass('active')
       })
+    </script>
+
+    <script>
+      @auth
+        window.Permissions = {!! json_encode(Auth::user()->allPermissions(), true) !!};
+      @else
+        window.Permissions = [];
+      @endauth
     </script>
       @yield('scripts')
     </body>

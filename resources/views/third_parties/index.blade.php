@@ -8,7 +8,12 @@
    Terceros
 @endsection
 
-
 @section('content')
-  <third-party-main></third-party-main>
+
+  @can('view', App\ThirdParty::class)
+    <third-party-main></third-party-main>
+  @else
+    <p class="alert alert-warning tx-medium">Actualmente no tiene permisos para ver esta sección. Contacte al administrador para más información</p>
+  @endcan
+  
 @endsection

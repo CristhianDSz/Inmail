@@ -27,9 +27,9 @@
         <p class="tx-medium">{{record.invoice_number || 'No aplica'}}</p>
         <p class="tx-medium">{{record.description}}</p>
         <p class="tx-medium">{{record.attacheds}}</p>
-        <p class="tx-medium">{{record.third_party.name}}</p>
+        <p class="tx-medium">{{recordThirdParty}}</p>
         <p class="tx-semibold tx-teal">{{recordEmployee}}</p>
-        <p class="tx-medium">{{record.dependency.name}}</p>
+        <p class="tx-medium">{{recordDependency}}</p>
       </div>
   </div>
   </div>
@@ -43,7 +43,22 @@ computed: {
     return moment(this.record.datetime).format('DD/MM/YYYY HH:mm')
   },
   recordEmployee() { 
-    return `${this.record.employee.firstname} ${this.record.employee.lastname}`
+    if (this.record.employee) {
+      return `${this.record.employee.firstname} ${this.record.employee.lastname}`
+    }
+    return 'Sin empleado'
+  },
+  recordThirdParty() {
+    if (this.record.third_party) {
+      return this.record.third_party.name
+    }
+    return 'Sin tercero'
+  },
+  recordDependency() {
+    if (this.record.dependency) {
+      return this.record.dependency.name
+    }
+    return 'Sin dependencia'
   },
   documentDate() {
     return moment(this.record.document_date).format('DD/MM/YYYY')

@@ -91,4 +91,9 @@ class Record extends Model
     {
         return Carbon::parse($this->datetime)->format('d/m/Y');
     }
+
+    public function scopeInvoiceNumberExists($query,$invoiceNumber, $thirdParty)
+    {
+         return $query->where('invoice_number',$invoiceNumber)->where('third_party_id',$thirdParty);
+    }
 }

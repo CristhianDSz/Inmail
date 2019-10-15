@@ -6,6 +6,11 @@ use GuzzleHttp\Client;
 
 class CitiesController extends Controller
 {
+    /**
+     * Return cities from datos abiertos - This endpoint is currently deprecated!  
+     *
+     * @return void
+     */
     public function index()
     {
 

@@ -35,8 +35,8 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'show records', 'description' => 'Listar registros']);
         Permission::create(['name' => 'create records', 'description' => 'Crear registros']);
         Permission::create(['name' => 'edit records', 'description' => 'Editar registros']);
+        Permission::create(['name' => 'edit delivered records', 'description' => 'Editar registros entregados']);
         Permission::create(['name' => 'delete records', 'description' => 'Eliminar registros']);
-
         Permission::create(['name' => 'validate control', 'description' => 'Visado control interno']);
         Permission::create(['name' => 'validate accounting', 'description' => 'Visado contabilidad']);
         Permission::create(['name' => 'create company', 'description' => 'Crear compañía']);

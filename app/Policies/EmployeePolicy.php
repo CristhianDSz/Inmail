@@ -3,23 +3,13 @@
 namespace App\Policies;
 
 use App\User;
-use App\Employee;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Policies\PermissionPolicy;
+
 
 class EmployeePolicy
 {
     use HandlesAuthorization;
-    
-    /**
-     * Determine whether the user can view any employees.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
-    public function viewAny(User $user)
-    {
-        //
-    }
 
     /**
      * Determine whether the user can view the employee.
@@ -28,9 +18,9 @@ class EmployeePolicy
      * @param  \App\Employee  $employee
      * @return mixed
      */
-    public function view(User $user, Employee $employee)
+    public function view(User $user)
     {
-        //
+        return PermissionPolicy::hasPermission($user, "show employees");
     }
 
     /**
@@ -41,7 +31,7 @@ class EmployeePolicy
      */
     public function create(User $user)
     {
-        //
+        return PermissionPolicy::hasPermission($user, "create employees");
     }
 
     /**
@@ -51,9 +41,9 @@ class EmployeePolicy
      * @param  \App\Employee  $employee
      * @return mixed
      */
-    public function update(User $user, Employee $employee)
+    public function update(User $user)
     {
-        //
+        return PermissionPolicy::hasPermission($user, "edit employees");
     }
 
     /**
@@ -63,32 +53,8 @@ class EmployeePolicy
      * @param  \App\Employee  $employee
      * @return mixed
      */
-    public function delete(User $user, Employee $employee)
+    public function delete(User $user)
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the employee.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Employee  $employee
-     * @return mixed
-     */
-    public function restore(User $user, Employee $employee)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the employee.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Employee  $employee
-     * @return mixed
-     */
-    public function forceDelete(User $user, Employee $employee)
-    {
-        //
+        return PermissionPolicy::hasPermission($user, "delete employees");
     }
 }

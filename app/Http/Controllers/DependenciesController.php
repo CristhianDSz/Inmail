@@ -6,6 +6,11 @@ use App\Dependency;
 
 class DependenciesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function render()
     {
         return view('dependencies.index');
@@ -13,15 +18,9 @@ class DependenciesController extends Controller
 
     public function index()
     {
+        $this->authorize('view', Dependency::class);
+
         return Dependency::paginate(30);
-
-
-        // return [
-        //     'pagination' => [
-        //         'total' => $dependencies->total()
-        //     ],
-        //     'dependencies' => $dependencies
-        // ];
     }
 
     public function getWithEmployees()
@@ -31,6 +30,8 @@ class DependenciesController extends Controller
 
     public function store()
     {
+        $this->authorize('create', Dependency::class);
+
         $attributes = request()->validate([
             'name' => 'required|string|min:3',
             'code' => 'required|min:2'
@@ -43,6 +44,7 @@ class DependenciesController extends Controller
 
     public function update(Dependency $dependency)
     {
+        $this->authorize('update', $dependency);
 
         $attributes = request()->validate([
             'name' => 'required|string|min:3',
@@ -56,6 +58,8 @@ class DependenciesController extends Controller
 
     public function destroy(Dependency $dependency)
     {
+        $this->authorize('delete', $dependency);
+
         $dependency->delete();
 
         return response()->json(['message' => 'Dependencia eliminada correctamente!'], 200);

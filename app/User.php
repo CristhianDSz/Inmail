@@ -50,4 +50,19 @@ class User extends Authenticatable
             }
         }
     }
+
+    //Pendiente refactorizar con colecciones
+    public function allPermissions()
+    {
+        $permissions = [];
+        $roles = $this->roles()->get();
+
+        foreach ($roles as $role) {
+            foreach($role->permissions()->get() as $permission) {
+                $permissions[] = $permission->name;
+            }
+        }
+
+        return $permissions;
+    }
 }
