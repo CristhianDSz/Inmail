@@ -48,7 +48,7 @@ class RecordsController extends Controller
             'copy' => '',
         ]);
         //Test before if a thirdparty invoice number's exists
-        if ( $this->inoviceNumberExists($attributes['invoice_number'],$attributes['third_party_id'])) {
+        if ( $this->inoviceNumberExists(null,$attributes['invoice_number'],$attributes['third_party_id'])) {
             return response()->json(['message' => 'Este número de factura ya existe para el tercero'],400);
         }
 
