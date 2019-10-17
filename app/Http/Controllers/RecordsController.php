@@ -71,6 +71,7 @@ class RecordsController extends Controller
         $this->authorize('update', $record);
 
         $attributes = request()->validate([
+            'id' => 'required|numeric',
             'number' => 'required',
             'type' => 'required',
             'document_type' => 'required',
@@ -85,7 +86,7 @@ class RecordsController extends Controller
             'copy' => '',
         ]);
         //Test before if a thirdparty invoice number's exists
-        if ($this->inoviceNumberExists($attributes['invoice_number'],$attributes['third_party_id'])) {
+        if ($this->inoviceNumberExists($attributes['id'],$attributes['invoice_number'],$attributes['third_party_id'])) {
             return response()->json(['message' => 'Este número de factura ya existe para el tercero'],400);
         }
 
@@ -109,10 +110,10 @@ class RecordsController extends Controller
         return $pdf->download('radicados.pdf');
     }
 
-    public function inoviceNumberExists($invoiceNumber, $thirdParty)
+    public function inoviceNumberExists($idRecord = null, $invoiceNumber, $thirdParty)
     {
         if ($invoiceNumber !== null && $thirdParty !== null) {
-            return Record::invoiceNumberExists($invoiceNumber,$thirdParty)->first();
+            return Record::invoiceNumberExists($idRecord, $invoiceNumber,$thirdParty)->first();
         }
         return false;
     }

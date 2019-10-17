@@ -158,10 +158,11 @@ export default {
       );
     },
     postThirdParty() {
-      this.thirdParty.city = this.thirdPartyCity.municipio
+      this.thirdParty.city = this.thirdPartyCity
       axios.post("/third-parties", this.thirdParty).then(response => {
         this.$emit("success");
         this.resetForm();
+        this.$validator.reset()
       }).catch(error => {
         if(error.response.data.errors.hasOwnProperty('identification')) {
           this.$swal('Error!',"Ya existe un tercero con ese Nit o cédula, ingrese uno diferente",'error')

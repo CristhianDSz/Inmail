@@ -223,9 +223,9 @@ export default {
       );
     },
     postRecord() {
-      this.record.third_party_id = this.thirdPartyRecord.id
-      this.record.dependency_id = this.dependencyRecord.id
-      this.record.employee_id = this.employeeRecord.id
+      this.record.third_party_id = this.thirdPartyRecord.id || ''
+      this.record.dependency_id = this.dependencyRecord.id || ''
+      this.record.employee_id = this.employeeRecord.id || ''
       axios.post("/records", this.record).then(response => {
         this.$swal({
           title: "Correcto",
