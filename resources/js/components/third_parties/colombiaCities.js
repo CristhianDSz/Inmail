@@ -1294,5 +1294,12 @@ export const cities = [
             "Puerto Carre\u00f1o",
             "Santa Rosal\u00eda"
         ]
+    },
+    {
+        "id": 32,
+        "departamento": "Exterior",
+        "ciudades": [
+            "Exterior"
+        ]
     }
 ]

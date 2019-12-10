@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     datetimeFormat() {
-      return moment(this.data.datetime).format("MM/DD/YYYY HH:mm");
+      return moment(this.data.datetime).format("MM-DD-YYYY HH:mm");
     },
     showEditOption() {
       return (this.$can('edit records') && (this.data.status == 'Creado' ||

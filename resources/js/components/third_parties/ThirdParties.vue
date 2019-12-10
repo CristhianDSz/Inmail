@@ -32,7 +32,7 @@
               @click.prevent="goToPage(pagination.current_page - 1)"
               aria-label="Last"
             >
-              <span><</span>
+             <span class="icon ion-arrow-left-a"></span>
             </a>
           </li>
           <li
@@ -50,7 +50,7 @@
               @click.prevent="goToPage(pagination.current_page + 1)"
               aria-label="Last"
             >
-              <span>></span>
+             <span class="icon ion-arrow-right-a"></span>
             </a>
           </li>
         </ul>

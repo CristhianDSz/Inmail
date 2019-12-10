@@ -5,6 +5,9 @@
         <label class="tx-12">Búsqueda rápida</label>
         <input type="search" class="form-control form-control-sm" v-model="recordSearch" />
       </div>
+      <div class="form-group col-2 mt-1">
+        <button class="btn btn-sm mt-4 btn-secondary" @click="fastSearch">Buscar</button>
+      </div>
       <div class="form-group col-4 mg-t-0">
         <label class="tx-12">Ordenar por</label>
         <select
@@ -20,7 +23,8 @@
         </select>
       </div>
     </div>
-    <table class="table table-responsive table-valign-middle mg-b-0" v-if="records.length">
+    <div v-if="records.length">
+       <table class="table table-responsive table-valign-middle mg-b-0" >
       <thead>
         <tr>
           <th>Número</th>
@@ -44,16 +48,19 @@
         ></record>
       </tbody>
     </table>
+    </div>
     <p class="tx-medium" v-else>No existen registros actualmente.</p>
+    <pagination ref="recordsPagination" @page="goToPage" v-if="!recordSearch.length"></pagination>
   </div>
 </template>
 
 <script>
 import Record from "./Record";
 import RecordSorter from "./RecordSorter"
+import Pagination from "../utils/Pagination.vue"
 export default {
   components: {
-    Record
+    Record, Pagination
   },
   data() {
     return {
@@ -64,22 +71,27 @@ export default {
       employees: [],
       totalOutRecords: 0,
       recordSearch: "",
-      recordOrder: "datetime"
+      recordOrder: "datetime",
     };
   },
   created() {
     this.getRecords();
   },
   methods: {
-    getRecords() {
-      axios.get("/records").then(records => {
-        this.records = records.data;
-        this.originalRecords = records.data;
-        this.setTotalInRecords(records.data);
-        this.setTotalOutRecords(records.data);
-        this.setTotalUnregisterRecords(records.data);
-        this.setTotalTodayRecords(records.data);
-        this.$emit("quantity", records.data.length);
+     goToPage(page) {
+       this.getRecords(page)
+     },
+    getRecords(page = 1) {
+      axios.get("/records?page=" + page).then(records => {
+        this.$refs.recordsPagination.setPagination(records)
+        this.records = records.data.data;
+        this.originalRecords = records.data.data;
+        this.setTotalInRecords(records.data.data);
+        this.setTotalOutRecords(records.data.data);
+        this.setTotalUnregisterRecords(records.data.data);
+        this.setTotalTodayRecords(records.data.data);
+        this.$emit("quantity", records.data.data.length);
+        this.$refs.recordsPagination.getPagesNumber()
       });
     },
     passRecordToMain(record) {
@@ -128,28 +140,22 @@ export default {
         this.records = RecordSorter.sortByCharAndNumber(this.records)
       }
     },
+     /** Search a record for type, status, number, datetime, document_type or third_party name property */
+     fastSearch() {
+      if (this.recordSearch.length) {
+        axios.get(`/app/records/${this.recordSearch}/search`).then(records=> {
+          this.records = records.data
+        })
+       
+      } 
+    },
   },
   watch: {
-    /** Search a record for type, status, number, datetime, document_type or third_party name property */
-     recordSearch() {
-      if (this.recordSearch.length) {
-        this.records = this.originalRecords.filter(record => {
-          return (
-            record.type.toLowerCase().indexOf(this.recordSearch.toLowerCase()) > -1 ||
-            record.status.toLowerCase().indexOf(this.recordSearch.toLowerCase()) > -1 ||
-            record.number.toLowerCase().indexOf(this.recordSearch.toLowerCase()) > -1 ||
-            moment(record.datetime)
-              .format("MM/DD/YYYY")
-              .indexOf(this.recordSearch) > -1 ||
-            record.document_type.toLowerCase().indexOf(this.recordSearch.toLowerCase()) > -1 ||
-            (record.third_party && record.third_party.name.toLowerCase().indexOf(this.recordSearch.toLowerCase()) > -1)
-          );
-        });
-      } else {
-        this.records = this.originalRecords;
+    recordSearch() {
+      if (!this.recordSearch.length) {
+       this.records = this.originalRecords;
       }
-    },
-   
+    }
   }
 };
 </script>

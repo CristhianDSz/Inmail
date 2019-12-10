@@ -85,6 +85,9 @@
               @endforeach
             </tbody>
           </table>
+           <div class="row mx-auto">
+              {{ $records->links() }}
+           </div>
            @else
             <p class="tx-semibold mg-t-10">No existen resultados actualmente.</p>
            @endif

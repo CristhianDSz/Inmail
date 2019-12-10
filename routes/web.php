@@ -24,6 +24,7 @@ Route::get('third-parties/data', 'ThirdPartiesController@getData');
 Route::apiResource('third-parties', 'ThirdPartiesController');
 Route::get('app/cities', 'CitiesController@index');
 Route::get('app/correspondence', 'RecordsController@render')->name('correspondence.render');
+Route::get('app/records/{record}/search','RecordsController@search');
 Route::apiResource('records', 'RecordsController');
 
 Route::group(['prefix' => 'config'], function () {

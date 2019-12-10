@@ -21,7 +21,12 @@ class RecordsController extends Controller
     {
         $this->authorize('view', Record::class);
         
-        return Record::orderBy('datetime','DESC')->orderBy('number')->with('employee:id,firstname,lastname')->with('thirdParty:id,name')->with('dependency:id,name')->get();
+        return Record::orderBy('datetime','DESC')->orderBy('number')->with('employee:id,firstname,lastname')->with('thirdParty:id,name')->with('dependency:id,name')->paginate(20);
+    }
+
+    public function search($record)
+    {   
+        return Record::searchRecord($record)->with('employee:id,firstname,lastname')->with('thirdParty:id,name')->with('dependency:id,name')->get();
     }
 
     public function store()

@@ -28,7 +28,7 @@ class TrackingController extends Controller
             $records = $records->where('status','Visado Control Interno');
         }
 
-        $records = $records->get();
+        $records = $records->paginate(15);
 
         if (request()->has('record_ci')) {
             $this->validateRecord('record_ci');

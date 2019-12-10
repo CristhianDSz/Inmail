@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Record extends Model
 {
@@ -43,6 +44,18 @@ class Record extends Model
     public function scopeGetLast($query, $type)
     {
         return $query->where('type', $type)->orderBy('id', 'desc');
+    }
+
+    public function scopeSearchRecord($query, $record)
+    {
+        return $query->where('type','LIKE',"%$record%")
+                        ->orWhere('status','LIKE',"%$record%")
+                        ->orWhere('number','LIKE',"%$record%")
+                        ->orWhere('document_type','LIKE',"%$record%")
+                        ->orWhereHas('thirdParty', function ($query) use ($record) {
+                            $query->where('name','LIKE',"%$record%");
+                        })
+                        ->orWhere(DB::raw('DATE_FORMAT(datetime,"%m-%d-%Y")'),'LIKE',"%$record%");
     }
 
     public function scopeTrackingBy($query, $record, $status)
