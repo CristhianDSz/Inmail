@@ -6,14 +6,12 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>Correspondencia</title>
 
-    <link rel="stylesheet" href="{{ asset('css/perfect_scrollbar/perfect-scrollbar.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/ionicons/css/ionicons.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/multiselect/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    @yield('styles')
+        <link rel="stylesheet" href="{{ asset('css/perfect_scrollbar/perfect-scrollbar.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/ionicons/css/ionicons.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/multiselect/select2.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+        @yield('styles')
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
     </head>
     <body>
        <!-- ########## START: LEFT PANEL ########## -->
@@ -100,7 +98,7 @@
         <a href="{{ route('formats.index') }}" class="{{Route::current()->getName() == 'formats.index' ? 'br-menu-link active' : 'br-menu-link'}}">
           <div class="br-menu-item">
             <i class="menu-item-icon icon ion-ios-list-outline tx-22"></i>
-            <span class="menu-item-label">Planilla</span>
+            <span class="menu-item-label">Generar planilla</span>
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
        
@@ -176,7 +174,6 @@
               </a>
               <div class="dropdown-menu dropdown-menu-header wd-200">
                 <ul class="list-unstyled user-profile-nav">
-                  <li><a href=""><i class="icon ion-ios-person"></i>Perfil</a></li>
                 <li><a href="{{route('users.edit.password')}}"><i class="icon ion-ios-gear"></i> Contraseña</a></li>
                   <li><a  href="{{ route('logout') }}"
                     onclick="event.preventDefault();

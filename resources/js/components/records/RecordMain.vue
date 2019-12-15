@@ -1,9 +1,9 @@
 <template>
   <div class="row row-sm">
-    <card title="Entrada" :text="totalInRecords" color="teal"></card>
-    <card title="Salida" :text="totalOutRecords" color="danger"></card>
-    <card title="Sin registrar" :text="totalUnregisteredRecords" color="primary"></card>
-    <card title="Hoy" :text="totalTodayRecords" color="br-primary"></card>
+    <card title="Entrada" :text="totalInRecords" color="teal" icon="ion-android-arrow-forward"></card>
+    <card title="Salida" :text="totalOutRecords" color="danger" icon="ion-android-arrow-back"></card>
+    <card title="Sin registrar" :text="totalUnregisteredRecords" color="primary" icon="ion-email-unread"></card>
+    <card title="Hoy" :text="totalTodayRecords" color="br-primary" icon="ion-email"></card>
 
     <div class="card col-12 mt-4">
       <div class="card-body">
