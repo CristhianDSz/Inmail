@@ -17,8 +17,16 @@ class UsersController extends Controller
         $this->authorize('view',auth()->user());
 
         $roles = Role::all(['id', 'name']);
-        $users = User::where('id','!=',auth()->user()->id)->has('roles')->with('roles')->orderBy('username')->get();
+        $users = User::where('id','!=',auth()->user()->id)->has('roles')->with('roles')->orderBy('username')->withTrashed()->get();
         return view('users.index', compact('roles', 'users'));
+    }
+
+    public function create()
+    {
+        $this->authorize('create',User::class);
+
+        $roles = Role::all(['id', 'name']);
+        return view('users.create', compact('roles'));
     }
 
     public function edit(User $user)
@@ -31,7 +39,7 @@ class UsersController extends Controller
     public function update(User $user)
     {
         $this->authorize('update',$user);
-
+       
         $attributes = request()->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
@@ -46,6 +54,22 @@ class UsersController extends Controller
         return redirect()->route('users.index')->with([
             'message' => 'Usuario editado correctamente'
         ]);
+    }
+
+    public function restore($user)
+    {
+        $this->authorize('update',$user);
+
+        $userTrashed = User::withTrashed()->findOrFail($user);
+
+        if ($userTrashed->trashed()) {
+            $userTrashed->restore();
+        }
+
+        return redirect()->route('users.index')->with([
+            'message' => 'Usuario restaurado correctamente'
+        ]);
+
     }
 
     public function editPassword()
@@ -66,6 +90,14 @@ class UsersController extends Controller
         $user->update($attributes);
         
         return redirect()->back()->with(['message' => 'Contraseña actualizada correctamente']);
+    }
+
+    public function destroy(User $user)
+    {
+        $this->authorize('delete', $user);
         
+        $user->delete();
+        
+        return redirect()->route('users.index')->with(['message' => 'Usuario deshabilitado correctamente']);
     }
 }

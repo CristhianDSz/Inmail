@@ -32,6 +32,7 @@ Route::group(['prefix' => 'config'], function () {
     Route::apiResource('permissions', 'PermissionsController');
     Route::resource('companies', 'CompaniesController');
     Route::get('users/password', 'UsersController@editPassword')->name('users.edit.password');
+    Route::patch('users/{user}/restore', 'UsersController@restore')->name('users.restore.user');
     Route::patch('users/{user}/password', 'UsersController@updatePassword')->name('users.update.password');
     Route::resource('users', 'UsersController');
 });

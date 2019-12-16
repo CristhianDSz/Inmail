@@ -81,6 +81,8 @@ class RegisterController extends Controller
 
         $user->roles()->attach(request()->input('roles'));
 
-        return redirect($this->redirectPath());
+        return redirect($this->redirectPath())->with([
+            'message' => 'Usuario registrado correctamente!'
+        ]);
     }
 }
