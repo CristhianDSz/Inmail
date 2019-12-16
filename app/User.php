@@ -71,4 +71,14 @@ class User extends Authenticatable
 
         return $permissions;
     }
+
+    /**
+     * A user can register one or more record events
+     *
+     * @return void
+     */
+    public function recordEvents()
+    {
+        return $this->hasMany(RecordEvent::class);
+    }
 }

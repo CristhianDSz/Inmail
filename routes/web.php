@@ -43,6 +43,9 @@ Route::get('formats/pdf/{first_date}/{second_date}', 'FormatsController@getPdf')
 Route::get('app/tracking', 'TrackingController@index')->name('tracking.index');
 Route::patch('tracking/{record}', 'TrackingController@update')->name('tracking.update');
 
+//Record Events
+Route::get('record-events', 'RecordEventsController@index')->name('events.index');
+
 
 Auth::routes();
 

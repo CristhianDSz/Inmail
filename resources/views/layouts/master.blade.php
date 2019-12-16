@@ -101,6 +101,13 @@
             <span class="menu-item-label">Generar planilla</span>
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
+
+      <a href="{{route('events.index')}}" class="{{Route::current()->getName() == 'events.index' ? 'br-menu-link active' : 'br-menu-link'}}">
+          <div class="br-menu-item">
+            <i class="menu-item-icon icon ion-ios-time-outline tx-22"></i>
+            <span class="menu-item-label">Bitácora de eventos</span>
+          </div><!-- menu-item -->
+        </a><!-- br-menu-link -->
        
       </div><!-- br-sideleft-menu -->
     </div><!-- br-sideleft -->
