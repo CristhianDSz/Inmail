@@ -63,16 +63,20 @@ class Record extends Model
         if (in_array($status,self::CURRENT_STATUS)) {
 
             return $query->where('number', 'LIKE', "%$record%")->where('document_type','Facturas')->where('status', $status)->with('thirdParty')->with('employee.dependency');
-        } 
+        }
     }
 
     public static function makeRecordNumber($record = null, $recordString)
     {
         $digits = null;
-        if (!$record) {
+        $recordSequence = (int) explode("-", $record->number)[1];
+        $recordYear     = explode("-", $record->number)[0];
+        $recordStringYear = explode("-", $recordString)[0];
+
+        if (!$record || (substr($recordStringYear,-3) != substr($recordYear,-3))) {
             $digits = '001';
-        } else {
-            $recordSequence = (int) explode("-", $record->number)[1];
+        }
+        else {
             $digits = (int) $recordSequence + 1;
         }
 
@@ -111,6 +115,6 @@ class Record extends Model
             return $query->where('invoice_number',$invoiceNumber)->where('third_party_id',$thirdParty);
         }
         return $query->where('invoice_number',$invoiceNumber)->where('third_party_id',$thirdParty)->where('id','!=',$id);
-        
+
     }
 }
