@@ -78,9 +78,9 @@
     'normal' => $rootDir . '/lib/fonts/DejaVuSerif',
   ),
   'arimo' => array(
-    'normal' => $fontDir . '/33c32a116fc43cb7f7258f5398b58632',
+    'normal' => $fontDir . '/arimo-normal_fe4388a591b60615638c84283d5970fd',
   ),
   'arimo bold' => array(
-    'normal' => $fontDir . '/287930cf5c7170a8d57df1feb6d562c6',
+    'normal' => $fontDir . '/arimo-bold-normal_7d2a81f54efac9ca56768f9089dcf83a',
   ),
 ) ?>
