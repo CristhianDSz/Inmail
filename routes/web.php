@@ -24,7 +24,7 @@ Route::get('third-parties/data', 'ThirdPartiesController@getData');
 Route::apiResource('third-parties', 'ThirdPartiesController');
 Route::get('app/cities', 'CitiesController@index');
 Route::get('app/correspondence', 'RecordsController@render')->name('correspondence.render');
-Route::get('app/records/{record}/search','RecordsController@search');
+Route::get('app/records/{record}/search', 'RecordsController@search');
 Route::apiResource('records', 'RecordsController');
 
 Route::group(['prefix' => 'config'], function () {
@@ -45,7 +45,6 @@ Route::patch('tracking/{record}', 'TrackingController@update')->name('tracking.u
 
 //Record Events
 Route::get('record-events', 'RecordEventsController@index')->name('events.index');
-
 
 Auth::routes();
 
