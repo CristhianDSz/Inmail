@@ -24,43 +24,44 @@
       </div>
     </div>
     <div v-if="records.length">
-       <table class="table table-responsive table-valign-middle mg-b-0" >
-      <thead>
-        <tr>
-          <th>Número</th>
-          <th>Tipo</th>
-          <th>Fecha</th>
-          <th>Tipo de documento</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <record
-          v-for="record in records"
-          :key="record.id"
-          :data="record"
-          :dependenciesData="dependencies"
-          :employeesData="employees"
-          :thirdPartiesData="thirdParties"
-          @deleted="getRecords"
-          @recordClick="passRecordToMain"
-        ></record>
-      </tbody>
-    </table>
+      <table class="table table-responsive table-valign-middle mg-b-0">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Tipo de documento</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <record
+            v-for="record in records"
+            :key="record.id"
+            :data="record"
+            :dependenciesData="dependencies"
+            :employeesData="employees"
+            :thirdPartiesData="thirdParties"
+            @deleted="getRecords"
+            @recordClick="passRecordToMain"
+          ></record>
+        </tbody>
+      </table>
     </div>
     <p class="tx-medium" v-else>No existen registros actualmente.</p>
-    <pagination ref="recordsPagination" @page="goToPage" v-if="!recordSearch.length"></pagination>
+    <pagination ref="recordsPagination" @page="goToPage" v-if="!recordSearch"></pagination>
   </div>
 </template>
 
 <script>
 import Record from "./Record";
-import RecordSorter from "./RecordSorter"
-import Pagination from "../utils/Pagination.vue"
+import RecordSorter from "./RecordSorter";
+import Pagination from "../utils/Pagination.vue";
 export default {
   components: {
-    Record, Pagination
+    Record,
+    Pagination
   },
   data() {
     return {
@@ -71,19 +72,19 @@ export default {
       employees: [],
       totalOutRecords: 0,
       recordSearch: "",
-      recordOrder: "datetime",
+      recordOrder: "datetime"
     };
   },
   created() {
     this.getRecords();
   },
   methods: {
-     goToPage(page) {
-       this.getRecords(page)
-     },
+    goToPage(page) {
+      this.getRecords(page);
+    },
     getRecords(page = 1) {
       axios.get("/records?page=" + page).then(records => {
-        this.$refs.recordsPagination.setPagination(records)
+        this.$refs.recordsPagination.setPagination(records);
         this.records = records.data.data;
         this.originalRecords = records.data.data;
         this.setTotalInRecords(records.data.data);
@@ -91,7 +92,7 @@ export default {
         this.setTotalUnregisterRecords(records.data.data);
         this.setTotalTodayRecords(records.data.data);
         this.$emit("quantity", records.data.data.length);
-        this.$refs.recordsPagination.getPagesNumber()
+        this.$refs.recordsPagination.getPagesNumber();
       });
     },
     passRecordToMain(record) {
@@ -128,32 +129,31 @@ export default {
     /** Order records filtering by datetime, number (default from DB laravel), document_type or status - Using RecordSorter class */
     orderByRecord(field) {
       if (field === "datetime") {
-        this.records = RecordSorter.sortByDate(this.records)
+        this.records = RecordSorter.sortByDate(this.records);
       } else if (field === "document_type") {
-        this.records =  RecordSorter.sortByStringField(this.records,"document_type")
+        this.records = RecordSorter.sortByStringField(
+          this.records,
+          "document_type"
+        );
       } else if (field === "status") {
-        this.records =  RecordSorter.sortByStringField(this.records,"status")
+        this.records = RecordSorter.sortByStringField(this.records, "status");
       } else if (field === "name") {
-        this.records =   RecordSorter.sortByObjectNameField(this.records,"third_party")
-      }
-       else {
-        this.records = RecordSorter.sortByCharAndNumber(this.records)
+        this.records = RecordSorter.sortByObjectNameField(
+          this.records,
+          "third_party"
+        );
+      } else {
+        this.records = RecordSorter.sortByCharAndNumber(this.records);
       }
     },
-     /** Search a record for type, status, number, datetime, document_type or third_party name property */
-     fastSearch() {
+    /** Search a record for type, status, number, datetime, document_type or third_party name property */
+    fastSearch() {
       if (this.recordSearch.length) {
-        axios.get(`/app/records/${this.recordSearch}/search`).then(records=> {
-          this.records = records.data
-        })
-       
-      } 
-    },
-  },
-  watch: {
-    recordSearch() {
-      if (!this.recordSearch.length) {
-       this.records = this.originalRecords;
+        axios.get(`/app/records/${this.recordSearch}/search`).then(records => {
+          this.records = records.data;
+        });
+      } else {
+        this.getRecords();
       }
     }
   }
