@@ -48,45 +48,45 @@ class Record extends Model
 
     public function scopeSearchRecord($query, $record)
     {
-        return $query->where('type','LIKE',"%$record%")
-                        ->orWhere('status','LIKE',"%$record%")
-                        ->orWhere('number','LIKE',"%$record%")
-                        ->orWhere('document_type','LIKE',"%$record%")
+        return $query->where('type', 'LIKE', "%$record%")
+                        ->orWhere('status', 'LIKE', "%$record%")
+                        ->orWhere('number', 'LIKE', "%$record%")
+                        ->orWhere('document_type', 'LIKE', "%$record%")
                         ->orWhereHas('thirdParty', function ($query) use ($record) {
-                            $query->where('name','LIKE',"%$record%");
+                            $query->where('name', 'LIKE', "%$record%");
                         })
-                        ->orWhere(DB::raw('DATE_FORMAT(datetime,"%m-%d-%Y")'),'LIKE',"%$record%");
+                        ->orWhere(DB::raw('DATE_FORMAT(datetime,"%m-%d-%Y")'), 'LIKE', "%$record%");
     }
 
     public function scopeTrackingBy($query, $record, $status)
     {
-        if (in_array($status,self::CURRENT_STATUS)) {
-
-            return $query->where('number', 'LIKE', "%$record%")->where('document_type','Facturas')->where('status', $status)->with('thirdParty')->with('employee.dependency');
+        if (in_array($status, self::CURRENT_STATUS)) {
+            return $query->where('number', 'LIKE', "%$record%")->where('document_type', 'Facturas')->where('status', $status)->with('thirdParty')->with('employee.dependency');
         }
     }
 
     public static function makeRecordNumber($record = null, $recordString)
     {
         $digits = null;
-        $recordSequence = (int) explode("-", $record->number)[1];
-        $recordYear     = explode("-", $record->number)[0];
-        $recordStringYear = explode("-", $recordString)[0];
+        $recordSequence = 0;
+        $recordYear = Carbon::now()->year;
+        $recordStringYear = explode('-', $recordString)[0];
 
-        if (!$record || (substr($recordStringYear,-3) != substr($recordYear,-3))) {
-            $digits = '001';
+        if ($record) {
+            $recordSequence = (int) explode('-', $record->number)[1];
+            $recordYear = explode('-', $record->number)[0];
         }
-        else {
+
+        if (!$record || (substr($recordStringYear, -3) != substr($recordYear, -3))) {
+            $digits = '001';
+        } else {
             $digits = (int) $recordSequence + 1;
         }
 
-        $zerosToLeft = 0;
-        while (strlen($digits) < 3) {
-            $zerosToLeft++;
-            $digits = str_pad($digits, $zerosToLeft, "0", STR_PAD_LEFT);
-        }
+        $digitsWithZeros = str_pad($digits, (3 - strlen($digits)) + strlen($digits), '0', STR_PAD_LEFT);
+        $digits = strlen($digits) < 3 ? $digitsWithZeros : $digits;
 
-        return $recordString . "{$digits}";
+        return $recordString."{$digits}";
     }
 
     public static function makeNewRecordString($record)
@@ -97,10 +97,11 @@ class Record extends Model
 
         $newRecordNumber = null;
         if ($record == 'Entrada') {
-            $newRecordNumber = 'E' . $recordYear . "-";
+            $newRecordNumber = 'E'.$recordYear.'-';
         } else {
-            $newRecordNumber = 'S' . $recordYear . "-";
+            $newRecordNumber = 'S'.$recordYear.'-';
         }
+
         return $newRecordNumber;
     }
 
@@ -109,12 +110,12 @@ class Record extends Model
         return Carbon::parse($this->datetime)->format('d/m/Y');
     }
 
-    public function scopeInvoiceNumberExists($query, $id=null, $invoiceNumber, $thirdParty)
+    public function scopeInvoiceNumberExists($query, $id = null, $invoiceNumber, $thirdParty)
     {
         if (!$id) {
-            return $query->where('invoice_number',$invoiceNumber)->where('third_party_id',$thirdParty);
+            return $query->where('invoice_number', $invoiceNumber)->where('third_party_id', $thirdParty);
         }
-        return $query->where('invoice_number',$invoiceNumber)->where('third_party_id',$thirdParty)->where('id','!=',$id);
 
+        return $query->where('invoice_number', $invoiceNumber)->where('third_party_id', $thirdParty)->where('id', '!=', $id);
     }
 }
