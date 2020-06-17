@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Domain\Entities\RecordBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -65,44 +66,9 @@ class Record extends Model
         }
     }
 
-    public static function makeRecordNumber($record = null, $recordString)
+    public static function makeRecord($record, $recordType)
     {
-        $digits = null;
-        $recordSequence = 0;
-        $recordYear = Carbon::now()->year;
-        $recordStringYear = explode('-', $recordString)[0];
-
-        if ($record) {
-            $recordSequence = (int) explode('-', $record->number)[1];
-            $recordYear = explode('-', $record->number)[0];
-        }
-
-        if (!$record || (substr($recordStringYear, -3) != substr($recordYear, -3))) {
-            $digits = '001';
-        } else {
-            $digits = (int) $recordSequence + 1;
-        }
-
-        $digitsWithZeros = str_pad($digits, (3 - strlen($digits)) + strlen($digits), '0', STR_PAD_LEFT);
-        $digits = strlen($digits) < 3 ? $digitsWithZeros : $digits;
-
-        return $recordString."{$digits}";
-    }
-
-    public static function makeNewRecordString($record)
-    {
-        $currentYear = Carbon::now()->year;
-        $yearToString = (string) $currentYear;
-        $recordYear = substr($yearToString, -3);
-
-        $newRecordNumber = null;
-        if ($record == 'Entrada') {
-            $newRecordNumber = 'E'.$recordYear.'-';
-        } else {
-            $newRecordNumber = 'S'.$recordYear.'-';
-        }
-
-        return $newRecordNumber;
+        return RecordBuilder::load($record, $recordType)->generate();
     }
 
     public function getFormatDatetimeAttribute()

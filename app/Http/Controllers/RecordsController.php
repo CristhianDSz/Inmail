@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Record;
 use App\RecordEvent;
+use App\Domain\Services\Invoice;
 use PDF;
 
 class RecordsController extends Controller
@@ -12,21 +13,21 @@ class RecordsController extends Controller
     {
         $this->middleware('auth');
     }
+
     public function render()
     {
-        //return Record::invoiceNumberExists('12345',2)->first();
         return view('correspondence.index');
     }
 
     public function index()
     {
         $this->authorize('view', Record::class);
-        
-        return Record::orderBy('datetime','DESC')->orderBy('number')->with('employee:id,firstname,lastname')->with('thirdParty:id,name')->with('dependency:id,name')->paginate(20);
+
+        return Record::orderBy('datetime', 'DESC')->orderBy('number')->with('employee:id,firstname,lastname')->with('thirdParty:id,name')->with('dependency:id,name')->paginate(20);
     }
 
     public function search($record)
-    {   
+    {
         return Record::searchRecord($record)->with('employee:id,firstname,lastname')->with('thirdParty:id,name')->with('dependency:id,name')->get();
     }
 
@@ -54,24 +55,21 @@ class RecordsController extends Controller
             'copy' => '',
         ]);
         //Test before if a thirdparty invoice number's exists
-        if ( $this->inoviceNumberExists(null,$attributes['invoice_number'],$attributes['third_party_id'])) {
-            return response()->json(['message' => 'Este número de factura ya existe para el tercero'],400);
+        if (Invoice::exists(null, $attributes['invoice_number'], $attributes['third_party_id'])) {
+            return response()->json(['message' => 'Este número de factura ya existe para el tercero'], 400);
         }
 
         unset($attributes['quantity']);
 
-        for ($i = 0; $i < $quantity; $i++) {
+        for ($i = 0; $i < $quantity; ++$i) {
             $lastRecord = Record::getLast($attributes['type'])->first();
-            $recordString = Record::makeNewRecordString($attributes['type']);
-            $number = Record::makeRecordNumber($lastRecord, $recordString);
-            $attributes['number'] = $number;
+            $attributes['number'] = Record::makeRecord($lastRecord, $attributes['type']);
             $savedRecord = Record::create($attributes);
-
             $record = Record::where('id', $savedRecord->id)->first();
             $records[] = $record;
 
-            /** Register in record events table */
-            RecordEvent::register(auth()->user(),$record,'Creado');
+            /* Register in record events table */
+            RecordEvent::register(auth()->user(), $record, 'Creado');
         }
 
         return response()->json(['message' => 'Registros creados correctamente', 'records' => $records]);
@@ -97,14 +95,14 @@ class RecordsController extends Controller
             'copy' => '',
         ]);
         //Test before if a thirdparty invoice number's exists
-        if ($this->inoviceNumberExists($attributes['id'],$attributes['invoice_number'],$attributes['third_party_id'])) {
-            return response()->json(['message' => 'Este número de factura ya existe para el tercero'],400);
+        if (Invoice::exists($attributes['id'], $attributes['invoice_number'], $attributes['third_party_id'])) {
+            return response()->json(['message' => 'Este número de factura ya existe para el tercero'], 400);
         }
 
         $record->update($attributes);
 
-        /** Register in record events table */
-        RecordEvent::register(auth()->user(),$record,'Modificado');
+        /* Register in record events table */
+        RecordEvent::register(auth()->user(), $record, 'Modificado');
 
         return response()->json(['message' => 'Registro actualizado correctamente']);
     }
@@ -114,9 +112,9 @@ class RecordsController extends Controller
         $this->authorize('delete', $record);
         $record->delete();
 
-        /** Register in record events table */
+        /* Register in record events table */
         RecordEvent::register(auth()->user(), $record, 'Eliminado');
-       
+
         return response()->json(['message' => 'Registro eliminado correctamente']);
     }
 
@@ -125,15 +123,7 @@ class RecordsController extends Controller
         $records = request()->all();
         $counter = 0;
         $pdf = PDF::loadView('records.pdf2', compact('records', 'counter'));
+
         return $pdf->download('radicados.pdf');
     }
-
-    public function inoviceNumberExists($idRecord = null, $invoiceNumber, $thirdParty)
-    {
-        if ($invoiceNumber !== null && $thirdParty !== null) {
-            return Record::invoiceNumberExists($idRecord, $invoiceNumber,$thirdParty)->first();
-        }
-        return false;
-    }
-
 }
