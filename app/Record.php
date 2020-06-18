@@ -50,13 +50,13 @@ class Record extends Model
     public function scopeSearchRecord($query, $record)
     {
         return $query->where('type', 'LIKE', "%$record%")
-                        ->orWhere('status', 'LIKE', "%$record%")
-                        ->orWhere('number', 'LIKE', "%$record%")
-                        ->orWhere('document_type', 'LIKE', "%$record%")
-                        ->orWhereHas('thirdParty', function ($query) use ($record) {
-                            $query->where('name', 'LIKE', "%$record%");
-                        })
-                        ->orWhere(DB::raw('DATE_FORMAT(datetime,"%m-%d-%Y")'), 'LIKE', "%$record%");
+            ->orWhere('status', 'LIKE', "%$record%")
+            ->orWhere('number', 'LIKE', "%$record%")
+            ->orWhere('document_type', 'LIKE', "%$record%")
+            ->orWhereHas('thirdParty', function ($query) use ($record) {
+                $query->where('name', 'LIKE', "%$record%");
+            })
+            ->orWhere(DB::raw('DATE_FORMAT(datetime,"%m-%d-%Y")'), 'LIKE', "%$record%");
     }
 
     public function scopeTrackingBy($query, $record, $status)

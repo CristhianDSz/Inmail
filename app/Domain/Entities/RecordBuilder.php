@@ -17,27 +17,12 @@ class RecordBuilder
 
     const START_SEQUENCE = '001';
 
-    public function setRecord($record)
-    {
-        $this->record = $record;
-    }
-
-    public function setYear()
-    {
-        $this->year = (string) Carbon::now()->year;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
     public static function load($record = null, $type = 'Entrada')
     {
         $builder = new self();
-        $builder->setRecord($record);
-        $builder->setYear();
-        $builder->setType($type);
+        $builder->record = $record;
+        $builder->year =  (string) Carbon::now()->year;
+        $builder->type = $type;
 
         return $builder;
     }
@@ -55,7 +40,7 @@ class RecordBuilder
     protected function makeRecordTag(): string
     {
         $recordYear = substr($this->year, -3);
-        $tag = $this->type === 'Entrada' ? 'E'.$recordYear.'-' : 'S'.$recordYear.'-';
+        $tag = $this->type === 'Entrada' ? 'E' . $recordYear . '-' : 'S' . $recordYear . '-';
 
         return $tag;
     }
@@ -80,7 +65,7 @@ class RecordBuilder
         $digitsSequenceFilled = $this->fillWithZeros($digitsSequence);
         $digitsSequence = strlen($digitsSequence) < 3 ? $digitsSequenceFilled : $digitsSequence;
 
-        return $this->makeRecordTag()."{$digitsSequence}";
+        return $this->makeRecordTag() . "{$digitsSequence}";
     }
 
     public function generate(): string
