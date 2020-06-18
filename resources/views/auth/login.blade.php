@@ -24,7 +24,7 @@
           <div class="tx-center mg-b-5">Software de correspondencia en la nube</div>
 
           <div class="signin-logo tx-center tx-28 tx-bold tx-inverse mg-b-20">
-            <img class="wd-100" src="{{asset('img/logo.png') }}" alt="Insuma">
+            <img class="wd-100" src="{{ asset('storage/'.$logo) ?? asset('img/logo.png') }}" alt="Insuma">
           </div>
   
             <form method="POST" action="{{ route('login') }}">
