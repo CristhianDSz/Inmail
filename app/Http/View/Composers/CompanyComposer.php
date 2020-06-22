@@ -12,6 +12,6 @@ class CompanyComposer
     public function compose(View $view)
     {
         $company = Company::first();
-        $view->with('logo', $company->logo);
+        $view->with('logo', $company->logo ?? null);
     }
 }
