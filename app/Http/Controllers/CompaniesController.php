@@ -6,7 +6,7 @@ use App\Company;
 use App\Employee;
 use App\Dependency;
 use App\Domain\Services\ImageService;
-use App\Validators\CompanyValidator;
+use App\Http\Validators\CompanyValidator;
 
 class CompaniesController extends Controller
 {

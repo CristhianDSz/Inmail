@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Record;
 use App\Domain\Services\RecordService;
-use App\Validators\RecordValidator;
+use App\Http\Validators\RecordValidator;
 use PDF;
 
 class RecordsController extends Controller
