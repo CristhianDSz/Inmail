@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Company;
 use App\Employee;
 use App\Dependency;
+use App\Domain\Services\ImageService;
+use App\Validators\CompanyValidator;
 
 class CompaniesController extends Controller
 {
@@ -12,7 +14,7 @@ class CompaniesController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function index()
     {
         $this->authorize('view', Company::class);
@@ -38,20 +40,12 @@ class CompaniesController extends Controller
     {
         $this->authorize('create', Company::class);
 
-        $attributes = request()->validate([
-            'name' => 'required|min:3',
-            'identification' => 'required|min:8',
-            'email' => 'required|email|unique:companies,email',
-            'address' => 'nullable|max:255',
-            'phone' => 'nullable|max:10|numeric',
-            'logo', 'sometimes|file|image|max:5000',
-            'print_logo', 'sometimes|file|image|max:5000'
-        ]);
+        $attributes = (new CompanyValidator())->validate(request()->all(), new Company());
 
         $company = Company::create($attributes);
 
-        $this->storageImage($company, 'logo');
-        $this->storageImage($company, 'print_logo');
+        ImageService::store($company, 'logo');
+        ImageService::store($company, 'print_logo');
 
         return redirect()->route('companies.index');
     }
@@ -67,30 +61,13 @@ class CompaniesController extends Controller
     {
         $this->authorize('update', $company);
 
-        $attributes = request()->validate([
-            'name' => 'required|min:3',
-            'identification' => 'required|min:8|unique:companies,identification,' . $company->id,
-            'email' => 'required|email|unique:companies,email,' . $company->id,
-            'address' => 'nullable|max:255',
-            'phone' => 'nullable|max:10',
-            'logo', 'sometimes|file|image|max:5000',
-            'print_logo', 'sometimes|file|image|max:5000'
-        ]);
+        $attributes = (new CompanyValidator())->validate(request()->all(), $company);
 
         $company->update($attributes);
 
-        $this->storageImage($company, 'logo');
-        $this->storageImage($company, 'print_logo');
+        ImageService::store($company, 'logo');
+        ImageService::store($company, 'print_logo');
 
         return redirect()->route('companies.index');
-    }
-
-    private function storageImage($company, $imageName)
-    {
-        if (request()->has($imageName)) {
-            $company->update([
-                $imageName => request()->$imageName->store('uploads', 'public')
-            ]);
-        }
     }
 }
