@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Domain\Entities\RecordBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -90,11 +89,6 @@ class Record extends Model
         if (in_array($status, self::CURRENT_STATUS)) {
             return $query->where('number', 'LIKE', "%$record%")->where('document_type', 'Facturas')->where('status', $status)->with('thirdParty')->with('employee.dependency');
         }
-    }
-
-    public static function makeRecord($record, $recordType)
-    {
-        return RecordBuilder::load($record, $recordType)->generate();
     }
 
     public function getFormatDatetimeAttribute()

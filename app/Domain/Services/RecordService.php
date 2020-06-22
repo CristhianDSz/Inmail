@@ -2,6 +2,7 @@
 
 namespace App\Domain\Services;
 
+use App\Domain\Entities\RecordNumber;
 use App\Record;
 
 /**
@@ -49,14 +50,14 @@ class RecordService
     }
 
     /**
-     * Wrapper for the creation of the record number, the makeRecord model method is invoked
+     * Wrapper for the creation of the record number, the RecordNumber entity is invoked
      *
      * @param string $type - The record type (Entrada, Salida)
      * @return string
      */
     protected function recordNumber($type)
     {
-        return Record::makeRecord($this->lastExistentRecord($type), $type);
+        return RecordNumber::load($this->lastExistentRecord($type), $type)->generate();
     }
 
     /**
