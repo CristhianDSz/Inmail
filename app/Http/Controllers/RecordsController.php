@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Record;
-use App\RecordEvent;
-use App\Domain\Services\InvoiceService;
+use App\Domain\Services\RecordService;
 use App\Validators\RecordValidator;
 use PDF;
 
@@ -44,26 +43,14 @@ class RecordsController extends Controller
     {
         $this->authorize('create', Record::class);
 
-        $quantity = 1;
-        $records = [];
-        if (request()->exists('quantity')) {
-            $quantity = request('quantity');
-        }
-
+        $quantity = request()->exists('quantity') ? request('quantity') : 1;
         $attributes = (new RecordValidator)->validate(request()->all(), new Record());
 
-        //Test before if a thirdparty invoice number's exists
-        if (InvoiceService::invoiceExists(null, $attributes['invoice_number'], $attributes['third_party_id'])) {
+        if (RecordService::recordHasInvoice(null, $attributes)) {
             return response()->json(['message' => 'Este número de factura ya existe para el tercero'], 400);
         }
 
-        for ($i = 0; $i < $quantity; ++$i) {
-            $lastRecord = Record::getLast($attributes['type'])->first();
-            $attributes['number'] = Record::makeRecord($lastRecord, $attributes['type']);
-            $savedRecord = Record::create($attributes);
-            $record = Record::where('id', $savedRecord->id)->first();
-            $records[] = $record;
-        }
+        $records = RecordService::records($quantity, $attributes);
 
         return response()->json(['message' => 'Registros creados correctamente', 'records' => $records]);
     }
@@ -74,8 +61,7 @@ class RecordsController extends Controller
 
         $attributes = (new RecordValidator)->validate(request()->all(), $record);
 
-        //Test before if a thirdparty invoice number's exists
-        if (InvoiceService::invoiceExists($attributes['id'], $attributes['invoice_number'], $attributes['third_party_id'])) {
+        if (RecordService::recordHasInvoice($attributes['id'], $attributes)) {
             return response()->json(['message' => 'Este número de factura ya existe para el tercero'], 400);
         }
 
