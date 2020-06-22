@@ -9,7 +9,13 @@ use Illuminate\Support\Facades\DB;
 
 class Record extends Model
 {
-    const CURRENT_STATUS = ['Creado', 'Registrado', 'Entregado', 'Visado Control Interno', 'Visado Contabilidad'];
+    const CURRENT_STATUS = [
+        'Creado',
+        'Registrado',
+        'Entregado',
+        'Visado Control Interno',
+        'Visado Contabilidad'
+    ];
 
     protected $fillable = [
         'datetime',
@@ -26,6 +32,26 @@ class Record extends Model
         'dependency_id',
         'employee_id',
     ];
+
+    /**
+     * We call the model's lifecycle events for register the record events.
+     *
+     * @return void
+     */
+    public static function booted()
+    {
+        self::created(function ($record) {
+            RecordEvent::register(auth()->user(), $record, 'Creado');
+        });
+
+        self::updated(function ($record) {
+            RecordEvent::register(auth()->user(), $record, 'Modificado');
+        });
+
+        self::deleted(function ($record) {
+            RecordEvent::register(auth()->user(), $record, 'Eliminado');
+        });
+    }
 
     public function employee()
     {

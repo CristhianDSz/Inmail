@@ -63,9 +63,6 @@ class RecordsController extends Controller
             $savedRecord = Record::create($attributes);
             $record = Record::where('id', $savedRecord->id)->first();
             $records[] = $record;
-
-            /* Register in record events table */
-            RecordEvent::register(auth()->user(), $record, 'Creado');
         }
 
         return response()->json(['message' => 'Registros creados correctamente', 'records' => $records]);
@@ -84,9 +81,6 @@ class RecordsController extends Controller
 
         $record->update($attributes);
 
-        /* Register in record events table */
-        RecordEvent::register(auth()->user(), $record, 'Modificado');
-
         return response()->json(['message' => 'Registro actualizado correctamente']);
     }
 
@@ -94,9 +88,6 @@ class RecordsController extends Controller
     {
         $this->authorize('delete', $record);
         $record->delete();
-
-        /* Register in record events table */
-        RecordEvent::register(auth()->user(), $record, 'Eliminado');
 
         return response()->json(['message' => 'Registro eliminado correctamente']);
     }

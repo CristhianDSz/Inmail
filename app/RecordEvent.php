@@ -20,8 +20,8 @@ class RecordEvent extends Model
             'user_id' => $user->id,
             'record' => $record->number,
             'record_type' => $record->type,
-            'record_status' => $record->status,
-             'action' => $action
+            'record_status' => $record->status ?? $action,
+            'action' => $action
         ]);
     }
 }
