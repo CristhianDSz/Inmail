@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Record;
 use App\RecordEvent;
 use App\Domain\Services\InvoiceService;
+use App\Validators\RecordValidator;
 use PDF;
 
 class RecordsController extends Controller
@@ -23,12 +24,20 @@ class RecordsController extends Controller
     {
         $this->authorize('view', Record::class);
 
-        return Record::orderBy('datetime', 'DESC')->orderBy('number')->with('employee:id,firstname,lastname')->with('thirdParty:id,name')->with('dependency:id,name')->paginate(20);
+        return Record::orderBy('datetime', 'DESC')->orderBy('number')
+            ->with('employee:id,firstname,lastname')
+            ->with('thirdParty:id,name')
+            ->with('dependency:id,name')
+            ->paginate(15);
     }
 
     public function search($record)
     {
-        return Record::searchRecord($record)->with('employee:id,firstname,lastname')->with('thirdParty:id,name')->with('dependency:id,name')->get();
+        return Record::searchRecord($record)
+            ->with('employee:id,firstname,lastname')
+            ->with('thirdParty:id,name')
+            ->with('dependency:id,name')
+            ->get();
     }
 
     public function store()
@@ -41,25 +50,12 @@ class RecordsController extends Controller
             $quantity = request('quantity');
         }
 
-        $attributes = request()->validate([
-            'type' => 'required',
-            'document_type' => '',
-            'document_date' => '',
-            'invoice_number' => '',
-            'description' => '',
-            'attacheds' => '',
-            'third_party_id' => '',
-            'dependency_id' => '',
-            'employee_id' => '',
-            'status' => '',
-            'copy' => '',
-        ]);
+        $attributes = (new RecordValidator)->validate(request()->all(), new Record());
+
         //Test before if a thirdparty invoice number's exists
         if (InvoiceService::invoiceExists(null, $attributes['invoice_number'], $attributes['third_party_id'])) {
             return response()->json(['message' => 'Este número de factura ya existe para el tercero'], 400);
         }
-
-        unset($attributes['quantity']);
 
         for ($i = 0; $i < $quantity; ++$i) {
             $lastRecord = Record::getLast($attributes['type'])->first();
@@ -79,21 +75,8 @@ class RecordsController extends Controller
     {
         $this->authorize('update', $record);
 
-        $attributes = request()->validate([
-            'id' => 'required|numeric',
-            'number' => 'required',
-            'type' => 'required',
-            'document_type' => 'required',
-            'document_date' => 'required',
-            'invoice_number' => '',
-            'description' => 'required',
-            'attacheds' => 'required',
-            'third_party_id' => 'required',
-            'dependency_id' => 'required',
-            'employee_id' => 'required',
-            'status' => 'required',
-            'copy' => '',
-        ]);
+        $attributes = (new RecordValidator)->validate(request()->all(), $record);
+
         //Test before if a thirdparty invoice number's exists
         if (InvoiceService::invoiceExists($attributes['id'], $attributes['invoice_number'], $attributes['third_party_id'])) {
             return response()->json(['message' => 'Este número de factura ya existe para el tercero'], 400);
