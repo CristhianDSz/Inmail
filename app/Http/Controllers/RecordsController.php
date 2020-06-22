@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Record;
 use App\RecordEvent;
-use App\Domain\Services\Invoice;
+use App\Domain\Services\InvoiceService;
 use PDF;
 
 class RecordsController extends Controller
@@ -55,7 +55,7 @@ class RecordsController extends Controller
             'copy' => '',
         ]);
         //Test before if a thirdparty invoice number's exists
-        if (Invoice::exists(null, $attributes['invoice_number'], $attributes['third_party_id'])) {
+        if (InvoiceService::invoiceExists(null, $attributes['invoice_number'], $attributes['third_party_id'])) {
             return response()->json(['message' => 'Este número de factura ya existe para el tercero'], 400);
         }
 
@@ -95,7 +95,7 @@ class RecordsController extends Controller
             'copy' => '',
         ]);
         //Test before if a thirdparty invoice number's exists
-        if (Invoice::exists($attributes['id'], $attributes['invoice_number'], $attributes['third_party_id'])) {
+        if (InvoiceService::invoiceExists($attributes['id'], $attributes['invoice_number'], $attributes['third_party_id'])) {
             return response()->json(['message' => 'Este número de factura ya existe para el tercero'], 400);
         }
 
