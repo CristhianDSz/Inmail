@@ -3610,6 +3610,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3704,9 +3732,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     postRecord: function postRecord() {
       var _this3 = this;
 
-      this.record.third_party_id = this.thirdPartyRecord.id || '';
-      this.record.dependency_id = this.dependencyRecord.id || '';
-      this.record.employee_id = this.employeeRecord.id || '';
+      this.record.third_party_id = this.thirdPartyRecord.id || "";
+      this.record.dependency_id = this.dependencyRecord.id || "";
+      this.record.employee_id = this.employeeRecord.id || "";
       axios.post("/records", this.record).then(function (response) {
         _this3.$swal({
           title: "Correcto",
@@ -3725,9 +3753,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       })["catch"](function (error) {
         if (error.response.status == 400) {
           return _this3.$swal({
-            title: 'Ha ocurrido un error',
+            title: "Ha ocurrido un error",
             text: error.response.data.message,
-            type: 'error'
+            type: "error"
           });
         }
       });

@@ -100,19 +100,47 @@
         <div class="col-md-4">
           <div class="form-group mg-md-l--1 bd-t-0-force">
             <label class="form-control-label">Tercero:</label>
-            <multiselect class="form-control" :selectLabel="''" :deselectLabel="''" :maxHeight="200" v-model="thirdPartyRecord" :options="thirdParties" label="name" placeholder="Seleccione"></multiselect>
+            <multiselect
+              class="form-control"
+              :selectLabel="''"
+              :deselectLabel="''"
+              :maxHeight="200"
+              v-model="thirdPartyRecord"
+              :options="thirdParties"
+              label="name"
+              placeholder="Seleccione"
+            ></multiselect>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group mg-md-l--1 bd-t-0-force">
             <label class="form-control-label">Dependencia:</label>
-            <multiselect class="form-control" :selectLabel="''" :deselectLabel="''"  :maxHeight="400" v-model="dependencyRecord" :options="dependencies" label="name"   @input="getEmployees(dependencyRecord.id)" placeholder="Seleccione"></multiselect>
+            <multiselect
+              class="form-control"
+              :selectLabel="''"
+              :deselectLabel="''"
+              :maxHeight="400"
+              v-model="dependencyRecord"
+              :options="dependencies"
+              label="name"
+              @input="getEmployees(dependencyRecord.id)"
+              placeholder="Seleccione"
+            ></multiselect>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group mg-md-l--1 bd-t-0-force">
             <label class="form-control-label">Empleado:</label>
-             <multiselect class="form-control" :selectLabel="''" :deselectLabel="''" :maxHeight="200" v-model="employeeRecord" :options="employees" label="firstname" placeholder="Seleccione"></multiselect>
+            <multiselect
+              class="form-control"
+              :selectLabel="''"
+              :deselectLabel="''"
+              :maxHeight="200"
+              v-model="employeeRecord"
+              :options="employees"
+              label="firstname"
+              placeholder="Seleccione"
+            ></multiselect>
           </div>
         </div>
         <div class="col-md-2">
@@ -173,9 +201,9 @@ export default {
       dependencies: [],
       employees: [],
       //Multiselect
-      thirdPartyRecord:"",
-      dependencyRecord:"",
-      employeeRecord:""
+      thirdPartyRecord: "",
+      dependencyRecord: "",
+      employeeRecord: ""
     };
   },
   created() {
@@ -223,32 +251,34 @@ export default {
       );
     },
     postRecord() {
-      this.record.third_party_id = this.thirdPartyRecord.id || ''
-      this.record.dependency_id = this.dependencyRecord.id || ''
-      this.record.employee_id = this.employeeRecord.id || ''
-      axios.post("/records", this.record).then(response => {
-        this.$swal({
-          title: "Correcto",
-          text: response.data.message,
-          type: "success",
-          confirmButtonText: "Generar pdf"
-        }).then(result => {
-          if (result.value) {
-            this.postRecordsPdf(response.data.records);
+      this.record.third_party_id = this.thirdPartyRecord.id || "";
+      this.record.dependency_id = this.dependencyRecord.id || "";
+      this.record.employee_id = this.employeeRecord.id || "";
+      axios
+        .post("/records", this.record)
+        .then(response => {
+          this.$swal({
+            title: "Correcto",
+            text: response.data.message,
+            type: "success",
+            confirmButtonText: "Generar pdf"
+          }).then(result => {
+            if (result.value) {
+              this.postRecordsPdf(response.data.records);
+            }
+          });
+          this.$emit("success");
+          this.resetRecord();
+        })
+        .catch(error => {
+          if (error.response.status == 400) {
+            return this.$swal({
+              title: "Ha ocurrido un error",
+              text: error.response.data.message,
+              type: "error"
+            });
           }
         });
-        this.$emit("success");
-        this.resetRecord();
-      })
-      .catch(error => {
-        if (error.response.status == 400) {
-          return this.$swal({
-            title: 'Ha ocurrido un error',
-            text: error.response.data.message,
-            type: 'error'
-          })
-        }
-      })
     },
     postRecordsPdf(records) {
       axios
