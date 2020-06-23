@@ -42,5 +42,6 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'show company', 'description' => 'Listar compañía']);
         Permission::create(['name' => 'create company', 'description' => 'Crear compañía']);
         Permission::create(['name' => 'edit company', 'description' => 'Editar compañía']);
+        Permission::create(['name' => 'show record event', 'description' => 'Listar eventos de registros']);
     }
 }

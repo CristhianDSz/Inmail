@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\RecordEvent;
-use Illuminate\Http\Request;
 
 class RecordEventsController extends Controller
 {
@@ -14,7 +13,9 @@ class RecordEventsController extends Controller
 
     public function index()
     {
-        $events =  RecordEvent::with('user')->orderBy('created_at')->paginate(15);
-        return view('events.index', compact('events')); 
+        $this->authorize('view', RecordEvent::class);
+
+        $events =  RecordEvent::with('user')->orderBy('created_at', 'desc')->paginate(15);
+        return view('events.index', compact('events'));
     }
 }
