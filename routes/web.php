@@ -46,6 +46,10 @@ Route::patch('tracking/{record}', 'TrackingController@update')->name('tracking.u
 //Record Events
 Route::get('record-events', 'RecordEventsController@index')->name('events.index');
 
+Route::resource('stickers', 'StickerController', [
+    'except' => 'show'
+]);
+
 Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');
