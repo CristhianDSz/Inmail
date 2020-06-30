@@ -25,7 +25,7 @@ class ComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer(
-            ['layouts/master', 'auth/login'],
+            ['layouts/master', 'auth/login', 'livewire/stickers/sticker'],
             'App\Http\View\Composers\CompanyComposer'
         );
     }

@@ -50,6 +50,7 @@ Route::resource('stickers', 'StickerController', [
     'except' => 'show'
 ]);
 
+
 Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');
