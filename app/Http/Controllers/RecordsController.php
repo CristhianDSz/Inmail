@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Record;
 use App\Domain\Services\RecordService;
 use App\Http\Validators\RecordValidator;
+use Carbon\Carbon;
 use PDF;
 
 class RecordsController extends Controller
@@ -28,6 +29,19 @@ class RecordsController extends Controller
             ->with('thirdParty:id,name')
             ->with('dependency:id,name')
             ->paginate(15);
+    }
+
+    public function total()
+    {
+        $records =  [
+            'all' => Record::all()->count(),
+            'incoming' => Record::where('type','Entrada')->count(),
+            'outgoing' => Record::where('type','Salida')->count(),
+            'today' => Record::whereDate('datetime', Carbon::today()->toDateString())->count(),
+            'unregistered' =>  Record::where('status','Creado')->count()
+        ];
+
+        return response()->json($records);
     }
 
     public function search($record)

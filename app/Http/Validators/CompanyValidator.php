@@ -5,7 +5,7 @@ namespace App\Http\Validators;
 class CompanyValidator
 {
 
-    protected function identificationUniqueness($company)
+    protected function identificationRule($company)
     {
         if ($company->exists) {
             return 'required|min:8|unique:companies,identification,' . $company->id;
@@ -13,7 +13,7 @@ class CompanyValidator
         return 'required|min:8';
     }
 
-    protected function emailUniqueness($company)
+    protected function emailRule($company)
     {
         if ($company->exists) {
             return 'required|email|unique:companies,email,' . $company->id;
@@ -25,8 +25,8 @@ class CompanyValidator
     {
         return [
             'name' => 'required|min:3',
-            'identification' => $this->identificationUniqueness($company),
-            'email' => $this->emailUniqueness($company),
+            'identification' => $this->identificationRule($company),
+            'email' => $this->emailRule($company),
             'address' => 'nullable|max:255',
             'phone' => 'nullable|max:10|numeric',
             'logo', 'sometimes|file|image|max:5000',
