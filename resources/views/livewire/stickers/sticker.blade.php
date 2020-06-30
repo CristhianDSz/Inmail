@@ -11,7 +11,7 @@
             @endforeach
             </div>
 
-        <p>Seleccione un color de QR</p>
+        <p class="mb-1 mt-2">Seleccione un color de QR</p>
 
         <div class="row">
            @foreach($qrColors as $color => $value)
@@ -27,28 +27,28 @@
            @endforeach
         </div>
 
-        <p>Seleccione el nombre de título de Radicado</p>
+        <p class="mt-2 mb-1">Seleccione el nombre de título de Radicado</p>
 
         <div class="row">
-            <input type="text" class="form-control" wire:model="registrationTitle">
+            <input type="text" class="form-control form-control-sm" wire:model="registrationTitle">
         </div>
 
-        <p>Seleccione el nombre del título medio</p>
+        <p class="mt-2 mb-1">Seleccione el nombre del título medio</p>
 
         <div class="row">
-            <input type="text" class="form-control" wire:model="midTitle">
+            <input type="text" class="form-control form-control-sm" wire:model="midTitle">
         </div>
 
-        <p>Seleccione el nombre del título inferior</p>
+        <p class="mt-2 mb-1">Seleccione el nombre del título inferior</p>
 
         <div class="row">
-            <input type="text" class="form-control" wire:model="footerTitle">
+            <input type="text" class="form-control form-control-sm" wire:model="footerTitle">
         </div>
 
-        <p>Seleccione el formato de fecha</p>
+        <p class="mt-2 mb-1">Seleccione el formato de fecha</p>
 
         <div class="row">
-            <select class="form-control ht-50" wire:model="dateFormat">
+            <select class="form-control form-control-sm" wire:model="dateFormat">
                @foreach($dateFormats as $date => $value)
                     <option value="{{ $date }}">{{ $value }}</option>
                @endforeach
