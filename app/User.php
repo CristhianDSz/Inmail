@@ -22,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username'
+        'name', 'email', 'password', 'username', 'company_id'
     ];
 
     /**
@@ -64,7 +64,7 @@ class User extends Authenticatable
         $roles = $this->roles()->get();
 
         foreach ($roles as $role) {
-            foreach($role->permissions()->get() as $permission) {
+            foreach ($role->permissions()->get() as $permission) {
                 $permissions[] = $permission->name;
             }
         }
@@ -80,5 +80,10 @@ class User extends Authenticatable
     public function recordEvents()
     {
         return $this->hasMany(RecordEvent::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 }
