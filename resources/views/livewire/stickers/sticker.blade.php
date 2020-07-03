@@ -1,4 +1,4 @@
-<div class="row d-flex justify-content-between">
+<div class="row d-flex justify-content-between ml-2">
    <div class="col-5 bg-white text-dark pb-3">
         <p>Seleccione un modelo de QR</p>
 
@@ -95,13 +95,13 @@
                </div>
             </div>
         </div>
-       {{-- <div class="card mt-3 mb-2">
-           <div class="card-body mx-auto text-center">
-                <p class="font-weight-bold"> Nombre (opcional):</p>
-                <input class="form-control form-control-sm mb-2" type="text" wire:model="name">
+      
+        <input type="button" class="btn btn-sm btn-teal w-75 d-block mx-auto font-weight-bold" {{ ($total >= 3) ? 'disabled' : '' }} value="Guardar" wire:click="submit()">
+        @if ($total >= 3)
+            <div class="alert alert-bordered alert-warning mt-3">
+                <p class="tx-12">Actualmente a llegado al límite máximo de creación de modelos de stickers ({{ $total }}), para más información consulte su plan.</p>
             </div>
-        </div> --}}
-        <input type="button" class="btn btn-sm btn-teal w-75 d-block mx-auto font-weight-bold" value="Guardar" wire:click="submit()">
+        @endif
    </div>
 
 </div>

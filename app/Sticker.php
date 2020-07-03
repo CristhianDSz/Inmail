@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sticker extends Model
 {
+    protected $append = ['total'];
+
     protected $fillable = [
         'name',
         'qr_style',
@@ -17,6 +19,11 @@ class Sticker extends Model
         'is_default',
         'company_id'
     ];
+
+    public function getTotalAttribute()
+    {
+        return $this->count();
+    }
 
     public function company()
     {

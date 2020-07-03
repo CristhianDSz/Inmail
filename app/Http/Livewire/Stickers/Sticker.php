@@ -8,6 +8,9 @@ use Livewire\Component;
 
 class Sticker extends Component
 {
+
+    public $modelId;
+    public $total;
     public $qrCode = '';
     public $qrStyle = 'square';
     public $qrColor = 'rgb(0,0,0)';
@@ -37,17 +40,24 @@ class Sticker extends Component
     public $qrStyles = [];
     public $dateFormats = [];
 
-    public function mount()
+    public function mount($total, $modelId = null)
     {
-        $this->qrCode = \QrCode::size(100)->generate(self::TEST_URL);
+        $this->total = $total;
+        $this->modelId = $modelId;
+        $this->generateQrCode();
         $this->generateQrStyles();
         $this->generateDateFormats();
+    }
+
+    public function generateQrCode()
+    {
+        $this->qrCode = \QrCode::size(100)->generate(self::TEST_URL);
     }
 
     public function generateQrStyles()
     {
         foreach ($this->styles as $style) {
-            $this->qrStyles[$style] =  \QrCode::size(100)->style($style)
+            $this->qrStyles[$style] =  \QrCode::size(80)->style($style)
                 ->generate(self::TEST_URL);
         }
     }
@@ -91,6 +101,8 @@ class Sticker extends Component
 
     public function store()
     {
+        //$this->checkLimitReached();
+
         AppSticker::create([
             'qr_style' => $this->qrStyle,
             'qr_color' => $this->qrColor,
@@ -100,6 +112,13 @@ class Sticker extends Component
             'footer_title' => $this->footerTitle,
             'company_id' => auth()->user()->company->id
         ]);
+
+        //return redirect()->route('stickers.index');
+    }
+
+    public function checkLimitReached()
+    {
+        abort_if($this->total >= 3, 403);
     }
 
     public function render()

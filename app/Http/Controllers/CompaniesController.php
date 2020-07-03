@@ -18,7 +18,8 @@ class CompaniesController extends Controller
     public function index()
     {
         $this->authorize('view', Company::class);
-        $company = Company::first();
+
+        $company = auth()->user()->company->with('stickers')->withCount('stickers')->first();
         $employees = Employee::count();
         $dependencies = Dependency::count();
 

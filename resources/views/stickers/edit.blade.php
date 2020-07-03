@@ -5,11 +5,11 @@
 @endsection
 
 @section('pageTitle')
-   Generación de Sticker
+   Editar Sticker
 @endsection
 
 @section('content')
-    @livewire('stickers.sticker',[ 'total' => $total])
+    @livewire('stickers.sticker',[ 'total' => $total, 'modelId' => $sticker->id])
 @endsection
 
 @section('scripts')
