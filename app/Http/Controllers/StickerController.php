@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use QrCode;
 
 
 class StickerController extends Controller
 {
-    public function index()
+    public function create()
     {
-        return view('stickers.index');
+        return view('stickers.create');
     }
 }

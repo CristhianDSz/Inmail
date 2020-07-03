@@ -35,6 +35,9 @@ Route::group(['prefix' => 'config'], function () {
     Route::patch('users/{user}/restore', 'UsersController@restore')->name('users.restore.user');
     Route::patch('users/{user}/password', 'UsersController@updatePassword')->name('users.update.password');
     Route::resource('users', 'UsersController');
+    Route::resource('stickers', 'StickerController', [
+        'except' => 'show'
+    ]);
 });
 
 Route::post('app/records/pdf', 'RecordsController@getPdf')->name('records.pdf');
@@ -45,11 +48,6 @@ Route::patch('tracking/{record}', 'TrackingController@update')->name('tracking.u
 
 //Record Events
 Route::get('record-events', 'RecordEventsController@index')->name('events.index');
-
-Route::resource('stickers', 'StickerController', [
-    'except' => 'show'
-]);
-
 
 Auth::routes();
 

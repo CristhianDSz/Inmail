@@ -30,7 +30,6 @@ class Sticker extends Component
         'green'  => 'rgb(34,139,34)',
         'blue'   => 'rgb(0,191,255)',
         'purple' => 'rgb(147,112,219)',
-        'pink'   => 'rgb(255,105,180)',
         'grey'   => 'rgb(192,192,192)',
         'brown'  => 'rgb(218,165,32)',
     ];
@@ -79,12 +78,12 @@ class Sticker extends Component
     public function submit()
     {
         $this->validate([
-            'qrStyle' => 'required',
-            'qrColor' => 'required',
+            'qrStyle' => 'required|min:3',
+            'qrColor' => 'required|min:3',
             'dateFormat' => 'required',
-            'registrationTitle' => 'required',
-            'midTitle' => 'required',
-            'footerTitle' => 'required'
+            'registrationTitle' => 'required|min:3',
+            'midTitle' => 'required|min:3',
+            'footerTitle' => 'required|min:3'
         ]);
 
         $this->store();
