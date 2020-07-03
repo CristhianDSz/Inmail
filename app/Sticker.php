@@ -8,12 +8,13 @@ class Sticker extends Model
 {
     protected $fillable = [
         'name',
-        'style',
-        'color',
-        'dateFormat',
-        'registrationFormat',
-        'midTitle',
-        'footerTitle',
+        'qr_style',
+        'qr_color',
+        'date_format',
+        'registration_title',
+        'mid_title',
+        'footer_title',
+        'is_default',
         'company_id'
     ];
 

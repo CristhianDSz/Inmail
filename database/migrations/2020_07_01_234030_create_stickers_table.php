@@ -16,12 +16,13 @@ class CreateStickersTable extends Migration
         Schema::create('stickers', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->enum('style',['square, dot, round']);
-            $table->string('color');
-            $table->enum('dateFormat',['dayMonthYear','monthYearDay','yearMonthDay']);
-            $table->string('registrationTitle');
-            $table->string('midTitle');
-            $table->string('footerTitle');
+            $table->enum('qr_style', ['square', 'dot', 'round']);
+            $table->string('qr_color');
+            $table->enum('date_format', ['day_month_year', 'month_year_day', 'year_month_day']);
+            $table->string('registration_title');
+            $table->string('mid_title');
+            $table->string('footer_title');
+            $table->boolean('is_default')->default(false)->nullable();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

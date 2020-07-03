@@ -85,6 +85,12 @@
                </div>
             </div>
         </div>
+       <div class="card">
+           <div class="card-body mx-auto">
+            <input type="button" class="btn btn-primary" value="Guardar" wire:click="submit()">
+
+           </div>
+       </div>
    </div>
 
 </div>
