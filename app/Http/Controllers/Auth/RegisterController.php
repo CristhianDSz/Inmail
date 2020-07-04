@@ -36,7 +36,8 @@ class RegisterController extends Controller
      * @return void
      */
     public function __construct()
-    { }
+    {
+    }
 
     /**
      * Get a validator for an incoming registration request.
@@ -68,12 +69,13 @@ class RegisterController extends Controller
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'company_id' => auth()->user()->company->id
         ]);
     }
 
     public function register()
     {
-        $this->authorize('create',auth()->user());
+        $this->authorize('create', auth()->user());
 
         $this->validator(request()->all())->validate();
 

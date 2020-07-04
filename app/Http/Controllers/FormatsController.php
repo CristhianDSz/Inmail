@@ -11,7 +11,6 @@ class FormatsController extends Controller
 {
     public function index()
     {
-
         $firstDate =  Carbon::today()->toDateString();
         $secondDate =  Carbon::today()->toDateString();
 
@@ -29,7 +28,6 @@ class FormatsController extends Controller
 
         $todayRecords = $todayRecords->where('type', 'Entrada')->where('status', 'Registrado')->with('thirdParty')->with('employee');
         $todayRecords = $todayRecords->get();
-
 
         return view('formats.index', compact('firstDate', 'secondDate', 'todayRecords'));
     }

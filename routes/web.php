@@ -22,7 +22,6 @@ Route::apiResource('employees', 'EmployeesController');
 Route::get('app/third-parties', 'ThirdPartiesController@render')->name('third_parties.render');
 Route::get('third-parties/data', 'ThirdPartiesController@getData');
 Route::apiResource('third-parties', 'ThirdPartiesController');
-Route::get('app/cities', 'CitiesController@index');
 Route::get('app/correspondence', 'RecordsController@render')->name('correspondence.render');
 Route::get('app/records/{record}/search', 'RecordsController@search');
 Route::apiResource('records', 'RecordsController');
@@ -50,5 +49,3 @@ Route::patch('tracking/{record}', 'TrackingController@update')->name('tracking.u
 Route::get('record-events', 'RecordEventsController@index')->name('events.index');
 
 Auth::routes();
-
-//Route::get('/home', 'HomeController@index')->name('home');
