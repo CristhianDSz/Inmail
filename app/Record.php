@@ -67,7 +67,7 @@ class Record extends Model
         return $this->belongsTo(ThirdParty::class);
     }
 
-    public function scopeGetLast($query, $type)
+    public function scopeLastOfType($query, $type)
     {
         return $query->where('type', $type)->orderBy('id', 'desc');
     }

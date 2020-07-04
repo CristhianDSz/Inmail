@@ -68,23 +68,27 @@ class RecordService
      */
     protected function lastExistentRecord($type)
     {
-        return Record::getLast($type)->first();
+        return Record::lastOfType($type)->first();
     }
 
     /**
-     * Check if record invoice number exists, the InvoiceService method is invoked
+     * Check if record invoice number exists, record model method is invoked
      *
      * @param integer | null $idRecord
      * @param array $attributes
-     * @return App\Record | boolean
+     * @return boolean
      */
-    public static function recordHasInvoice($idRecord = null, $attributes)
+    public static function hasInvoice($idRecord = null, $attributes)
     {
-        return InvoiceService::invoiceExists(
-            $idRecord,
-            $attributes['invoice_number'],
-            $attributes['third_party_id']
-        );
+        if (!empty($attributes['invoice_number']) && !empty($attributes['third_party_id'])) {
+            return Record::invoiceNumberExists(
+                $idRecord,
+                $attributes['invoice_number'],
+                $attributes['third_party_id']
+            )->exists();
+        }
+
+        return false;
     }
 
     /**

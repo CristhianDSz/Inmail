@@ -31,14 +31,14 @@ class RecordsController extends Controller
             ->paginate(15);
     }
 
-    public function total()
+    public function resume()
     {
         $records =  [
             'all' => Record::all()->count(),
-            'incoming' => Record::where('type','Entrada')->count(),
-            'outgoing' => Record::where('type','Salida')->count(),
+            'incoming' => Record::where('type', 'Entrada')->count(),
+            'outgoing' => Record::where('type', 'Salida')->count(),
             'today' => Record::whereDate('datetime', Carbon::today()->toDateString())->count(),
-            'unregistered' =>  Record::where('status','Creado')->count()
+            'unregistered' =>  Record::where('status', 'Creado')->count()
         ];
 
         return response()->json($records);
@@ -60,7 +60,7 @@ class RecordsController extends Controller
         $quantity = request()->exists('quantity') ? request('quantity') : 1;
         $attributes = (new RecordValidator)->validate(request()->all(), new Record());
 
-        if (RecordService::recordHasInvoice(null, $attributes)) {
+        if (RecordService::hasInvoice(null, $attributes)) {
             return response()->json(['message' => 'Este número de factura ya existe para el tercero'], 400);
         }
 
@@ -75,7 +75,7 @@ class RecordsController extends Controller
 
         $attributes = (new RecordValidator)->validate(request()->all(), $record);
 
-        if (RecordService::recordHasInvoice($attributes['id'], $attributes)) {
+        if (RecordService::hasInvoice($attributes['id'], $attributes)) {
             return response()->json(['message' => 'Este número de factura ya existe para el tercero'], 400);
         }
 
