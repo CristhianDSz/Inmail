@@ -6,7 +6,7 @@ use App\Sticker as AppSticker;
 use Carbon\Carbon;
 use Livewire\Component;
 
-class Sticker extends Component
+class Single extends Component
 {
     public $modelId;
     public $total;
@@ -113,6 +113,6 @@ class Sticker extends Component
 
     public function render()
     {
-        return view('livewire.stickers.sticker');
+        return view('livewire.stickers.single');
     }
 }

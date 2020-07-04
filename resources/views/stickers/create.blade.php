@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-    @livewire('stickers.sticker',[ 'total' => $total])
+    @livewire('stickers.single',[ 'total' => $total])
 @endsection
 
 @section('scripts')
