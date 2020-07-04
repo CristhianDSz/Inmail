@@ -11,22 +11,6 @@
             @endforeach
             </div>
 
-        <p class="mb-1 mt-2">Seleccione un color de QR</p>
-
-        <div class="row ml-1">
-           @foreach($qrColors as $color => $value)
-               <button 
-                type="button" 
-                class="btn btn-icon mr-1 mb-1 {{ $value === $qrColor ? 'active' : '' }}"
-                id="{{ $color }}" 
-                style="background-color: {{ $value }};width:30px;height:30px"
-                wire:model="qrColor"
-                wire:click="$set('qrColor','{{ $value }}')">
-                <div></div>
-                </button>
-           @endforeach
-        </div>
-
         <p class="mt-2 mb-1">Seleccione el nombre de título de Radicado</p>
 
         <div class="row">
@@ -45,10 +29,16 @@
             <small class="parsley-errors-list filled d-block">{{ $message }}</small>
         @enderror
 
-        <p class="mt-2 mb-1">Seleccione el nombre del título inferior</p>
+        <p class="mt-2 mb-1">Seleccione el nombre del título inferior (entrada)</p>
 
         <div class="row">
-            <input type="text" class="form-control form-control-sm w-75 ml-3" wire:model="footerTitle">
+            <input type="text" class="form-control form-control-sm w-75 ml-3" wire:model="incomingFooterTitle">
+        </div>
+
+        <p class="mt-2 mb-1">Seleccione el nombre del título inferior (salida)</p>
+
+        <div class="row">
+            <input type="text" class="form-control form-control-sm w-75 ml-3" wire:model="outgoingFooterTitle">
         </div>
 
         @error('footerTitle')
@@ -90,7 +80,8 @@
                </div>
                <div class="row justify-content-center">
                     <div class="col-8">
-                        <p class="text-uppercase text-center">{{ $footerTitle }} Recibido (a)</p>
+                        <p class="text-uppercase text-center mb-0 text-muted">{{ $incomingFooterTitle }}</p>
+                        <p class="text-uppercase text-center">{{ $outgoingFooterTitle }}</p>
                     </div>
                </div>
             </div>

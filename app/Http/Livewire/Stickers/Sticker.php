@@ -8,14 +8,14 @@ use Livewire\Component;
 
 class Sticker extends Component
 {
-
     public $modelId;
     public $total;
-    public $qrCode = '';
+    public $qrCode;
     public $qrStyle = 'square';
     public $qrColor = 'rgb(0,0,0)';
     public $registrationTitle = 'Radicado';
-    public $footerTitle = 'Correspondencia';
+    public $incomingFooterTitle = 'Correspondencia recibida';
+    public $outgoingFooterTitle = 'Correspondencia enviada';
     public $midTitle = 'Citar en caso de respuesta';
     public $dateFormat = 'day_month_year';
 
@@ -23,18 +23,6 @@ class Sticker extends Component
 
     public $styles = [
         'square', 'dot', 'round'
-    ];
-
-    public $qrColors = [
-        'black'  => 'rgb(0,0,0)',
-        'red'    => 'rgb(255,0,0)',
-        'gold'   => 'rgb(255,215,0)',
-        'orange' => 'rgb(255,165,0)',
-        'green'  => 'rgb(34,139,34)',
-        'blue'   => 'rgb(0,191,255)',
-        'purple' => 'rgb(147,112,219)',
-        'grey'   => 'rgb(192,192,192)',
-        'brown'  => 'rgb(218,165,32)',
     ];
 
     public $qrStyles = [];
@@ -93,7 +81,8 @@ class Sticker extends Component
             'dateFormat' => 'required',
             'registrationTitle' => 'required|min:3',
             'midTitle' => 'required|min:3',
-            'footerTitle' => 'required|min:3'
+            'incomingFooterTitle' => 'required|min:3',
+            'outgoingFooterTitle' => 'required|min:3'
         ]);
 
         $this->store();
@@ -109,11 +98,12 @@ class Sticker extends Component
             'date_format' => $this->dateFormat,
             'registration_title' => $this->registrationTitle,
             'mid_title' => $this->midTitle,
-            'footer_title' => $this->footerTitle,
+            'incoming_footer_title' => $this->incomingFooterTitle,
+            'outgoing_footer_title' => $this->incomingFooterTitle,
             'company_id' => auth()->user()->company->id
         ]);
 
-        //return redirect()->route('stickers.index');
+        return redirect()->route('companies.index');
     }
 
     public function checkLimitReached()

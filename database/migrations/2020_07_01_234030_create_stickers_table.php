@@ -21,7 +21,8 @@ class CreateStickersTable extends Migration
             $table->enum('date_format', ['day_month_year', 'month_year_day', 'year_month_day']);
             $table->string('registration_title');
             $table->string('mid_title');
-            $table->string('footer_title');
+            $table->string('incoming_footer_title');
+            $table->string('outgoing_footer_title');
             $table->boolean('is_default')->default(false)->nullable();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->timestamps();

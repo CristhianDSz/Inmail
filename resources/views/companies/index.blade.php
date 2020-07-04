@@ -89,7 +89,15 @@ Información de la empresa
                     @else
                     <p class="tx-bold">No registrado</p>
                     @endif
-                    <a href="{{ route('stickers.create') }}">Crear sticker</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="tx-bold">Stickers</p>
+                </div>
+                <div class="col-md-6">
+                    <a href="{{ route('stickers.create') }}" class="text-primary font-weight-bold">+ Crear</a>
+
                 </div>
             </div>
             <div class="row">

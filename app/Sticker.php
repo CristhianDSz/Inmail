@@ -15,7 +15,8 @@ class Sticker extends Model
         'date_format',
         'registration_title',
         'mid_title',
-        'footer_title',
+        'incoming_footer_title',
+        'outgoing_footer_title',
         'is_default',
         'company_id'
     ];
