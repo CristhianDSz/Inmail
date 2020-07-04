@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class Record extends Model
@@ -87,21 +86,26 @@ class Record extends Model
     public function scopeTrackingBy($query, $record, $status)
     {
         if (in_array($status, self::CURRENT_STATUS)) {
-            return $query->where('number', 'LIKE', "%$record%")->where('document_type', 'Facturas')->where('status', $status)->with('thirdParty')->with('employee.dependency');
+            return $query
+                ->where('number', 'LIKE', "%$record%")
+                ->where('document_type', 'Facturas')
+                ->where('status', $status)
+                ->with('thirdParty')
+                ->with('employee.dependency');
         }
+
+        return $query->where('number', 'LIKE', "%$record%")
+            ->with('thirdParty')->with('employee.dependency');
     }
 
-    public function getFormatDatetimeAttribute()
-    {
-        return Carbon::parse($this->datetime)->format('d/m/Y');
-    }
-
-    public function scopeInvoiceNumberExists($query, $id = null, $invoiceNumber, $thirdParty)
+    public function scopeInvoiceNumberExists($query, $id = null, $invoice, $thirdParty)
     {
         if (!$id) {
-            return $query->where('invoice_number', $invoiceNumber)->where('third_party_id', $thirdParty);
+            return $query->where('invoice_number', $invoice)
+                ->where('third_party_id', $thirdParty);
         }
 
-        return $query->where('invoice_number', $invoiceNumber)->where('third_party_id', $thirdParty)->where('id', '!=', $id);
+        return $query->where('invoice_number', $invoice)
+            ->where('third_party_id', $thirdParty)->where('id', '!=', $id);
     }
 }
