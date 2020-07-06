@@ -90,6 +90,23 @@
                </div>
             </div>
         </div>
+
+        <div class="card mx-auto mb-3">
+            <div class="card-body">
+                <p class="tx-14">Etiqueta (Opcional)</p>
+                <input type="text" class="form-control form-control-sm w-75" wire:model="name">
+                
+                <label class="mt-3">
+                    <input type="checkbox" wire:model="isDefault">
+                    <span class="pl-2 tx-14">Sticker por defecto? </span>
+                </label>
+
+                @error('isDefault')
+                    <small class="parsley-errors-list filled d-block">{{ $message }}</small>
+                @enderror
+                 
+            </div>
+        </div>
       
         <input type="button" class="btn btn-sm btn-teal w-75 d-block mx-auto font-weight-bold" {{ ($total >= 3) ? 'disabled' : '' }} value="Guardar" wire:click="submit()">
         @if ($total >= 3)

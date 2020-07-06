@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Stickers;
 
-use App\Sticker as AppSticker;
+use App\Sticker;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -18,6 +18,8 @@ class Single extends Component
     public $outgoingFooterTitle = 'Correspondencia enviada';
     public $midTitle = 'Citar en caso de respuesta';
     public $dateFormat = 'day_month_year';
+    public $isDefault = false;
+    public $name = 'Sticker sin nombre';
 
     const TEST_URL = 'https://inmail.com';
 
@@ -82,7 +84,8 @@ class Single extends Component
             'registrationTitle' => 'required|min:3',
             'midTitle' => 'required|min:3',
             'incomingFooterTitle' => 'required|min:3',
-            'outgoingFooterTitle' => 'required|min:3'
+            'outgoingFooterTitle' => 'required|min:3',
+            'isDefault' => 'required'
         ]);
 
         $this->store();
@@ -92,7 +95,8 @@ class Single extends Component
     {
         //$this->checkLimitReached();
 
-        AppSticker::create([
+        Sticker::create([
+            'name' =>  $this->name,
             'qr_style' => $this->qrStyle,
             'qr_color' => $this->qrColor,
             'date_format' => $this->dateFormat,
@@ -100,6 +104,7 @@ class Single extends Component
             'mid_title' => $this->midTitle,
             'incoming_footer_title' => $this->incomingFooterTitle,
             'outgoing_footer_title' => $this->incomingFooterTitle,
+            'is_default' => $this->isDefault,
             'company_id' => auth()->user()->company->id
         ]);
 

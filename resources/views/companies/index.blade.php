@@ -14,7 +14,7 @@ Información de la empresa
 @else
 <div class="row row-sm">
     @can('view', App\Company::class)
-    <div class="col-lg-9">
+    <div class="col-lg-10">
         <div class="br-section-wrapper br-sitemap-section pd-t-25">
             <div class="d-flex justify-content-end mg-0 pd-0">
                 @can('update', App\Company::class)
@@ -96,8 +96,20 @@ Información de la empresa
                     <p class="tx-bold">Stickers</p>
                 </div>
                 <div class="col-md-6">
-                    <a href="{{ route('stickers.create') }}" class="text-primary font-weight-bold">+ Crear</a>
+                    <a href="{{ route('stickers.create') }}" class="btn btn-sm btn-teal tx-12 text-white">
+                        <i class="icon ion-plus"></i>
+                        <span>Nuevo</span>
+                    </a>
 
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    @livewire('stickers.preview', [
+                        'stickers' => $company->stickers
+                    ])
                 </div>
             </div>
             <div class="row">

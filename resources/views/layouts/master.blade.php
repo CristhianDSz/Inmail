@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="{{ asset('css/multiselect/select2.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
         @yield('styles')
+        @livewireStyles
 
     </head>
     <body>
@@ -237,5 +238,6 @@
       @endauth
     </script>
       @yield('scripts')
+      @livewireScripts
     </body>
 </html>
