@@ -10,7 +10,11 @@ class CompanyComposer
 
     public function compose(View $view)
     {
-        $company = auth()->user()->company;
-        $view->with('logo', $company->logo ?? null);
+        $company = auth()->user()->company ?? null;
+        if ($company && $company->logo) {
+            return $view->with('logo', $company->logo);
+        }
+
+        return $view->with('logo', asset('img/logo.png'));
     }
 }

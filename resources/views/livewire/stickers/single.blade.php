@@ -35,13 +35,17 @@
             <input type="text" class="form-control form-control-sm w-75 ml-3" wire:model="incomingFooterTitle">
         </div>
 
+        @error('incomingFooterTitle')
+            <small class="parsley-errors-list filled d-block">{{ $message }}</small>
+        @enderror
+
         <p class="mt-2 mb-1">Seleccione el nombre del título inferior (salida)</p>
 
         <div class="row">
             <input type="text" class="form-control form-control-sm w-75 ml-3" wire:model="outgoingFooterTitle">
         </div>
 
-        @error('footerTitle')
+        @error('outgoingFooterTitle')
             <small class="parsley-errors-list filled d-block">{{ $message }}</small>
         @enderror
 
@@ -65,7 +69,7 @@
                     </div>
                     <div class="col-8">
                         <div class="row">
-                            <img src="{{ $logo !== null ? asset('storage/'.$logo) : asset('img/logo.png') }}" alt="Logo" width="150">
+                            <img src="{{ $logo }}" alt="Logo" width="150">
                         </div>
                         <div class="row mt-2">
                             <p class="text-uppercase tx-18 mb-0">{{ $registrationTitle }} <span class="font-weight-bold tx-14">e020-###</span></p>

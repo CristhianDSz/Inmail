@@ -16,7 +16,7 @@
     <body>
        <!-- ########## START: LEFT PANEL ########## -->
     <div class="br-logo"><a href="">
-    <img src="{{ $logo !== null ? asset('storage/'. $logo) : asset('img/logo.png')}}" alt="company logo" style="width:100px">  
+    <img src="{{ $logo }}" alt="company logo" style="width:100px">  
     </a></div>
     <div class="br-sideleft overflow-y-auto">
       <label class="sidebar-label pd-x-15 mg-t-20">Menú principal</label>
