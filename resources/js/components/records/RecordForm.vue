@@ -110,6 +110,14 @@
               label="name"
               placeholder="Seleccione"
             ></multiselect>
+            <a
+              class="text-secondary tx-bold text-right d-block mx-auto text-right"
+              href="#"
+              @click.prevent="showThirdPartyForm"
+            >
+              <i class="tx-11 icon ion-plus"></i>
+              <span class="tx-11">Agregar tercero</span>
+            </a>
           </div>
         </div>
         <div class="col-md-4">
@@ -203,7 +211,8 @@ export default {
       //Multiselect
       thirdPartyRecord: "",
       dependencyRecord: "",
-      employeeRecord: ""
+      employeeRecord: "",
+      createThirdParty: false
     };
   },
   created() {
@@ -310,6 +319,9 @@ export default {
         copy: 2,
         quantity: 1
       };
+    },
+    showThirdPartyForm() {
+      this.$emit("createThirdParty");
     }
   }
 };

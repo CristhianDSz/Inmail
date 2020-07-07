@@ -2,7 +2,12 @@
   <div class="row row-sm">
     <card title="Entrada" :text="totalInRecords" color="teal" icon="ion-android-arrow-forward"></card>
     <card title="Salida" :text="totalOutRecords" color="danger" icon="ion-android-arrow-back"></card>
-    <card title="Sin registrar" :text="totalUnregisteredRecords" color="primary" icon="ion-email-unread"></card>
+    <card
+      title="Sin registrar"
+      :text="totalUnregisteredRecords"
+      color="primary"
+      icon="ion-email-unread"
+    ></card>
     <card title="Hoy" :text="totalTodayRecords" color="br-primary" icon="ion-email"></card>
 
     <div class="card col-12 mt-4">
@@ -26,44 +31,46 @@
         </div>
         <div class="pd-10 rounded mg-t-5">
           <div class="content-tabs">
-            <records ref="records" 
-            @selectedRecord="passRecord"
-            @quantity="totalRecords = $event"
-            @inRecords="totalInRecords = $event"
-            @outRecords="totalOutRecords = $event"
-            @unregisteredRecords="totalUnregisteredRecords = $event"
-            @todayRecords = "totalTodayRecords = $event"
+            <records
+              ref="records"
+              @selectedRecord="passRecord"
+              @quantity="totalRecords = $event"
+              @inRecords="totalInRecords = $event"
+              @outRecords="totalOutRecords = $event"
+              @unregisteredRecords="totalUnregisteredRecords = $event"
+              @todayRecords="totalTodayRecords = $event"
             ></records>
           </div>
         </div>
-        <modal ref="recordModal" name="recordModal">
+        <modal ref="recordModal" name="recordModal" :isLg="true">
           <template slot="title">Crear nuevo registro</template>
           <template slot="body">
             <record-form
+              ref="recordForm"
               @dependencies="passDependenciesToRecords"
               @thirdParties="passThirdPartiesToRecords"
               @employees="passEmployeesToRecords"
+              @createThirdParty="showThirdPartyForm"
               @success="getRecords"
             ></record-form>
+          </template>
+        </modal>
+        <modal ref="recordThirdPartyModal" name="recordThirdPartyModal" :isLg="false">
+          <template slot="title">Crear tercero</template>
+          <template slot="body">
+            <third-party-form ref="thirdParties" @success="reloadThirdParties"></third-party-form>
           </template>
         </modal>
         <modal ref="recordEditModal" name="recordEditModal">
           <template slot="title">Editar registro</template>
           <template slot="body">
-            <record-edit-form
-              v-if="showEditForm"
-              @success="getRecords"
-              :record="currentRecord"
-            ></record-edit-form>
+            <record-edit-form v-if="showEditForm" @success="getRecords" :record="currentRecord"></record-edit-form>
           </template>
         </modal>
         <modal ref="recordDetailModal" name="recordDetailModal">
           <template slot="title">Detalle de registro</template>
           <template slot="body">
-            <record-detail 
-            :record="currentRecord" 
-            v-if="showDetail">
-            </record-detail>
+            <record-detail :record="currentRecord" v-if="showDetail"></record-detail>
           </template>
         </modal>
       </div>
@@ -76,10 +83,19 @@ import Modal from "../utils/Modal";
 import Card from "./Card";
 import RecordForm from "./RecordForm";
 import RecordEditForm from "./RecordEditForm";
-import RecordDetail from "./RecordDetail"
+import RecordDetail from "./RecordDetail";
 import Records from "./Records";
+import ThirdPartyForm from "../third_parties/ThirdPartyForm";
 export default {
-  components: { Modal, Card, RecordForm, RecordEditForm, RecordDetail, Records },
+  components: {
+    Modal,
+    Card,
+    RecordForm,
+    RecordEditForm,
+    RecordDetail,
+    Records,
+    ThirdPartyForm
+  },
   data() {
     return {
       records: [],
@@ -91,12 +107,11 @@ export default {
       totalRecords: 0,
       totalInRecords: 0,
       totalOutRecords: 0,
-      totalUnregisteredRecords:0,
-      totalTodayRecords:0
+      totalUnregisteredRecords: 0,
+      totalTodayRecords: 0
     };
   },
-  created() {
-  },
+  created() {},
   methods: {
     showModal() {
       this.$refs.recordModal.showModal();
@@ -117,15 +132,22 @@ export default {
     passRecord(data) {
       this.currentRecord = data.record;
       if (data.edit) {
-        this.showEditForm= data.edit;
-        this.showDetail = !data.edit
+        this.showEditForm = data.edit;
+        this.showDetail = !data.edit;
         this.$refs.recordEditModal.showModal();
       } else {
-         this.showDetail = !data.edit
-         this.showEditForm = data.edit
-         this.$refs.recordDetailModal.showModal()
+        this.showDetail = !data.edit;
+        this.showEditForm = data.edit;
+        this.$refs.recordDetailModal.showModal();
       }
     },
+    showThirdPartyForm() {
+      this.$refs.recordThirdPartyModal.showModal();
+    },
+    reloadThirdParties() {
+      this.$refs.recordForm.getAllData();
+      modalEmitter.$emit("close", "recordThirdPartyModal");
+    }
   }
 };
 </script>

@@ -3638,6 +3638,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3660,7 +3668,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       //Multiselect
       thirdPartyRecord: "",
       dependencyRecord: "",
-      employeeRecord: ""
+      employeeRecord: "",
+      createThirdParty: false
     };
   },
   created: function created() {
@@ -3795,6 +3804,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         copy: 2,
         quantity: 1
       };
+    },
+    showThirdPartyForm: function showThirdPartyForm() {
+      this.$emit("createThirdParty");
     }
   }
 });
@@ -3816,6 +3828,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _RecordEditForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./RecordEditForm */ "./resources/js/components/records/RecordEditForm.vue");
 /* harmony import */ var _RecordDetail__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./RecordDetail */ "./resources/js/components/records/RecordDetail.vue");
 /* harmony import */ var _Records__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Records */ "./resources/js/components/records/Records.vue");
+/* harmony import */ var _third_parties_ThirdPartyForm__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../third_parties/ThirdPartyForm */ "./resources/js/components/third_parties/ThirdPartyForm.vue");
 //
 //
 //
@@ -3889,6 +3902,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -3902,7 +3923,8 @@ __webpack_require__.r(__webpack_exports__);
     RecordForm: _RecordForm__WEBPACK_IMPORTED_MODULE_2__["default"],
     RecordEditForm: _RecordEditForm__WEBPACK_IMPORTED_MODULE_3__["default"],
     RecordDetail: _RecordDetail__WEBPACK_IMPORTED_MODULE_4__["default"],
-    Records: _Records__WEBPACK_IMPORTED_MODULE_5__["default"]
+    Records: _Records__WEBPACK_IMPORTED_MODULE_5__["default"],
+    ThirdPartyForm: _third_parties_ThirdPartyForm__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   data: function data() {
     return {
@@ -3952,6 +3974,13 @@ __webpack_require__.r(__webpack_exports__);
         this.showEditForm = data.edit;
         this.$refs.recordDetailModal.showModal();
       }
+    },
+    showThirdPartyForm: function showThirdPartyForm() {
+      this.$refs.recordThirdPartyModal.showModal();
+    },
+    reloadThirdParties: function reloadThirdParties() {
+      this.$refs.recordForm.getAllData();
+      modalEmitter.$emit("close", "recordThirdPartyModal");
     }
   }
 });
@@ -4802,8 +4831,8 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    modalEmitter.$on("close", function (event) {
-      var modalName = "#".concat(_this.name);
+    modalEmitter.$on("close", function (name) {
+      var modalName = name ? "#".concat(name) : "#".concat(_this.name);
       $(modalName).modal("hide");
     });
   },
@@ -79570,7 +79599,29 @@ var render = function() {
                     },
                     expression: "thirdPartyRecord"
                   }
-                })
+                }),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass:
+                      "text-secondary tx-bold text-right d-block mx-auto text-right",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.showThirdPartyForm($event)
+                      }
+                    }
+                  },
+                  [
+                    _c("i", { staticClass: "tx-11 icon ion-plus" }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "tx-11" }, [
+                      _vm._v("Agregar tercero")
+                    ])
+                  ]
+                )
               ],
               1
             )
@@ -79902,7 +79953,10 @@ var render = function() {
             _vm._v(" "),
             _c(
               "modal",
-              { ref: "recordModal", attrs: { name: "recordModal" } },
+              {
+                ref: "recordModal",
+                attrs: { name: "recordModal", isLg: true }
+              },
               [
                 _c("template", { slot: "title" }, [
                   _vm._v("Crear nuevo registro")
@@ -79913,12 +79967,38 @@ var render = function() {
                   { slot: "body" },
                   [
                     _c("record-form", {
+                      ref: "recordForm",
                       on: {
                         dependencies: _vm.passDependenciesToRecords,
                         thirdParties: _vm.passThirdPartiesToRecords,
                         employees: _vm.passEmployeesToRecords,
+                        createThirdParty: _vm.showThirdPartyForm,
                         success: _vm.getRecords
                       }
+                    })
+                  ],
+                  1
+                )
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c(
+              "modal",
+              {
+                ref: "recordThirdPartyModal",
+                attrs: { name: "recordThirdPartyModal", isLg: false }
+              },
+              [
+                _c("template", { slot: "title" }, [_vm._v("Crear tercero")]),
+                _vm._v(" "),
+                _c(
+                  "template",
+                  { slot: "body" },
+                  [
+                    _c("third-party-form", {
+                      ref: "thirdParties",
+                      on: { success: _vm.reloadThirdParties }
                     })
                   ],
                   1
@@ -81188,7 +81268,11 @@ var render = function() {
     [
       _c(
         "div",
-        { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
+        {
+          staticClass: "modal-dialog modal-lg",
+          class: _vm.isLg === true ? "mw-100 w-75" : "",
+          attrs: { role: "document" }
+        },
         [
           _c("div", { staticClass: "modal-content tx-size-sm" }, [
             _c("div", { staticClass: "modal-header pd-x-20" }, [
