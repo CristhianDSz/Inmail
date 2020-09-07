@@ -126,11 +126,11 @@
             @if ($record['copy'] > 0)
                 @for ($i = 0; $i < $record['copy']; $i++)
                     <div class="container-one">
-                        <img src="{{public_path('img/QR.png')}}" alt="QR">
+                        <img src="{{public_path('img/Sticker.jpg')}}" alt="QR">
                     </div>
                     <div class="container-two">
                         <div class="row-one">
-                        <img src="{{public_path('img/Sticker.png')}}" alt="logo">
+                        <img src="{{public_path('img/Sticker_2.png')}}" alt="logo">
                         </div>
                         <div class="row-two">
                         <p class="title-record">Radicado <span>{{$record['number']}}</span></p>
