@@ -66,6 +66,10 @@ class Record extends Model
         return $this->belongsTo(ThirdParty::class);
     }
 
+    public function getFormatDatetimeAttribute($value) {
+        return \Carbon\Carbon::parse($value)->format('m-d-Y H:m');
+    }
+
     public function scopeLastOfType($query, $type)
     {
         return $query->where('type', $type)->orderBy('id', 'desc');

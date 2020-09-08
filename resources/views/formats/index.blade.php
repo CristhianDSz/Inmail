@@ -39,7 +39,7 @@
                @forelse ($todayRecords as $record)
                 <tr>
                   <td class="pd-l-0-force text-center">
-                  <span class="tx-medium">{{$record->format_datetime}}</span>
+                  <span class="tx-medium">{{$record->format_date_time}}</span>
                   </td>
                   <td class="pd-l-0-force text-center">
                   <span class="tx-medium">{{$record->number}}</span>
