@@ -12,7 +12,7 @@ class CompanyComposer
     {
         $company = auth()->user()->company ?? null;
         if ($company && $company->logo) {
-            return $view->with('logo', $company->logo);
+            return $view->with('logo', asset('storage/' .$company->logo));
         }
 
         return $view->with('logo', asset('img/logo.png'));
