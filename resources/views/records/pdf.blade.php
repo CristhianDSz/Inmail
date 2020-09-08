@@ -135,7 +135,7 @@
                         <div class="row-two">
                         <p class="title-record">Radicado <span>{{$record['number']}}</span></p>
                         <p class="cite">(Citar en caso de respuesta)</p>
-                        <p class="date">{{Carbon\Carbon::parse($record['created_at'])->format('d-m-Y H:i')}}</p>
+                        <p class="date">{{Carbon\Carbon::parse($record['created_at'])->timezone('America/Bogota')->format('d-m-Y H:i')}}</p>
                         </div>
                     </div>
                     <div class="container-footer">
